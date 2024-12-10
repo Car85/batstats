@@ -7,7 +7,6 @@ import './App.css';
 import './styles/style.css';
 import Plotly from 'react-plotly.js';
 import SaveReport from './SaveReport';
-import ReportsList from './ReportList';
 
 function App() {
   const [pivotState, setPivotState] = useState({});

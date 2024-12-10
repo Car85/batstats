@@ -27,7 +27,7 @@ function SaveReport({ pivotState }) {
       });
 
       if (response.ok) {
-        alert('Reporte guardado exitosamente.');
+        alert('Report Saved');
       } else {
         alert('Error al guardar el reporte.');
       }
@@ -39,30 +39,30 @@ function SaveReport({ pivotState }) {
 
   return (
     <div style={{ margin: '20px' }}>
-      <h2>Guardar Reporte</h2>
+      <h2>Save Report Configuration</h2>
       <div>
         <label>
-          Nombre del Reporte:
+          Name of Report:
           <input
             type="text"
             value={reportName}
             onChange={(e) => setReportName(e.target.value)}
-            placeholder="Ejemplo: Análisis de Bateo"
+            placeholder="Example: Batting Analysis"
           />
         </label>
       </div>
       <div>
         <label>
-          Tipo de Reporte:
+          Type of Report:
           <input
             type="text"
             value={reportType}
             onChange={(e) => setReportType(e.target.value)}
-            placeholder="Ejemplo: Bateo"
+            placeholder="Example: Batting"
           />
         </label>
       </div>
-      <button onClick={handleSave}>Guardar Reporte</button>
+      <button onClick={handleSave}>Save Report</button>
     </div>
   );
 }
