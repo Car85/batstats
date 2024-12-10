@@ -1,0 +1,6 @@
+[submodule "backend/dashboard"]
+	path = backend/dashboard
+	url = ./backend/dashboard/
+[submodule "frontend/bats-dashboar-tp"]
+	path = frontend/bats-dashboar-tp
+	url = ./frontend/bats-dashboar-tp/
