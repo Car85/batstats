@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import PivotTableUI from 'react-pivottable/PivotTableUI';
 import createPlotlyRenderers from 'react-pivottable/PlotlyRenderers';
 import 'react-pivottable/pivottable.css';
@@ -7,12 +7,38 @@ import './App.css';
 import './styles/style.css';
 import Plotly from 'react-plotly.js';
 import SaveReport from './SaveReport';
+import { useCSVReader } from 'react-papaparse';
+
+const styles = {
+  csvReader: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginBottom: 10,
+  } as CSSProperties,
+  browseFile: {
+    width: '20%',
+  } as CSSProperties,
+  acceptedFile: {
+    border: '1px solid #ccc',
+    height: 45,
+    lineHeight: 2.5,
+    paddingLeft: 10,
+    width: '80%',
+  } as CSSProperties,
+  remove: {
+    borderRadius: 0,
+    padding: '0 20px',
+  } as CSSProperties,
+  progressBarBackgroundColor: {
+    backgroundColor: 'red',
+  } as CSSProperties,
+};
 
 function App() {
   const [pivotState, setPivotState] = useState({});
   const [data, setData] = useState<(string | number)[][]>([]);
   const [selectedOption, setSelectedOption] = useState<'batting' | 'pitching' | null>(null);
-
+  const { CSVReader } = useCSVReader();
   useEffect(() => {
     if (!selectedOption) return;
 
@@ -75,7 +101,37 @@ function App() {
     <div className="App">
       <h1>{selectedOption === 'batting' ? 'Batting Stats' : 'Pitching Stats'} Pivot Table</h1>
       <div className="card">
-        <PivotTableUI
+      <CSVReader
+        onUploadAccepted={(results: any) => {
+        if (results && results.data) {
+            console.log('Resultados del CSV:', results.data);
+        } else {
+            console.error('Los resultados no contienen datos válidos:', results);
+        }
+      }}>
+         {({
+    getRootProps,
+    acceptedFile,
+    ProgressBar,
+    getRemoveFileProps,
+  }: any) => (
+    <>
+      <div style={styles.csvReader}>
+        <button type='button' {...getRootProps()} style={styles.browseFile}>
+          Browse file
+        </button>
+        <div style={styles.acceptedFile}>
+          {acceptedFile && acceptedFile.name}
+        </div>
+        <button {...getRemoveFileProps()} style={styles.remove}>
+          Remove
+        </button>
+      </div>
+      <ProgressBar style={styles.progressBarBackgroundColor} />
+    </>
+  )}
+      </CSVReader>
+      <PivotTableUI
           data={data}
           onChange={setPivotState}
           renderers={{
