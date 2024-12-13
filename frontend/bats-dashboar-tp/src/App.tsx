@@ -102,14 +102,16 @@ function App() {
       <h1>{selectedOption === 'batting' ? 'Batting Stats' : 'Pitching Stats'} Pivot Table</h1>
       <div className="card">
       <CSVReader
-        onUploadAccepted={(results: any) => {
-        if (results && results.data) {
-            console.log('Resultados del CSV:', results.data);
-        } else {
-            console.error('Los resultados no contienen datos válidos:', results);
-        }
-      }}>
-         {({
+  onUploadAccepted={(results: any) => {
+    if (results && results.data) {
+      console.log('Resultados del CSV:', results.data);
+      setData(results.data); // Almacena los datos del CSV en el estado
+    } else {
+      console.error('Los resultados no contienen datos válidos:', results);
+    }
+  }}
+>
+  {({
     getRootProps,
     acceptedFile,
     ProgressBar,
@@ -117,7 +119,7 @@ function App() {
   }: any) => (
     <>
       <div style={styles.csvReader}>
-        <button type='button' {...getRootProps()} style={styles.browseFile}>
+        <button type="button" {...getRootProps()} style={styles.browseFile}>
           Browse file
         </button>
         <div style={styles.acceptedFile}>
@@ -126,12 +128,13 @@ function App() {
         <button {...getRemoveFileProps()} style={styles.remove}>
           Remove
         </button>
-        <SaveData pivotState={pivotState} />
+        <SaveData csvData={data} />
       </div>
       <ProgressBar style={styles.progressBarBackgroundColor} />
     </>
   )}
-      </CSVReader>
+</CSVReader>
+
       <PivotTableUI
           data={data}
           onChange={setPivotState}

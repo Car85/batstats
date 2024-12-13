@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.batstat.dashboard.application.port.incoming.DashboardServiceInterface;
+import com.batstat.dashboard.application.port.incoming.DashboardDataServiceInterface;
 import com.batstat.dashboard.domain.model.DashboardDataModel;
 
 import org.springframework.http.ResponseEntity;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequestMapping("/batstats/json")
 public class JsonController {
 
-    private final DashboardServiceInterface service;
+    private final DashboardDataServiceInterface service;
 
-    public JsonController(DashboardServiceInterface service) {
+    public JsonController(DashboardDataServiceInterface service) {
         this.service = service;
     }
 

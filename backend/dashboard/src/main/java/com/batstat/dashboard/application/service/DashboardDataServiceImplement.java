@@ -6,15 +6,15 @@ import com.batstat.dashboard.application.mapper.DashboardDataMapper;
 import com.batstat.dashboard.application.port.incoming.DashboardDataServiceInterface;
 import com.batstat.dashboard.domain.model.DashboardDataModel;
 import com.batstat.dashboard.infrastructure.persistence.entity.DashboardDataEntity;
-import com.batstat.dashboard.infrastructure.persistence.repository.DashboardReportRepository;
+import com.batstat.dashboard.infrastructure.persistence.repository.DashboardDataRepository;
 
 @Service
 public class DashboardDataServiceImplement implements DashboardDataServiceInterface{
 
-    private final DashboardReportRepository repository;
+    private final DashboardDataRepository repository;
     private final DashboardDataMapper mapper;
 
-    public DashboardDataServiceImplement(DashboardReportRepository repository, DashboardDataMapper mapper) {
+    public DashboardDataServiceImplement(DashboardDataRepository repository, DashboardDataMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
@@ -22,7 +22,7 @@ public class DashboardDataServiceImplement implements DashboardDataServiceInterf
     @Override
     public void saveData(DashboardDataModel data) {
         DashboardDataEntity entity = mapper.toEntity(data);
-        repository.saveDataEntity(entity);    
+        repository.save(entity);    
     }
 
 }

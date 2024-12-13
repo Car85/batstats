@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import 'react-pivottable/pivottable.css';
-function SaveData({ pivotState }) {
+
+
+function SaveData({ csvData }: { csvData: (string | number)[][] }) {
     const [dataName, setDataName] = useState('');
     const [dataDescription, setDataDescription] = useState('');
   
     const handleSave = async () => {
-      if (!dataName || !dataDescription) {
-        alert('Por favor, completa todos los campos.');
+      if (!dataName || !dataDescription || !csvData) {
+        alert('Please fill all the fields and upload a valid CSV.');
         return;
       }
   
@@ -14,11 +16,11 @@ function SaveData({ pivotState }) {
         name: dataName,
         description: dataDescription,
         date: new Date().toISOString(),
-        jsonData: JSON.stringify(pivotState.results),
+        jsonData: JSON.stringify(csvData),
       };
   
       try {
-        const response = await fetch('http://localhost/batstats/report/save-report', {
+        const response = await fetch('http://localhost/batstats/json/save-data', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -27,13 +29,13 @@ function SaveData({ pivotState }) {
         });
   
         if (response.ok) {
-          alert('Report Saved');
+          alert('Data Saved Successfully');
         } else {
-          alert('Error al guardar el reporte.');
+          alert('Error saving the data.');
         }
       } catch (error) {
         console.error('Error:', error);
-        alert('Error al guardar el reporte.');
+        alert('Error saving the data.');
       }
     };
   
@@ -62,7 +64,7 @@ function SaveData({ pivotState }) {
             />
           </label>
         </div>
-        <button onClick={handleSave}>Save Report</button>
+        <button onClick={handleSave}>Save Data</button>
       </div>
     );
   }

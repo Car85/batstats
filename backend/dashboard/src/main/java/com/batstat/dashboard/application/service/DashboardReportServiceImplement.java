@@ -27,7 +27,7 @@ public class DashboardReportServiceImplement implements DashboardReportServiceIn
     public void saveReport(DashboardReportModel reportModel) {
         
         DashboardReportEntity entity = mapper.toEntity(reportModel);
-        repository.saveReportEntity(entity);    
+        repository.save(entity);    
     
     }
 
