@@ -9,7 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-public class DashboardEntity {
+public class DashboardReportEntity {
 
 
     @Id
@@ -23,9 +23,9 @@ public class DashboardEntity {
     @Column(nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime createdAt;
 
-    public DashboardEntity(){}
+    public DashboardReportEntity(){}
 
-    public DashboardEntity(String name, String type, String configuration, LocalDateTime createdAt) {
+    public DashboardReportEntity(String name, String type, String configuration, LocalDateTime createdAt) {
         this.name = name;
         this.type = type;
         this.configuration = configuration;

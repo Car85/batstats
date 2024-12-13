@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.batstat.dashboard.application.port.incoming.DashboardServiceInterface;
+import com.batstat.dashboard.application.port.incoming.DashboardReportServiceInterface;
 import com.batstat.dashboard.domain.model.DashboardReportModel;
 
 @RestController
 @RequestMapping("/batstats/report")
 public class ReportController {
     
-    private final DashboardServiceInterface service;
+    private final DashboardReportServiceInterface service;
 
-    public ReportController(DashboardServiceInterface service) {
+    public ReportController(DashboardReportServiceInterface service) {
         this.service = service;
     }
 

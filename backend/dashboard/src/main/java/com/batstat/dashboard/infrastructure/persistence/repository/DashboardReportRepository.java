@@ -4,11 +4,14 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.batstat.dashboard.infrastructure.persistence.entity.DashboardEntity;
+
+import com.batstat.dashboard.infrastructure.persistence.entity.DashboardDataEntity;
+import com.batstat.dashboard.infrastructure.persistence.entity.DashboardReportEntity;
 
 @Repository
-public interface DashboardReportRepository  extends JpaRepository<DashboardEntity, UUID>{
+public interface DashboardReportRepository  extends JpaRepository<DashboardReportEntity, UUID>{
 
-    DashboardEntity save(DashboardEntity report);
+    DashboardReportEntity saveReportEntity(DashboardReportEntity report);
+    DashboardDataEntity saveDataEntity(DashboardDataEntity data);
 
 }

@@ -1,16 +1,15 @@
 package com.batstat.dashboard.application.mapper;
 
 import com.batstat.dashboard.domain.model.DashboardReportModel;
-import com.batstat.dashboard.infrastructure.persistence.entity.DashboardEntity;
-
+import com.batstat.dashboard.infrastructure.persistence.entity.DashboardReportEntity;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class DashboardMapper {
 
-    public DashboardEntity toEntity(DashboardReportModel model) {
-        return new DashboardEntity(
+    public DashboardReportEntity toEntity(DashboardReportModel model) {
+        return new DashboardReportEntity(
             model.name(),
             model.type(),
             model.configuration(),
@@ -18,7 +17,7 @@ public class DashboardMapper {
         );
     }
 
-    public DashboardReportModel toModel(DashboardEntity entity) {
+    public DashboardReportModel toModel(DashboardReportEntity entity) {
         return new DashboardReportModel(
             entity.getName(),
             entity.getType(),

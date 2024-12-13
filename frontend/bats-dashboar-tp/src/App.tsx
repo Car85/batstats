@@ -8,6 +8,7 @@ import './styles/style.css';
 import Plotly from 'react-plotly.js';
 import SaveReport from './SaveReport';
 import { useCSVReader } from 'react-papaparse';
+import SaveData from './SaveData';
 
 const styles = {
   csvReader: {
@@ -41,8 +42,7 @@ function App() {
   const { CSVReader } = useCSVReader();
   useEffect(() => {
     if (!selectedOption) return;
-
-    // Define el endpoint y el formato en el mismo lugar
+    const endpointSaveData = 'http://localhost/barstats/json/save-data';
     const endpoint =
       selectedOption === 'batting'
         ? 'http://localhost/batstats/batting'
@@ -126,6 +126,7 @@ function App() {
         <button {...getRemoveFileProps()} style={styles.remove}>
           Remove
         </button>
+        <SaveData pivotState={pivotState} />
       </div>
       <ProgressBar style={styles.progressBarBackgroundColor} />
     </>

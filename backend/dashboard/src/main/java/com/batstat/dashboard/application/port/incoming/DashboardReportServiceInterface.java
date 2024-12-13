@@ -4,10 +4,11 @@ import java.util.List;
 
 import com.batstat.dashboard.domain.model.DashboardReportModel;
 
-public interface DashboardServiceInterface {
+public interface DashboardReportServiceInterface {
 
     void saveReport(DashboardReportModel report);
 
     List<DashboardReportModel> getAllReports();
+
 
 }
