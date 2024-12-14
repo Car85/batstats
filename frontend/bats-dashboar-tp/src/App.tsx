@@ -97,7 +97,7 @@ function App() {
       />
     </div>
     {/* Box Plot */}
-    <div style={{ width: '30%' }}>
+    <div style={{ width: '50%' }}>
       <BoxPlot data={data} />
     </div>
     
