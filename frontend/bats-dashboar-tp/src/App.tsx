@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import PivotTableUI from 'react-pivottable/PivotTableUI';
 import createPlotlyRenderers from 'react-pivottable/PlotlyRenderers';
 import 'react-pivottable/pivottable.css';
@@ -17,19 +17,13 @@ const styles = {
     flexDirection: 'row',
     marginBottom: 10,
   } as CSSProperties,
-  browseFile: {
-    width: '20%',
-  } as CSSProperties,
-  acceptedFile: {
-    border: '1px solid #ccc',
-    height: 45,
-    lineHeight: 2.5,
-    paddingLeft: 10,
-    width: '80%',
-  } as CSSProperties,
-  remove: {
-    borderRadius: 0,
-    padding: '0 20px',
+  dropZone: {
+    width: '100%',
+    border: '2px dashed #ccc',
+    padding: '20px',
+    textAlign: 'center',
+    cursor: 'pointer',
+    backgroundColor: '#f9f9f9',
   } as CSSProperties,
   progressBarBackgroundColor: {
     backgroundColor: 'red',
@@ -39,72 +33,69 @@ const styles = {
 function App() {
   const [pivotState, setPivotState] = useState({});
   const [data, setData] = useState<(string | number)[][]>([]);
+  const [csvLoaded, setCsvLoaded] = useState(false); // Estado para rastrear si el CSV está cargado
   const { CSVReader } = useCSVReader();
-  
+
   const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
-  return (
-    <div className="App">
-      <div className="card">
-      <CSVReader
-  onUploadAccepted={(results: any) => {
+  const handleCsvUpload = (results: any) => {
     if (results && results.data) {
       console.log('Resultados del CSV:', results.data);
-      setData(results.data); 
+      setData(results.data);
+      setCsvLoaded(true); // Establece que el CSV está cargado
     } else {
       console.error('Los resultados no contienen datos válidos:', results);
     }
-  }}
->
-  {({
-    getRootProps,
-    acceptedFile,
-    ProgressBar,
-  }: any) => (
-    <div
-      {...getRootProps()}
-      style={{
-        width: '100%',
-        border: '2px dashed #ccc',
-        padding: '20px',
-        textAlign: 'center',
-        cursor: 'pointer',
-        backgroundColor: '#f9f9f9',
-      }}
-    >
-      {acceptedFile ? (
-        <p>{acceptedFile.name}</p>
-      ) : (
-        <p>DROP YOUR CSV DATASET HERE</p>
+  };
+
+  return (
+    <div className="App">
+      {/* Mostrar la herramienta de drop solo si el CSV no está cargado */}
+      {!csvLoaded && (
+        <CSVReader onUploadAccepted={handleCsvUpload}>
+          {({
+            getRootProps,
+            acceptedFile,
+            ProgressBar,
+          }: any) => (
+            <div {...getRootProps()} style={styles.dropZone}>
+              {acceptedFile ? (
+                <p>{acceptedFile.name}</p>
+              ) : (
+                <p>DROP YOUR CSV DATASET HERE</p>
+              )}
+              <ProgressBar style={styles.progressBarBackgroundColor} />
+            </div>
+          )}
+        </CSVReader>
       )}
-      <ProgressBar style={styles.progressBarBackgroundColor} />
-    </div>
-  )}
-</CSVReader>
 
+      {/* Mostrar la Pivot Table, Box Chart y botones solo si el CSV está cargado */}
+      {csvLoaded && (
+        <>
+          <div style={{ marginBottom: '20px' }}>
+            <PivotTableUI
+              data={data}
+              onChange={setPivotState}
+              renderers={{
+                ...TableRenderers,
+                ...PlotlyRenderers,
+              }}
+              {...pivotState}
+            />
+          </div>
 
-<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-    {/* Pivot Table */}
-    <div style={{ width: '65%' }}>
-      <PivotTableUI
-        data={data}
-        onChange={setPivotState}
-        renderers={{
-          ...TableRenderers,
-          ...PlotlyRenderers,
-        }}
-        {...pivotState}
-      />
+          <div style={{ marginBottom: '20px' }}>
+            <BoxPlot data={data} />
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <SaveReport pivotState={pivotState} />
+            <SaveData csvData={data} />
+          </div>
+        </>
+      )}
     </div>
-    {/* Box Plot */}
-    <div style={{ width: '50%' }}>
-      <BoxPlot data={data} />
-    </div>
-    
-      </div></div>
-      <SaveReport pivotState={pivotState} />
-      <SaveData csvData={data} /> 
-      </div>
   );
 }
 
