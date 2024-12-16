@@ -12,21 +12,37 @@ import SaveData from './SaveData';
 import BoxPlot from './Boxplot';
 
 const styles = {
-  csvReader: {
+  appContainer: {
     display: 'flex',
-    flexDirection: 'row',
-    marginBottom: 10,
+    flexDirection: 'column',
+    alignItems: 'center', // Centra horizontalmente todos los elementos
+    justifyContent: 'center',
+    minHeight: '100vh', // Para centrar verticalmente en toda la ventana
+    padding: '20px',
+    textAlign: 'center', // Centra el texto en el interior de los contenedores
+    boxSizing: 'border-box',
   } as CSSProperties,
   dropZone: {
-    width: '100%',
+    width: '80%', // Ajusta el tamaño de la herramienta de Drop
     border: '2px dashed #ccc',
     padding: '20px',
     textAlign: 'center',
     cursor: 'pointer',
     backgroundColor: '#f9f9f9',
+    marginBottom: '20px', // Espaciado inferior
   } as CSSProperties,
-  progressBarBackgroundColor: {
-    backgroundColor: 'red',
+  pivotContainer: {
+    width: '80%',
+    marginBottom: '20px',
+  } as CSSProperties,
+  boxPlotContainer: {
+    width: '80%',
+    marginBottom: '20px',
+  } as CSSProperties,
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: '80%',
   } as CSSProperties,
 };
 
@@ -49,8 +65,8 @@ function App() {
   };
 
   return (
-    <div className="App">
-      {/* Mostrar la herramienta de drop solo si el CSV no está cargado */}
+    <div style={styles.appContainer}>
+      {/* Mostrar la herramienta de Drop solo si el CSV no está cargado */}
       {!csvLoaded && (
         <CSVReader onUploadAccepted={handleCsvUpload}>
           {({
@@ -64,7 +80,7 @@ function App() {
               ) : (
                 <p>DROP YOUR CSV DATASET HERE</p>
               )}
-              <ProgressBar style={styles.progressBarBackgroundColor} />
+              <ProgressBar style={{ backgroundColor: 'red' }} />
             </div>
           )}
         </CSVReader>
@@ -73,7 +89,7 @@ function App() {
       {/* Mostrar la Pivot Table, Box Chart y botones solo si el CSV está cargado */}
       {csvLoaded && (
         <>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={styles.pivotContainer}>
             <PivotTableUI
               data={data}
               onChange={setPivotState}
@@ -85,11 +101,11 @@ function App() {
             />
           </div>
 
-          <div style={{ marginBottom: '20px' }}>
+          <div style={styles.boxPlotContainer}>
             <BoxPlot data={data} />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+          <div style={styles.buttonContainer}>
             <SaveReport pivotState={pivotState} />
             <SaveData csvData={data} />
           </div>
