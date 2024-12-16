@@ -17,4 +17,4 @@ The application is still under development and aims to be generic, capable of ha
 
 # Project Demo
 
-[Demo Video](https://github.com/user-attachments/assets/26b3ba88-8973-4eee-aee4-a28543d0f321](https://github.com/user-attachments/assets/f5a5582a-7d09-42e3-a458-682f2abcd08d)
+[Demo Video](https://github.com/user-attachments/assets/f5a5582a-7d09-42e3-a458-682f2abcd08d)
