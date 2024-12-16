@@ -23,13 +23,17 @@ const styles = {
     boxSizing: 'border-box',
   } as CSSProperties,
   dropZone: {
-    width: '80%', // Ajusta el tamaño de la herramienta de Drop
+    display: 'flex',
+    justifyContent: 'center', // Centrado horizontal
+    alignItems: 'center', // Centrado vertical
+    width: '100vw',
+    height: '100vh',
     border: '2px dashed #ccc',
     padding: '20px',
     textAlign: 'center',
     cursor: 'pointer',
-    backgroundColor: '#f9f9f9',
-    marginBottom: '20px', // Espaciado inferior
+    backgroundColor: '#001f3f', // Azul marino oscuro
+    color: '#fff', // Texto en blanco para mejor contraste
   } as CSSProperties,
   pivotContainer: {
     width: '80%',
