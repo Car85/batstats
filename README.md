@@ -45,7 +45,7 @@ The frontend leverages **React with TypeScript** and integrates the **Plotly** l
 
 ---
 
-## **🖥️ Preliminar Demo**  
+## **🖥️ Preliminary Demo**  
 
 [📽️ Watch Demo Video](https://github.com/user-attachments/assets/f5a5582a-7d09-42e3-a458-682f2abcd08d)
 
