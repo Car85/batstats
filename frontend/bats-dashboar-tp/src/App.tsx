@@ -61,6 +61,7 @@ const styles = {
 
 function App() {
   const [pivotState, setPivotState] = useState({});
+  const [boxPlotState, setBoxPlotState] = useState({});
   const [data, setData] = useState<(string | number)[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
   const { CSVReader } = useCSVReader();
@@ -120,14 +121,16 @@ function App() {
           {/* Sección 2: Box Plot */}
           <div style={{ ...styles.snapSection, backgroundColor: '#e0e0e0' }}>
             <div style={styles.boxPlotContainer}>
-              <BoxPlot data={data} />
+              <BoxPlot data={data}
+                onChange={setBoxPlotState}
+                />
             </div>
           </div>
 
           {/* Sección 3: Guardar Reporte y Datos */}
           <div style={{ ...styles.snapSection, backgroundColor: '#d0d0d0' }}>
             <div style={styles.buttonContainer}>
-              <SaveReport pivotState={pivotState} />
+              <SaveReport pivotState={pivotState} boxPlotState={boxPlotState}/>
               <SaveData csvData={data} />
             </div>
           </div>

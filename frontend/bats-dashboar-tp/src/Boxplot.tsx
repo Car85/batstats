@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import Plotly from 'react-plotly.js';
 
 interface BoxPlotProps {
   data: (string | number)[][];
 }
-
-const BoxPlot = ({ data }: BoxPlotProps) => {
+interface ExtendedBoxPlotProps extends BoxPlotProps {
+  onChange?: Dispatch<SetStateAction<{}>>;
+}
+const BoxPlot = ({ data }: ExtendedBoxPlotProps) => {
   const [categoricalColumn, setCategoricalColumn] = useState<string | null>(null);
   const [numericColumn, setNumericColumn] = useState<string | null>(null);
   const [tooltipColumn, setTooltipColumn] = useState<string | null>(null);

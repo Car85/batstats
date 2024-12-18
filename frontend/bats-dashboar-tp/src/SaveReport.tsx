@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 
-function SaveReport({ pivotState }) {
+function SaveReport({ pivotState: any, boxPlotState: any }) {
   const [reportName, setReportName] = useState('');
   const [reportType, setReportType] = useState('');
-
+  const dashboardData = {
+    pivotState,
+    boxPlotState,
+    timestamp: new Date().toISOString(),
+  };
   const handleSave = async () => {
     if (!reportName || !reportType) {
       alert('Por favor, completa todos los campos.');
@@ -13,8 +17,8 @@ function SaveReport({ pivotState }) {
     const payload = {
       name: reportName,
       type: reportType,
-      configuration: JSON.stringify(pivotState),
-      createdAt: new Date().toISOString(), // Asignamos la fecha actual
+      configuration: JSON.stringify(dashboardData),
+      createdAt: new Date().toISOString(), 
     };
 
     try {

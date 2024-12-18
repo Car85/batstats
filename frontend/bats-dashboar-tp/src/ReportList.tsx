@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import PivotTableUI from 'react-pivottable/PivotTableUI';
 import 'react-pivottable/pivottable.css';
 
-function ReportsList({ pivotState, setPivotState }) {
+function ReportsList({ pivotState, setPivotState, boxPlotState, setBoxPlotState  }) {
   const [reports, setReports] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost/batstats/report/getAllReports') // Cambia el endpoint si es necesario
+    fetch('http://localhost/batstats/report/getAllReports')
       .then((response) => {
         if (!response.ok) {
           throw new Error('Error al recuperar los informes');
