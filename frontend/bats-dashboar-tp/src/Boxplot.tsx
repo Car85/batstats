@@ -1,5 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import Plotly from 'react-plotly.js';
+import { Data } from 'plotly.js';
+
 
 interface BoxPlotProps {
   data: (string | number)[][];
@@ -40,7 +42,7 @@ const BoxPlot = ({ data }: ExtendedBoxPlotProps) => {
   };
 
   // Filtrar datos para construir el Box Plot
-  const boxPlotData = () => {
+  const boxPlotData = (): Data[] => {
     if (!categoricalColumn || !numericColumn) return [];
 
     const groupedData: { [key: string]: { values: number[]; tooltips: string[] } } = {};
