@@ -1,39 +1,35 @@
-import { UUID } from 'crypto';
 import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import 'react-pivottable/pivottable.css';
 
 interface Report {
-  id: UUID;
+  id: string;
   name: string;
-  type: string;
-  createdAt: string;
-  configuration: string; 
 }
 
 interface ReportsListProps {
-  setPivotState: Dispatch<SetStateAction<object>>; 
-  setBoxPlotState: Dispatch<SetStateAction<object>>; 
+  setPivotState: Dispatch<SetStateAction<object>>;
+  setBoxPlotState: Dispatch<SetStateAction<object>>;
 }
 
 function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListProps>) {
-  const [reports, setReports] = useState<Report[]>([]); 
+  const [reports, setReports] = useState<Report[]>([]);
 
+  // Cargar reportes desde el localStorage al iniciar
   useEffect(() => {
-    fetch('http://localhost/batstats/report/getAllReports')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Error al recuperar los informes');
-        }
-        return response.json();
-      })
-      .then((data: Report[]) => setReports(data)) 
-      .catch((error) => console.error('Error:', error));
+    const reportsFromStorage = localStorage.getItem('reports');
+    if (reportsFromStorage) {
+      setReports(JSON.parse(reportsFromStorage));
+    }
   }, []);
 
-  const handleLoadReport = (configuration: string) => {
+  // Manejar la carga de un reporte específico
+  const handleLoadReport = async (reportId: string) => {
     try {
-
-      const { pivotState, boxPlotState } = JSON.parse(configuration);
+      const response = await fetch(`http://localhost/batstats/report/${reportId}`);
+      if (!response.ok) {
+        throw new Error('Error al recuperar el reporte');
+      }
+      const { pivotState, boxPlotState } = await response.json();
 
       setPivotState(pivotState);
       setBoxPlotState(boxPlotState);
@@ -46,13 +42,10 @@ function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListPro
     <div>
       <h1>Reports</h1>
       <ul>
-        {reports.map((report, index) => (
-          <li key={index}>
-            <h3>{report.name}</h3>
-            <h4>{report.id}</h4>
-            <button onClick={() => handleLoadReport(report.configuration)}>
-              Load Report
-            </button>
+        {reports.map((report) => (
+          <li key={report.id}>
+            <h5>{report.name}</h5>
+            <button onClick={() => handleLoadReport(report.id)}>Load Report</button>
           </li>
         ))}
       </ul>

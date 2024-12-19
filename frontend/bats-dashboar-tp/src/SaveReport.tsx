@@ -15,11 +15,9 @@ interface Report {
   createdAt: string; 
 }
 
-function SaveReport({ pivotState, boxPlotState }: Readonly<SaveReportProps>) {
+function SaveReport({ pivotState, boxPlotState, onSave }: Readonly<SaveReportProps>) {
     const [reportName, setReportName] = useState('');
     const [reportType, setReportType] = useState('');
-    const [savedReports, setSavedReports] = useState<{ name: string; id: string }[]>([]);
-
     const dashboardData = {
         pivotState,
         boxPlotState,
@@ -32,7 +30,7 @@ function SaveReport({ pivotState, boxPlotState }: Readonly<SaveReportProps>) {
             return;
         }
 
-        const payload: Report = {
+        const newReport: Report = {
             id: uuidv4(), 
             name: reportName,
             type: reportType,
@@ -40,20 +38,29 @@ function SaveReport({ pivotState, boxPlotState }: Readonly<SaveReportProps>) {
             createdAt: new Date().toISOString(),
         };
 
+        // Guardar en localStorage
+        try {
+            const storedReports = localStorage.getItem('reports');
+            const reports = storedReports ? JSON.parse(storedReports) : [];
+            reports.push({ id: newReport.id, name: newReport.name });
+            localStorage.setItem('reports', JSON.stringify(reports));
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
+
+        // Enviar al backend
         try {
             const response = await fetch('http://localhost/batstats/report/save-report', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(newReport),
             });
 
             if (response.ok) {
                 alert('Report saved successfully.');
-                const updatedReports = [...savedReports, { name: payload.name, id: payload.id }];
-                setSavedReports(updatedReports);
-                localStorage.setItem('reports', JSON.stringify(updatedReports));
+                onSave(newReport); // Notifica al componente padre
             } else {
                 alert('Error saving report.');
             }
