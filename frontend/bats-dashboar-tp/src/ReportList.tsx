@@ -1,7 +1,9 @@
+import { UUID } from 'crypto';
 import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import 'react-pivottable/pivottable.css';
 
 interface Report {
+  id: UUID;
   name: string;
   type: string;
   createdAt: string;
@@ -47,12 +49,7 @@ function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListPro
         {reports.map((report, index) => (
           <li key={index}>
             <h3>{report.name}</h3>
-            <p>
-              <strong>Type:</strong> {report.type}
-            </p>
-            <p>
-              <strong>Creation Date:</strong> {new Date(report.createdAt).toLocaleString()}
-            </p>
+            <h4>{report.id}</h4>
             <button onClick={() => handleLoadReport(report.configuration)}>
               Load Report
             </button>

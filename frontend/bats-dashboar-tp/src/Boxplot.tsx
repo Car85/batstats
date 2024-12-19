@@ -1,60 +1,48 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import Plotly from 'react-plotly.js';
 import { Data } from 'plotly.js';
 
-
 interface BoxPlotProps {
   data: (string | number)[][];
+  onChange: Dispatch<SetStateAction<object>>;
 }
-interface ExtendedBoxPlotProps extends BoxPlotProps {
-  onChange?: Dispatch<SetStateAction<{}>>;
-}
-const BoxPlot = ({ data }: ExtendedBoxPlotProps) => {
+
+const BoxPlot = ({ data, onChange }: BoxPlotProps) => {
   const [categoricalColumn, setCategoricalColumn] = useState<string | null>(null);
   const [numericColumn, setNumericColumn] = useState<string | null>(null);
   const [tooltipColumn, setTooltipColumn] = useState<string | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  // Validar si data tiene datos
-  const headers = data.length > 0 ? (data[0] as string[]) : []; // Fila de encabezados
-  const rows = data.length > 1 ? data.slice(1) : []; // Filas de datos
+  const headers = data[0] as string[]; // Encabezados
+  const rows = data.slice(1); // Datos
 
-  const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategoricalColumn(event.target.value);
-    setSelectedCategories([]); // Resetear categorías al cambiar de columna categórica
-  };
-
-  const handleNumericChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setNumericColumn(event.target.value);
-  };
-
+  // Manejar selección de columna para tooltips
   const handleTooltipChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setTooltipColumn(event.target.value);
   };
+
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const options = Array.from(event.target.selectedOptions, (option) => option.value);
     setSelectedCategories(options);
   };
+   const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setCategoricalColumn(event.target.value);
+    setSelectedCategories([]); // Resetear categorías al cambiar de columna categórica
+  };
 
-  const boxPlotData = (): Data[] => {
-    if (!categoricalColumn || !numericColumn || headers.length === 0) return [];
+  // Generar los datos para el gráfico solo cuando cambien las dependencias relevantes
+  const boxPlotData = useMemo(() => {
+    if (!categoricalColumn || !numericColumn) return [];
 
     const groupedData: { [key: string]: { values: number[]; tooltips: string[] } } = {};
 
     rows.forEach((row) => {
-      const categoryIndex = headers.indexOf(categoricalColumn);
-      const numericIndex = headers.indexOf(numericColumn);
-      const tooltipIndex = tooltipColumn ? headers.indexOf(tooltipColumn) : -1;
-
-      if (categoryIndex === -1 || numericIndex === -1) return;
-
-      const category = row[categoryIndex] as string;
-      const numericValue = Number(row[numericIndex]);
-      const tooltipValue =
-        tooltipIndex !== -1 && tooltipColumn
-          ? `${tooltipColumn}: ${row[tooltipIndex]}`
-          : '';
+      const category = row[headers.indexOf(categoricalColumn)] as string;
+      const numericValue = Number(row[headers.indexOf(numericColumn)]);
+      const tooltipValue = tooltipColumn
+        ? row[headers.indexOf(tooltipColumn)] as string
+        : '';
 
       if (!selectedCategories.length || selectedCategories.includes(category)) {
         if (!groupedData[category]) {
@@ -67,18 +55,27 @@ const BoxPlot = ({ data }: ExtendedBoxPlotProps) => {
 
     return Object.entries(groupedData).map(([key, { values, tooltips }]) => ({
       y: values,
-      text: tooltips, // Tooltips dinámicos
+      text: tooltips,
       type: 'box',
       name: key,
-      hoverinfo: 'text', // Mostrar contenido de los tooltips
+      hoverinfo: 'text',
     }));
-  };
+  }, [categoricalColumn, numericColumn, tooltipColumn, selectedCategories, rows, headers]);
+
+  // Actualizar el estado del boxPlot en el padre solo cuando `boxPlotData` cambie
+  React.useEffect(() => {
+    onChange({
+      categoricalColumn,
+      numericColumn,
+      tooltipColumn,
+      selectedCategories,
+      boxPlotData,
+    });
+  }, [categoricalColumn, numericColumn, tooltipColumn, selectedCategories, boxPlotData, onChange]);
 
   return (
     <div>
       <h2>Dynamic Box Plot</h2>
-
-      {/* Selección de columna categórica */}
       <div>
         <label htmlFor="categoricalColumn">Select Categorical Column:</label>
         <select
@@ -94,14 +91,12 @@ const BoxPlot = ({ data }: ExtendedBoxPlotProps) => {
           ))}
         </select>
       </div>
-
-      {/* Selección de columna numérica */}
       <div>
         <label htmlFor="numericColumn">Select Numeric Column:</label>
         <select
           id="numericColumn"
           value={numericColumn || ''}
-          onChange={handleNumericChange}
+          onChange={(e) => setNumericColumn(e.target.value)}
         >
           <option value="">--Select Numeric Column--</option>
           {headers.map((header) => (
@@ -111,8 +106,6 @@ const BoxPlot = ({ data }: ExtendedBoxPlotProps) => {
           ))}
         </select>
       </div>
-
-      {/* Selección de columna para tooltips */}
       <div>
         <label htmlFor="tooltipColumn">Select Tooltip Column:</label>
         <select
@@ -129,7 +122,6 @@ const BoxPlot = ({ data }: ExtendedBoxPlotProps) => {
         </select>
       </div>
 
-      {/* Selección de categorías específicas */}
       {categoricalColumn && (
         <div>
           <label htmlFor="categoryFilter">Select Specific Categories:</label>
@@ -162,17 +154,14 @@ const BoxPlot = ({ data }: ExtendedBoxPlotProps) => {
         </div>
       )}
 
-      {/* Renderizar Box Plot */}
-      {categoricalColumn && numericColumn && (
-        <Plotly
-          data={boxPlotData()}
-          layout={{
-            title: 'Box Plot: Dynamic Analysis',
-            yaxis: { title: numericColumn },
-            xaxis: { title: categoricalColumn },
-          }}
-        />
-      )}
+      <Plotly
+        data={boxPlotData}
+        layout={{
+          title: 'Box Plot: Dynamic Analysis',
+          yaxis: { title: numericColumn },
+          xaxis: { title: categoricalColumn },
+        }}
+      />
     </div>
   );
 };

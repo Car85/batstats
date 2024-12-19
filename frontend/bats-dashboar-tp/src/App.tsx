@@ -8,6 +8,7 @@ import SaveReport from './SaveReport';
 import { useCSVReader } from 'react-papaparse';
 import SaveData from './SaveData';
 import BoxPlot from './Boxplot';
+import ReportList from './ReportList';
 
 const styles = {
   appContainer: {
@@ -85,14 +86,6 @@ const App = () => {
     console.log('Saving report:', report);
   };
 
-  function extractDataFromPivotState(s: PivotTableUIProps) {
-    throw new Error('Function not implemented.');
-  }
-
-  function updateChart(selectedData: void) {
-    throw new Error('Function not implemented.');
-  }
-
   return (
     <div style={styles.appContainer}>
       {/* Página inicial: Cargar el CSV */}
@@ -133,7 +126,10 @@ const App = () => {
       {/* Página 3: BoxPlot */}
       {csvLoaded && (
         <section style={{ ...styles.snapSection, backgroundColor: '#e0e0e0' }}>
-          <BoxPlot data={data} />
+          <BoxPlot 
+            data={data}
+            onChange={setBoxPlotState}  
+          />
         </section>
       )}
 
@@ -149,6 +145,11 @@ const App = () => {
                 onSave={handleSaveReport}
               />
               <SaveData csvData={data} />
+              <ReportList setPivotState={function (value: React.SetStateAction<object>): void {
+                  throw new Error('Function not implemented.');
+                } } setBoxPlotState={function (value: React.SetStateAction<object>): void {
+                  throw new Error('Function not implemented.');
+                } } />
             </div>
           </div>
         </div>
