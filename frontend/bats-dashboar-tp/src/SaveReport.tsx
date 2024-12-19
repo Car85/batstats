@@ -18,6 +18,8 @@ interface Report {
 function SaveReport({ pivotState, boxPlotState }: Readonly<SaveReportProps>) {
     const [reportName, setReportName] = useState('');
     const [reportType, setReportType] = useState('');
+    const [savedReports, setSavedReports] = useState<{ name: string; id: string }[]>([]);
+
     const dashboardData = {
         pivotState,
         boxPlotState,
@@ -49,6 +51,9 @@ function SaveReport({ pivotState, boxPlotState }: Readonly<SaveReportProps>) {
 
             if (response.ok) {
                 alert('Report saved successfully.');
+                const updatedReports = [...savedReports, { name: payload.name, id: payload.id }];
+                setSavedReports(updatedReports);
+                localStorage.setItem('reports', JSON.stringify(updatedReports));
             } else {
                 alert('Error saving report.');
             }

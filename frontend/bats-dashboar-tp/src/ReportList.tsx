@@ -44,7 +44,7 @@ function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListPro
 
   return (
     <div>
-      <h1>Saved Reports</h1>
+      <h1>Reports</h1>
       <ul>
         {reports.map((report, index) => (
           <li key={index}>

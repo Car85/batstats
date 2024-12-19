@@ -16,7 +16,7 @@ const styles = {
     overflowY: 'scroll',
     height: '100vh',
     width: '100vw',
-    boxSizing: 'border-box', // Asegura que padding no altere el tamaño
+    boxSizing: 'border-box',
     margin: 0,
     padding: 0,
   } as CSSProperties,
@@ -65,13 +65,11 @@ const styles = {
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
-
 const App = () => {
-  const [pivotState, setPivotState] = useState({});
-  const [boxPlotState, setBoxPlotState] = useState({});
+  const [pivotState, setPivotState] = useState<object>({});
+  const [boxPlotState, setBoxPlotState] = useState<object>({});
   const [data, setData] = useState<(string | number)[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
-  const [showReports, setShowReports] = useState(false);
 
   const { CSVReader } = useCSVReader();
 
@@ -82,13 +80,12 @@ const App = () => {
     }
   };
 
-  const handleSaveReport = (report: Report) => {
+  const handleSaveReport = (report: any) => {
     console.log('Saving report:', report);
   };
 
   return (
     <div style={styles.appContainer}>
-      {/* Página inicial: Cargar el CSV */}
       {!csvLoaded && (
         <section style={styles.snapSection}>
           <CSVReader onUploadAccepted={handleCsvUpload}>
@@ -106,24 +103,22 @@ const App = () => {
         </section>
       )}
 
-      {/* Página 2: Pivot Table */}
       {csvLoaded && (
         <section style={{ ...styles.snapSection, backgroundColor: '#f0f0f0' }}>
-         <div style={styles.pivotContainer}>
-              <PivotTableUI
-                data={data}
-                onChange={setPivotState}
-                renderers={{
-                  ...TableRenderers,
-                  ...PlotlyRenderers,
-                }}
-                {...pivotState}
-              />
-            </div>
+          <div style={styles.pivotContainer}>
+            <PivotTableUI
+              data={data}
+              onChange={setPivotState}
+              renderers={{
+                ...TableRenderers,
+                ...PlotlyRenderers,
+              }}
+              {...pivotState}
+            />
+          </div>
         </section>
       )}
 
-      {/* Página 3: BoxPlot */}
       {csvLoaded && (
         <section style={{ ...styles.snapSection, backgroundColor: '#e0e0e0' }}>
           <BoxPlot 
@@ -133,30 +128,26 @@ const App = () => {
         </section>
       )}
 
-      {/* Página 4: Guardar y ver reportes */}
       {csvLoaded && (
-      <section style={{ ...styles.snapSection, backgroundColor: '#f0f0f0' }}>
-        <div style={{ width: '90%' }}>
-          <div style={{ ...styles.snapSection, backgroundColor: '#d0d0d0' }}>
-            <div style={styles.buttonContainer}>
-              <SaveReport
-                pivotState={pivotState}
-                boxPlotState={boxPlotState}
-                onSave={handleSaveReport}
-              />
-              <SaveData csvData={data} />
-              <ReportList setPivotState={function (value: React.SetStateAction<object>): void {
-                  throw new Error('Function not implemented.');
-                } } setBoxPlotState={function (value: React.SetStateAction<object>): void {
-                  throw new Error('Function not implemented.');
-                } } />
+        <section style={{ ...styles.snapSection, backgroundColor: '#f0f0f0' }}>
+          <div style={{ width: '90%' }}>
+            <div style={{ ...styles.snapSection, backgroundColor: '#d0d0d0' }}>
+              <div style={styles.buttonContainer}>
+                <SaveReport
+                  pivotState={pivotState}
+                  boxPlotState={boxPlotState}
+                  onSave={handleSaveReport}
+                />
+                <SaveData csvData={data} />
+                <ReportList
+                  setPivotState={setPivotState}
+                  setBoxPlotState={setBoxPlotState}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-)}
-
-
+        </section>
+      )}
     </div>
   );
 };
