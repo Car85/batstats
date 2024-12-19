@@ -15,12 +15,13 @@ const BoxPlot = ({ data }: ExtendedBoxPlotProps) => {
   const [tooltipColumn, setTooltipColumn] = useState<string | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const headers = data[0] as string[]; 
-  const rows = data.slice(1); 
+  // Validar si data tiene datos
+  const headers = data.length > 0 ? (data[0] as string[]) : []; // Fila de encabezados
+  const rows = data.length > 1 ? data.slice(1) : []; // Filas de datos
 
   const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCategoricalColumn(event.target.value);
-    setSelectedCategories([]); 
+    setSelectedCategories([]); // Resetear categorías al cambiar de columna categórica
   };
 
   const handleNumericChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -37,32 +38,39 @@ const BoxPlot = ({ data }: ExtendedBoxPlotProps) => {
   };
 
   const boxPlotData = (): Data[] => {
-    if (!categoricalColumn || !numericColumn) return [];
+    if (!categoricalColumn || !numericColumn || headers.length === 0) return [];
 
     const groupedData: { [key: string]: { values: number[]; tooltips: string[] } } = {};
 
     rows.forEach((row) => {
-      const category = row[headers.indexOf(categoricalColumn)] as string;
-      const numericValue = Number(row[headers.indexOf(numericColumn)]);
-      const tooltipValue = tooltipColumn
-        ? row[headers.indexOf(tooltipColumn)] as string
-        : '';
+      const categoryIndex = headers.indexOf(categoricalColumn);
+      const numericIndex = headers.indexOf(numericColumn);
+      const tooltipIndex = tooltipColumn ? headers.indexOf(tooltipColumn) : -1;
+
+      if (categoryIndex === -1 || numericIndex === -1) return;
+
+      const category = row[categoryIndex] as string;
+      const numericValue = Number(row[numericIndex]);
+      const tooltipValue =
+        tooltipIndex !== -1 && tooltipColumn
+          ? `${tooltipColumn}: ${row[tooltipIndex]}`
+          : '';
 
       if (!selectedCategories.length || selectedCategories.includes(category)) {
         if (!groupedData[category]) {
           groupedData[category] = { values: [], tooltips: [] };
         }
         groupedData[category].values.push(numericValue);
-        groupedData[category].tooltips.push(`${category}, ${numericValue}, ${tooltipColumn}: ${tooltipValue}`);
+        groupedData[category].tooltips.push(`${category}, ${numericValue}, ${tooltipValue}`);
       }
     });
 
     return Object.entries(groupedData).map(([key, { values, tooltips }]) => ({
       y: values,
-      text: tooltips, // Aquí se pasa la información adicional para los tooltips
+      text: tooltips, // Tooltips dinámicos
       type: 'box',
       name: key,
-      hoverinfo: 'text', // Muestra solo el contenido del tooltip
+      hoverinfo: 'text', // Mostrar contenido de los tooltips
     }));
   };
 
