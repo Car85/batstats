@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.batstat.dashboard.application.mapper.DashboardMapper;
+import com.batstat.dashboard.application.mapper.DashboardReportMapper;
 import com.batstat.dashboard.application.port.incoming.DashboardReportServiceInterface;
 import com.batstat.dashboard.domain.model.DashboardReportModel;
 import com.batstat.dashboard.infrastructure.persistence.entity.DashboardReportEntity;
@@ -16,9 +16,9 @@ import com.batstat.dashboard.infrastructure.persistence.repository.DashboardRepo
 public class DashboardReportServiceImplement implements DashboardReportServiceInterface{
 
     private final DashboardReportRepository repository;
-    private final DashboardMapper mapper;
+    private final DashboardReportMapper mapper;
 
-    public DashboardReportServiceImplement(DashboardReportRepository repository, DashboardMapper mapper) {
+    public DashboardReportServiceImplement(DashboardReportRepository repository, DashboardReportMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
