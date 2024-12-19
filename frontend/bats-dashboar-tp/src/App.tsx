@@ -107,7 +107,7 @@ const App = () => {
         <section style={{ ...styles.snapSection, backgroundColor: '#f0f0f0' }}>
           <div style={styles.pivotContainer}>
             <PivotTableUI
-              data={data}
+              data={pivotState.data || data}
               onChange={setPivotState}
               renderers={{
                 ...TableRenderers,
@@ -122,7 +122,7 @@ const App = () => {
       {csvLoaded && (
         <section style={{ ...styles.snapSection, backgroundColor: '#e0e0e0' }}>
           <BoxPlot 
-            data={data}
+            data={boxPlotState.boxPlotData || data}
             onChange={setBoxPlotState}  
           />
         </section>

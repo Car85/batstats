@@ -29,7 +29,8 @@ function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListPro
       if (!response.ok) {
         throw new Error('Error al recuperar el reporte');
       }
-      const { pivotState, boxPlotState } = await response.json();
+      const { configuration } = await response.json();
+      const { pivotState, boxPlotState } = JSON.parse(configuration);
 
       setPivotState(pivotState);
       setBoxPlotState(boxPlotState);

@@ -46,5 +46,12 @@ public class DashboardReportServiceImplement implements DashboardReportServiceIn
        .collect(Collectors.toList());
         
     }
+
+    @Override
+    public DashboardReportModel getReportById(UUID id) {
+        return repository.findById(id)
+                .map(mapper::toModel)
+                .orElse(null);
+    }
    
 }
