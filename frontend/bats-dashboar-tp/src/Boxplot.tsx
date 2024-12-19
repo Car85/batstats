@@ -15,33 +15,27 @@ const BoxPlot = ({ data }: ExtendedBoxPlotProps) => {
   const [tooltipColumn, setTooltipColumn] = useState<string | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  // Obtener encabezados y datos
-  const headers = data[0] as string[]; // Fila de encabezados
-  const rows = data.slice(1); // Filas de datos
+  const headers = data[0] as string[]; 
+  const rows = data.slice(1); 
 
-  // Manejar selección de columna categórica
   const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCategoricalColumn(event.target.value);
-    setSelectedCategories([]); // Resetear categorías al cambiar de columna categórica
+    setSelectedCategories([]); 
   };
 
-  // Manejar selección de columna numérica
   const handleNumericChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setNumericColumn(event.target.value);
   };
 
-  // Manejar selección de columna para tooltips
   const handleTooltipChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setTooltipColumn(event.target.value);
   };
 
-  // Manejar selección de categorías específicas
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const options = Array.from(event.target.selectedOptions, (option) => option.value);
     setSelectedCategories(options);
   };
 
-  // Filtrar datos para construir el Box Plot
   const boxPlotData = (): Data[] => {
     if (!categoricalColumn || !numericColumn) return [];
 

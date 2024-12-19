@@ -1,8 +1,6 @@
 import React, { CSSProperties, useState } from 'react';
 import PivotTableUI from 'react-pivottable/PivotTableUI';
-import createPlotlyRenderers from 'react-pivottable/PlotlyRenderers';
 import 'react-pivottable/pivottable.css';
-import TableRenderers from 'react-pivottable/TableRenderers';
 import './App.css';
 import './styles/style.css';
 import Plotly from 'react-plotly.js';
@@ -10,6 +8,10 @@ import SaveReport from './SaveReport';
 import { useCSVReader } from 'react-papaparse';
 import SaveData from './SaveData';
 import BoxPlot from './Boxplot';
+import ReportsList from './ReportList';
+import TableRenderers from 'react-pivottable/TableRenderers';
+import PlotlyRenderers from 'react-pivottable/PlotlyRenderers';
+
 
 const styles = {
   appContainer: {
@@ -59,67 +61,71 @@ const styles = {
   } as CSSProperties,
 };
 
-function App() {
+
+const App = () => {
   const [pivotState, setPivotState] = useState({});
   const [boxPlotState, setBoxPlotState] = useState({});
   const [data, setData] = useState<(string | number)[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
+  const [showReports, setShowReports] = useState(false); 
   const { CSVReader } = useCSVReader();
 
-  const PlotlyRenderers = createPlotlyRenderers(Plotly);
-
+y
   const handleCsvUpload = (results: any) => {
     if (results && results.data) {
-      console.log('Resultados del CSV:', results.data);
       setData(results.data);
       setCsvLoaded(true);
-    } else {
-      console.error('Los resultados no contienen datos válidos:', results);
     }
+  };
+
+  const handleSaveReport = (report: Report) => {
+    console.log('Saving report:', report);
   };
 
   return (
     <div style={styles.appContainer}>
-      {/* Página inicial: Cargar el CSV */}
-      {!csvLoaded && (
-        <CSVReader onUploadAccepted={handleCsvUpload}>
-          {({
-            getRootProps,
-            acceptedFile,
-            ProgressBar,
-          }: any) => (
-            <div {...getRootProps()} style={styles.dropZone}>
-              {acceptedFile ? (
-                <p>{acceptedFile.name}</p>
-              ) : (
-                <p>DROP YOUR CSV DATASET HERE</p>
-              )}
-              <ProgressBar style={{ backgroundColor: 'red' }} />
-            </div>
-          )}
-        </CSVReader>
-      )}
+    {/* Página inicial: Cargar el CSV */}
+    {!csvLoaded && (
+      <CSVReader onUploadAccepted={handleCsvUpload}>
+        {({
+          getRootProps,
+          acceptedFile,
+          ProgressBar,
+        }: any) => (
+          <div {...getRootProps()} style={styles.dropZone}>
+            {acceptedFile ? (
+              <p>{acceptedFile.name}</p>
+            ) : (
+              <p>DROP YOUR CSV DATASET HERE</p>
+            )}
+            <ProgressBar style={{ backgroundColor: 'red' }} />
+          </div>
+        )}
+      </CSVReader>
+    )}
 
-      {/* Contenedor Scroll Snap */}
+      {/* Página 2: Pivot Table */}
       {csvLoaded && (
         <div style={styles.snapContainer}>
-          {/* Sección 1: Pivot Table */}
           <div style={{ ...styles.snapSection, backgroundColor: '#f0f0f0' }}>
             <div style={styles.pivotContainer}>
-              <PivotTableUI
-                data={data}
-                onChange={setPivotState}
-                renderers={{
-                  ...TableRenderers,
-                  ...PlotlyRenderers,
-                }}
-                {...pivotState}
-              />
-            </div>
-          </div>
 
-          {/* Sección 2: Box Plot */}
-          <div style={{ ...styles.snapSection, backgroundColor: '#e0e0e0' }}>
+            <PivotTableUI
+              data={data}
+              onChange={setPivotState}
+              renderers={{
+                ...TableRenderers,
+                ...PlotlyRenderers, // Asegúrate de usar PlotlyRenderers aquí
+             }}
+             {...pivotState}
+            />
+              </div>
+          </div>
+        </div>
+      )}
+
+      {/* Página 3: BoxPlot */}
+      <div style={{ ...styles.snapSection, backgroundColor: '#e0e0e0' }}>
             <div style={styles.boxPlotContainer}>
               <BoxPlot data={data}
                 onChange={setBoxPlotState}
@@ -127,17 +133,39 @@ function App() {
             </div>
           </div>
 
-          {/* Sección 3: Guardar Reporte y Datos */}
-          <div style={{ ...styles.snapSection, backgroundColor: '#d0d0d0' }}>
-            <div style={styles.buttonContainer}>
-              <SaveReport pivotState={pivotState} boxPlotState={boxPlotState}/>
-              <SaveData csvData={data} />
-            </div>
+      {/* Página 4: Guardar y ver reportes */}
+      {csvLoaded && (
+        <section style={{ scrollSnapAlign: 'start', minHeight: '100vh', padding: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <SaveReport pivotState={pivotState} boxPlotState={boxPlotState}   onSave={handleSaveReport}
+            />
+            <button
+              style={{
+                marginTop: '20px',
+                padding: '10px 20px',
+                backgroundColor: '#007BFF',
+                color: '#FFF',
+                border: 'none',
+                cursor: 'pointer',
+                borderRadius: '5px',
+              }}
+              onClick={() => setShowReports(!showReports)}
+            >
+              {showReports ? 'Hide Saved Reports' : 'Show Saved Reports'}
+            </button>
+            {showReports && (
+              <div style={{ marginTop: '20px', width: '100%' }}>
+                <ReportsList
+                  setPivotState={setPivotState}
+                  setBoxPlotState={setBoxPlotState}
+                />
+              </div>
+            )}
           </div>
-        </div>
+        </section>
       )}
     </div>
   );
-}
+};
 
 export default App;
