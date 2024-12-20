@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 interface SaveReportProps {
   pivotState: object; 
   boxPlotState: object; 
-  onSave: (report: Report) => void; 
 }
 
 interface Report {
@@ -15,13 +14,12 @@ interface Report {
   createdAt: string; 
 }
 
-function SaveReport({ pivotState, boxPlotState, onSave }: Readonly<SaveReportProps>) {
+function SaveReport({ pivotState, boxPlotState }: Readonly<SaveReportProps>) {
     const [reportName, setReportName] = useState('');
     const [reportType, setReportType] = useState('');
     const dashboardData = {
         pivotState,
-        boxPlotState,
-        timestamp: new Date().toISOString(),
+        boxPlotState
     };
 
     const handleSave = async () => {
@@ -38,7 +36,6 @@ function SaveReport({ pivotState, boxPlotState, onSave }: Readonly<SaveReportPro
             createdAt: new Date().toISOString(),
         };
 
-        // Guardar en localStorage
         try {
             const storedReports = localStorage.getItem('reports');
             const reports = storedReports ? JSON.parse(storedReports) : [];
@@ -48,7 +45,6 @@ function SaveReport({ pivotState, boxPlotState, onSave }: Readonly<SaveReportPro
             console.error('Error saving to localStorage:', error);
         }
 
-        // Enviar al backend
         try {
             const response = await fetch('http://localhost/batstats/report/save-report', {
                 method: 'POST',
@@ -60,7 +56,6 @@ function SaveReport({ pivotState, boxPlotState, onSave }: Readonly<SaveReportPro
 
             if (response.ok) {
                 alert('Report saved successfully.');
-                onSave(newReport); // Notifica al componente padre
             } else {
                 alert('Error saving report.');
             }

@@ -63,13 +63,26 @@ const styles = {
   } as CSSProperties,
 };
 
+interface PivotState {
+  map?: string; 
+  [key: string]: any;
+}
+
+interface BoxPlot {
+  map?: string;
+  [key: string]: any;
+
+}
+
+
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
 const App = () => {
-  const [pivotState, setPivotState] = useState<object>({});
-  const [boxPlotState, setBoxPlotState] = useState<object>({});
+  const [pivotState, setPivotState] = useState<PivotState>({});
+  const [boxPlotState, setBoxPlotState] = useState<BoxPlot>({});
   const [data, setData] = useState<(string | number)[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
+  const [usePivotStateData, setUsePivotStateData] = useState(false); 
 
   const { CSVReader } = useCSVReader();
 
@@ -77,13 +90,17 @@ const App = () => {
     if (results && results.data) {
       setData(results.data);
       setCsvLoaded(true);
+      setUsePivotStateData(false); 
+    }else {
+      console.error('Result data not valid:', results);
     }
   };
-
-  const handleSaveReport = (report: any) => {
-    console.log('Saving report:', report);
+  const handleReportLoad = (newPivotState: any) => {
+    setPivotState(newPivotState);
+    setUsePivotStateData(true); 
   };
 
+ 
   return (
     <div style={styles.appContainer}>
       {!csvLoaded && (
@@ -106,9 +123,14 @@ const App = () => {
       {csvLoaded && (
         <section style={{ ...styles.snapSection, backgroundColor: '#f0f0f0' }}>
           <div style={styles.pivotContainer}>
-            <PivotTableUI
-              data={pivotState.data || data}
-              onChange={setPivotState}
+          <PivotTableUI
+              data={usePivotStateData ? pivotState.data : data} 
+              onChange={(newState) =>
+                setPivotState({
+                  ...newState,
+                  data: usePivotStateData ? pivotState.data : data, 
+                })
+              }
               renderers={{
                 ...TableRenderers,
                 ...PlotlyRenderers,
@@ -122,9 +144,9 @@ const App = () => {
       {csvLoaded && (
         <section style={{ ...styles.snapSection, backgroundColor: '#e0e0e0' }}>
           <BoxPlot 
-            data={boxPlotState.boxPlotData || data}
-            onChange={setBoxPlotState}  
-          />
+            data={boxPlotState.data || data}
+            onChange={(newState) => setBoxPlotState({ ...boxPlotState, ...newState })}  
+            />
         </section>
       )}
 
@@ -136,20 +158,23 @@ const App = () => {
                 <SaveReport
                   pivotState={pivotState}
                   boxPlotState={boxPlotState}
-                  onSave={handleSaveReport}
                 />
-                <SaveData csvData={data} />
-                <ReportList
-                  setPivotState={setPivotState}
-                  setBoxPlotState={setBoxPlotState}
-                />
+                <SaveData csvData={data} />               
               </div>
             </div>
           </div>
+        </section>        
+      )}
+       {csvLoaded && (
+        <section style={{ ...styles.snapSection, backgroundColor: '#d0d0d0' }}>
+          <ReportList
+            setPivotState={handleReportLoad}
+            setBoxPlotState={() => {}}
+          />
         </section>
       )}
     </div>
-  );
+  );            
 };
 
 export default App;

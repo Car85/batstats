@@ -11,6 +11,7 @@ interface ReportsListProps {
   setBoxPlotState: Dispatch<SetStateAction<object>>;
 }
 
+
 function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListProps>) {
   const [reports, setReports] = useState<Report[]>([]);
 
@@ -22,22 +23,40 @@ function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListPro
     }
   }, []);
 
-  // Manejar la carga de un reporte específico
   const handleLoadReport = async (reportId: string) => {
     try {
       const response = await fetch(`http://localhost/batstats/report/${reportId}`);
       if (!response.ok) {
         throw new Error('Error al recuperar el reporte');
       }
+  
       const { configuration } = await response.json();
-      const { pivotState, boxPlotState } = JSON.parse(configuration);
+      if (!configuration) {
+        throw new Error('La configuración está vacía o es nula');
+      }
+  
+      let parsedConfig;
+      try {
+        parsedConfig = JSON.parse(configuration);
+      } catch (jsonError) {
+        if (jsonError instanceof Error) {
+          throw new Error('Error al parsear la configuración JSON: ' + jsonError.message);
+        } else {
+          throw new Error('Error desconocido al parsear la configuración JSON');
+        }
+      }
+  
+      const { pivotState = {}, boxPlotState = {} } = parsedConfig;
 
+      console.log("Validated Pivot State:", pivotState);     
+  
       setPivotState(pivotState);
       setBoxPlotState(boxPlotState);
     } catch (error) {
       console.error('Error al cargar la configuración:', error);
     }
   };
+  
 
   return (
     <div>
