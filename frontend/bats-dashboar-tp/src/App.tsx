@@ -144,10 +144,11 @@ const App = () => {
 
       {csvLoaded && (
         <section style={{ ...styles.snapSection, backgroundColor: '#e0e0e0' }}>
-          <BoxPlot 
-            data={boxPlotState.data || data}
-            onChange={(newState) => setBoxPlotState({ ...boxPlotState, ...newState })}  
-            />
+          <BoxPlot
+            data={Array.isArray(boxPlotState.data) && boxPlotState.data.length > 0 ? boxPlotState.data : data}
+            onChange={(newState) => setBoxPlotState({ ...boxPlotState, ...newState })}
+        />
+
         </section>
       )}
 
