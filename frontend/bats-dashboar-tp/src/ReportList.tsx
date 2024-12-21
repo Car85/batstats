@@ -60,14 +60,17 @@ function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListPro
 
   return (
     <div>
-      <h1>Reports</h1>
+      <h1>Your Reports</h1>
       <ul>
-        {reports.map((report) => (
-          <li key={report.id}>
-            <h5>{report.name}</h5>
-            <button onClick={() => handleLoadReport(report.id)}>Load Report</button>
-          </li>
+      <select onChange={(e) => handleLoadReport(e.target.value)}>
+         <option value="" disabled selected>Select a report</option>
+         {reports.map((report) => (
+         <option key={report.id} value={report.id}>
+            {report.name}
+      </option>
         ))}
+      </select>
+
       </ul>
     </div>
   );
