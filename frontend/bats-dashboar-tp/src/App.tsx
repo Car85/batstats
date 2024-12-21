@@ -97,7 +97,8 @@ const App = () => {
   };
   const handleReportLoad = (newPivotState: any) => {
     setPivotState(newPivotState);
-    setUsePivotStateData(true); 
+    setData(pivotState.data);
+    setUsePivotStateData(false); 
   };
 
  
@@ -169,7 +170,7 @@ const App = () => {
         <section style={{ ...styles.snapSection, backgroundColor: '#d0d0d0' }}>
           <ReportList
             setPivotState={handleReportLoad}
-            setBoxPlotState={() => {}}
+            setBoxPlotState={handleReportLoad}
           />
         </section>
       )}
