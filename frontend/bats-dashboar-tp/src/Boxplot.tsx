@@ -1,6 +1,5 @@
 import React, { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import Plotly from 'react-plotly.js';
-import { Data } from 'plotly.js';
 
 interface BoxPlotProps {
   data: (string | number)[][];
