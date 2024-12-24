@@ -83,7 +83,14 @@ The frontend leverages **React with TypeScript** and integrates the **Plotly** l
 
 ## **🚧 Roadmap**  
 
-- [ ] **Incorporate LocalStorage with UUID** for persistent dashboards without user registration.
+- [X] **Incorporate LocalStorage with UUID** for persistent dataset without user registration.
+
+    Video Demo:
+      
+     [📽️ Watch Demo Video](https://github.com/user-attachments/assets/98e25ee1-da33-429e-b9ce-be699eaec608)
+
+   
+      
 - [ ] **Create the icon for batstats**
 - [ ] **Back and Front Testing.** 
 - [ ] Implement more chart types (e.g., histograms, scatter plots).  
