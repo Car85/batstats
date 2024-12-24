@@ -67,10 +67,10 @@ function SaveReport({ pivotState, boxPlotState }: Readonly<SaveReportProps>) {
 
     return (
         <div style={{ margin: '20px' }}>
-            <h2>Save Report Configuration</h2>
+            <h2>Save Dataset</h2>
             <div>
                 <label>
-                    Name of Report:
+                    Name of Dataset:
                     <input
                         type="text"
                         value={reportName}
@@ -81,7 +81,7 @@ function SaveReport({ pivotState, boxPlotState }: Readonly<SaveReportProps>) {
             </div>
             <div>
                 <label>
-                    Type of Report:
+                    Description:
                     <input
                         type="text"
                         value={reportType}

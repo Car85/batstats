@@ -6,7 +6,6 @@ import TableRenderers from 'react-pivottable/TableRenderers';
 import Plotly from 'react-plotly.js';
 import SaveReport from './SaveReport';
 import { useCSVReader } from 'react-papaparse';
-import SaveData from './SaveData';
 import BoxPlot from './Boxplot';
 import ReportList from './ReportList';
 
@@ -157,7 +156,6 @@ const App = () => {
                   pivotState={pivotState}
                   boxPlotState={boxPlotState}
                 />
-                <SaveData csvData={data} />               
               </div>
             </div>
           </div>
