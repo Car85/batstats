@@ -8,36 +8,31 @@ interface BoxPlotProps {
 const BoxPlot = ({ data }: BoxPlotProps) => {
   const [categoricalColumn, setCategoricalColumn] = useState<string | null>(null);
   const [numericColumn, setNumericColumn] = useState<string | null>(null);
-  const [tooltipColumn, setTooltipColumn] = useState<string | null>(null);
+  const [tooltipColumn, setTooltipColumn] = useState<string>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  // Obtener encabezados y datos
-  const headers = data[0] as string[]; // Fila de encabezados
-  const rows = data.slice(1); // Filas de datos
+  const headers = data[0] as string[]; 
+  const rows = data.slice(1); 
 
-  // Manejar selección de columna categórica
   const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCategoricalColumn(event.target.value);
-    setSelectedCategories([]); // Resetear categorías al cambiar de columna categórica
+    setSelectedCategories([]); 
   };
 
-  // Manejar selección de columna numérica
+  
   const handleNumericChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setNumericColumn(event.target.value);
   };
 
-  // Manejar selección de columna para tooltips
   const handleTooltipChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setTooltipColumn(event.target.value);
   };
 
-  // Manejar selección de categorías específicas
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const options = Array.from(event.target.selectedOptions, (option) => option.value);
     setSelectedCategories(options);
   };
 
-  // Filtrar datos para construir el Box Plot
   const boxPlotData = () => {
     if (!categoricalColumn || !numericColumn) return [];
 
@@ -61,7 +56,7 @@ const BoxPlot = ({ data }: BoxPlotProps) => {
       y: values,
       type: 'box',
       name: tooltipColumn,
-      hoverinfo: tooltips, // Muestra solo el contenido del tooltip
+      hoverinfo: tooltips, 
     }));
   };
 
@@ -69,7 +64,6 @@ const BoxPlot = ({ data }: BoxPlotProps) => {
     <div>
       <h2>Dynamic Box Plot</h2>
 
-      {/* Selección de columna categórica */}
       <div>
         <label htmlFor="categoricalColumn">Select Categorical Column:</label>
         <select
@@ -86,7 +80,6 @@ const BoxPlot = ({ data }: BoxPlotProps) => {
         </select>
       </div>
 
-      {/* Selección de columna numérica */}
       <div>
         <label htmlFor="numericColumn">Select Numeric Column:</label>
         <select
@@ -103,7 +96,6 @@ const BoxPlot = ({ data }: BoxPlotProps) => {
         </select>
       </div>
 
-      {/* Selección de columna para tooltips */}
       <div>
         <label htmlFor="tooltipColumn">Select Tooltip Column:</label>
         <select
@@ -120,8 +112,8 @@ const BoxPlot = ({ data }: BoxPlotProps) => {
         </select>
       </div>
 
-      {/* Selección de categorías específicas */}
-      {categoricalColumn && (
+
+     {categoricalColumn && (
         <div>
           <label htmlFor="categoryFilter">Select Specific Categories:</label>
           <select
@@ -153,7 +145,6 @@ const BoxPlot = ({ data }: BoxPlotProps) => {
         </div>
       )}
 
-      {/* Renderizar Box Plot */}
       {categoricalColumn && numericColumn && (
         <Plotly
           data={boxPlotData()}
