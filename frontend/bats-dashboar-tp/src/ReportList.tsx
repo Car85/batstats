@@ -15,8 +15,8 @@ interface ReportsListProps {
 function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListProps>) {
   const [reports, setReports] = useState<Report[]>([]);
 
-  // Cargar reportes desde el localStorage al iniciar
-  useEffect(() => {
+  // load reports from localStorage 
+    useEffect(() => {
     const reportsFromStorage = localStorage.getItem('reports');
     if (reportsFromStorage) {
       setReports(JSON.parse(reportsFromStorage));
@@ -27,12 +27,12 @@ function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListPro
     try {
       const response = await fetch(`http://localhost/batstats/report/${reportId}`);
       if (!response.ok) {
-        throw new Error('Error al recuperar el reporte');
+        throw new Error('Error loading report');
       }
   
       const { configuration } = await response.json();
       if (!configuration) {
-        throw new Error('La configuración está vacía o es nula');
+        throw new Error('the config is empty or null');
       }
   
       let parsedConfig;
@@ -40,9 +40,9 @@ function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListPro
         parsedConfig = JSON.parse(configuration);
       } catch (jsonError) {
         if (jsonError instanceof Error) {
-          throw new Error('Error al parsear la configuración JSON: ' + jsonError.message);
+          throw new Error('Parse error to JSON: ' + jsonError.message);
         } else {
-          throw new Error('Error desconocido al parsear la configuración JSON');
+          throw new Error('Unknowns error  parsing JSON confg');
         }
       }
   
@@ -53,7 +53,7 @@ function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListPro
       setPivotState(pivotState);
       setBoxPlotState(boxPlotState);
     } catch (error) {
-      console.error('Error al cargar la configuración:', error);
+      console.error('Load Error config: ', error);
     }
   };
   

@@ -87,6 +87,7 @@ const App = () => {
   const { CSVReader } = useCSVReader();
 
   const handleCsvUpload = (results: any) => {
+    console.log(results.data);
     if (results && results.data) {
       setData(results.data);
       setCsvLoaded(true);
@@ -95,12 +96,7 @@ const App = () => {
       console.error('Result data not valid:', results);
     }
   };
-  const handleReportLoad = (newPivotState: any) => {
-    setPivotState(newPivotState);
-    setData(pivotState.data);
-    setUsePivotStateData(false); 
-  };
-
+ 
  
   return (
     <div style={styles.appContainer}>
@@ -125,7 +121,7 @@ const App = () => {
         <section style={{ ...styles.snapSection, backgroundColor: '#f0f0f0' }}>
           <div style={styles.pivotContainer}>
           <PivotTableUI
-              data={usePivotStateData ? pivotState.data : data} 
+              data={Array.isArray(pivotState.data) && pivotState.data.length > 0 ? pivotState.data : data} 
               onChange={(newState) =>
                 setPivotState({
                   ...newState,
@@ -170,8 +166,8 @@ const App = () => {
        {csvLoaded && (
         <section style={{ ...styles.snapSection, backgroundColor: '#d0d0d0' }}>
           <ReportList
-            setPivotState={handleReportLoad}
-            setBoxPlotState={handleReportLoad}
+            setPivotState={handleCsvUpload}
+            setBoxPlotState={handleCsvUpload}
           />
         </section>
       )}
