@@ -1,4 +1,7 @@
 # **BatStats**  
+
+![batstats](https://github.com/Car85/batstats/blob/2de8763c3dc1d413f101dd5ea7c467fd7c9fd58d/icon/icon_batstats.png)
+
 **Generate data charts and dashboards interactively.**  
 
 BatStats is a dynamic and user-friendly solution for analyzing and visualizing data. Using **pivot tables**, you can create interactive charts effortlessly, identify insights, and download them for your storytelling needs.  
@@ -88,10 +91,14 @@ The frontend leverages **React with TypeScript** and integrates the **Plotly** l
     Video Demo:
       
      [📽️ Watch Demo Video](https://github.com/user-attachments/assets/98e25ee1-da33-429e-b9ce-be699eaec608)
-
    
       
-- [ ] **Create the icon for batstats**
+- [X] **Create the icon for batstats**
+      
+     Preliminary version of the icon:
+
+     ![batstats](https://github.com/Car85/batstats/blob/2de8763c3dc1d413f101dd5ea7c467fd7c9fd58d/icon/icon_batstats.png)
+      
 - [ ] **Back and Front Testing.** 
 - [ ] Implement more chart types (e.g., histograms, scatter plots).  
 - [ ] Support additional file formats (e.g., Excel).  
