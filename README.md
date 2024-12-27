@@ -103,7 +103,8 @@ The frontend leverages **React with TypeScript** and integrates the **Plotly** l
 - [ ] Implement more chart types (e.g., histograms, scatter plots).  
 - [ ] Support additional file formats (e.g., Excel).  
 - [ ] Add interactive filters for real-time data analysis.  
-- [ ] Enable report sharing via unique links.  
+- [ ] Enable report sharing via unique links.
+- [ ] Generate a pdf dashboard with all the generated charts and relevant info
 
 ---
 
