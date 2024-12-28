@@ -1,4 +1,6 @@
-import React, { CSSProperties, useState } from 'react';
+import React, { useState } from 'react';
+
+
 import PivotTableUI from 'react-pivottable/PivotTableUI';
 import createPlotlyRenderers from 'react-pivottable/PlotlyRenderers';
 import 'react-pivottable/pivottable.css';
@@ -9,58 +11,11 @@ import { useCSVReader } from 'react-papaparse';
 import BoxPlot from './Boxplot';
 import ReportList from './ReportList';
 
-const styles = {
-  appContainer: {
-    scrollSnapType: 'y mandatory',
-    overflowY: 'scroll',
-    height: '100vh',
-    width: '100vw',
-    boxSizing: 'border-box',
-    margin: 0,
-    padding: 0,
-  } as CSSProperties,
-  snapSection: {
-    scrollSnapAlign: 'start',
-    height: '100vh',
-    width: '100vw',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    textAlign: 'center',
-    boxSizing: 'border-box',
-    padding: '20px',
-  } as CSSProperties,
-  dropZone: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
-    border: '2px dashed #ccc',
-    backgroundColor: '#001f3f',
-    color: '#fff',
-    cursor: 'pointer',
-    textAlign: 'center',
-  } as CSSProperties,
-  buttonContainer: {
-    marginTop: '20px',
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '10px',
-  } as CSSProperties,
-  pivotContainer: {
-    width: '80%',
-  } as CSSProperties,
-  actionButton: {
-    padding: '10px 20px',
-    backgroundColor: '#007BFF',
-    color: '#FFF',
-    border: 'none',
-    cursor: 'pointer',
-    borderRadius: '5px',
-  } as CSSProperties,
-};
+
+import './App.css';
+import './ParseResult';
+
+
 
 interface PivotState {
   map?: string; 
@@ -69,10 +24,9 @@ interface PivotState {
 
 interface BoxPlot {
   map?: string;
+  data?: (string | number)[][]; 
   [key: string]: any;
-
 }
-
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
@@ -85,7 +39,7 @@ const App = () => {
 
   const { CSVReader } = useCSVReader();
 
-  const handleCsvUpload = (results: any) => {
+  const handleCsvUpload = (results: ParseResult<string[]>) => {
     console.log(results.data);
     if (results && results.data) {
       setData(results.data);
@@ -98,12 +52,12 @@ const App = () => {
  
  
   return (
-    <div style={styles.appContainer}>
+  <div className="appContainer">
       {!csvLoaded && (
-        <section style={styles.snapSection}>
+        <section className="snapSection">
           <CSVReader onUploadAccepted={handleCsvUpload}>
             {({ getRootProps, acceptedFile, ProgressBar }: any) => (
-              <div {...getRootProps()} style={styles.dropZone}>
+              <div {...getRootProps()} className="dropZone">
                 {acceptedFile ? (
                   <p>{acceptedFile.name}</p>
                 ) : (
@@ -117,8 +71,8 @@ const App = () => {
       )}
 
       {csvLoaded && (
-        <section style={{ ...styles.snapSection, backgroundColor: '#f0f0f0' }}>
-          <div style={styles.pivotContainer}>
+        <section className="snapSection">
+          <div className="pivotContainer">
           <PivotTableUI
               data={Array.isArray(pivotState.data) && pivotState.data.length > 0 ? pivotState.data : data} 
               onChange={(newState) =>
@@ -138,20 +92,20 @@ const App = () => {
       )}
 
       {csvLoaded && (
-        <section style={{ ...styles.snapSection, backgroundColor: '#e0e0e0' }}>
+        <section className="snapSection">
           <BoxPlot
             data={Array.isArray(boxPlotState.data) && boxPlotState.data.length > 0 ? boxPlotState.data : data}
-            onChange={(newState) => setBoxPlotState({ ...boxPlotState, ...newState })}
+            onChange={(newState: BoxPlot) => setBoxPlotState({ ...boxPlotState, ...newState })}
         />
 
         </section>
       )}
 
       {csvLoaded && (
-        <section style={{ ...styles.snapSection, backgroundColor: '#f0f0f0' }}>
+        <section className="snapSection">
           <div style={{ width: '90%' }}>
-            <div style={{ ...styles.snapSection, backgroundColor: '#d0d0d0' }}>
-              <div style={styles.buttonContainer}>
+            <div className="snapSection">
+              <div className="buttonContainer">
                 <SaveReport
                   pivotState={pivotState}
                   boxPlotState={boxPlotState}
@@ -162,7 +116,7 @@ const App = () => {
         </section>        
       )}
        {csvLoaded && (
-        <section style={{ ...styles.snapSection, backgroundColor: '#d0d0d0' }}>
+        <section className="snapSection">
           <ReportList
             setPivotState={handleCsvUpload}
             setBoxPlotState={handleCsvUpload}
