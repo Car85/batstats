@@ -22,7 +22,7 @@ const PlotlyRenderers = createPlotlyRenderers(Plotly);
 const App = () => {
   const [pivotState, setPivotState] = useState<PivotState>({});
   const [boxPlotState, setBoxPlotState] = useState<BoxPlotState>({});
-  const [data, setData] = useState<(string | number)[][]>([]);
+  const [data, setData] = useState<string[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
   const [usePivotStateData, setUsePivotStateData] = useState(false); 
 
@@ -33,11 +33,15 @@ const App = () => {
     if (results && results.data) {
       setData(results.data);
       setCsvLoaded(true);
-      setUsePivotStateData(false); 
-    }else {
+      setUsePivotStateData(false);
+  
+      setPivotState({ ...pivotState, data: results.data });
+      setBoxPlotState({ ...boxPlotState, data: results.data });
+    } else {
       console.error('Result data not valid:', results);
     }
   };
+  
  
  
   return (
@@ -63,9 +67,15 @@ const App = () => {
         <section className="snapSection">
           <div className="pivotContainer">
           <PivotTableUI
-              data={Array.isArray(pivotState.data) && pivotState.data.length > 0 ? pivotState.data : data} 
-              onChange={(newState) =>
-                setPivotState({
+          data={
+            
+              Array.isArray(pivotState.data) && pivotState.data.length > 0
+              ? pivotState.data.map(row => row.map(cell => String(cell)))
+              : data.map(row => row.map(cell => String(cell)))  
+             }
+              
+            onChange={(newState) =>
+              setPivotState({
                   ...newState,
                   data: usePivotStateData ? pivotState.data : data, 
                 })
@@ -107,9 +117,9 @@ const App = () => {
        {csvLoaded && (
         <section className="snapSection">
           <ReportList
-            setPivotState={handleCsvUpload}
-            setBoxPlotState={handleCsvUpload}
-          />
+            setPivotState={(state: PivotState) => setPivotState(state)}
+            setBoxPlotState={(state: BoxPlotState) => setBoxPlotState(state)}
+        />
         </section>
       )}
     </div>

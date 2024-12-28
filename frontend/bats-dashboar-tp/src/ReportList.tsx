@@ -1,5 +1,6 @@
 import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import 'react-pivottable/pivottable.css';
+import { PivotState, BoxPlotState } from './Types';
 
 interface Report {
   id: string;
@@ -7,8 +8,8 @@ interface Report {
 }
 
 interface ReportsListProps {
-  setPivotState: Dispatch<SetStateAction<object>>;
-  setBoxPlotState: Dispatch<SetStateAction<object>>;
+  setPivotState: Dispatch<SetStateAction<PivotState>>;
+  setBoxPlotState: Dispatch<SetStateAction<BoxPlotState>>;
 }
 
 

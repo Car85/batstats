@@ -12,14 +12,14 @@ export interface ParseResult<T> {
 
   export interface PivotState {
     map?: string; 
-    data?: (string | number)[][]; 
+    data?: string[][];
     options?: Record<string, unknown>;
     [key: string]: unknown; 
   }
   
   export interface BoxPlotState {
     map?: string;
-    data?: (string | number)[][]; 
+    data?: string[][]; 
     labels?: string[]; 
     [key: string]: unknown; 
   }
