@@ -1,0 +1,1 @@
+{"root":["./src/main.tsx","./src/setupTests.ts","./src/vite-env.d.ts","./src/Components/BoxPlot/BoxPlot.test.tsx","./src/Components/BoxPlot/Boxplot.tsx","./src/Components/ReportList/ReportList.tsx","./src/Components/SaveReport/SaveReport.tsx","./src/pages/App.tsx","./src/types/Types.tsx"],"errors":true,"version":"5.6.3"}

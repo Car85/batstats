@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Plotly from 'react-plotly.js';
-import { BoxPlotState } from '../../types/Types';
+import { BoxPlotState } from '../../types/Types.js';
 import { Data } from 'plotly.js';
 
 const BoxPlot = ({ data }: BoxPlotState) => {

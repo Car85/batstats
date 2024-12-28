@@ -1,11 +1,18 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
   "compilerOptions": {
-    "types": ["node", "@testing-library/react", "@testing-library/jest-dom"]
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "types": ["jest", "@testing-library/react", "@testing-library/jest-dom"],
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src", "src/types"]
 }
