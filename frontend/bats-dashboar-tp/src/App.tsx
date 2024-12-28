@@ -13,26 +13,15 @@ import ReportList from './ReportList';
 
 
 import './App.css';
-import './ParseResult';
+import { BoxPlotState, ParseResult, PivotState, CSVReaderProps } from './Types';
 
 
-
-interface PivotState {
-  map?: string; 
-  [key: string]: any;
-}
-
-interface BoxPlot {
-  map?: string;
-  data?: (string | number)[][]; 
-  [key: string]: any;
-}
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
 const App = () => {
   const [pivotState, setPivotState] = useState<PivotState>({});
-  const [boxPlotState, setBoxPlotState] = useState<BoxPlot>({});
+  const [boxPlotState, setBoxPlotState] = useState<BoxPlotState>({});
   const [data, setData] = useState<(string | number)[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
   const [usePivotStateData, setUsePivotStateData] = useState(false); 
@@ -56,14 +45,14 @@ const App = () => {
       {!csvLoaded && (
         <section className="snapSection">
           <CSVReader onUploadAccepted={handleCsvUpload}>
-            {({ getRootProps, acceptedFile, ProgressBar }: any) => (
+            {({ getRootProps, acceptedFile, ProgressBar }: CSVReaderProps) => (
               <div {...getRootProps()} className="dropZone">
                 {acceptedFile ? (
                   <p>{acceptedFile.name}</p>
                 ) : (
                   <p>DROP YOUR CSV DATASET HERE</p>
                 )}
-                <ProgressBar style={{ backgroundColor: 'red' }} />
+                <ProgressBar/>
               </div>
             )}
           </CSVReader>
@@ -95,7 +84,7 @@ const App = () => {
         <section className="snapSection">
           <BoxPlot
             data={Array.isArray(boxPlotState.data) && boxPlotState.data.length > 0 ? boxPlotState.data : data}
-            onChange={(newState: BoxPlot) => setBoxPlotState({ ...boxPlotState, ...newState })}
+            onChange={(newState: BoxPlotState) => setBoxPlotState({ ...boxPlotState, ...newState })}
         />
 
         </section>
