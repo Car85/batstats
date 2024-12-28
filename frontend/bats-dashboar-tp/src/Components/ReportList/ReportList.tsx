@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import 'react-pivottable/pivottable.css';
-import { PivotState, BoxPlotState } from './Types';
+import { PivotState, BoxPlotState } from '../../types/Types';
 
 interface Report {
   id: string;

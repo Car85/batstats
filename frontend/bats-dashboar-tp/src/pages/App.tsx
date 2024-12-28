@@ -6,14 +6,14 @@ import createPlotlyRenderers from 'react-pivottable/PlotlyRenderers';
 import 'react-pivottable/pivottable.css';
 import TableRenderers from 'react-pivottable/TableRenderers';
 import Plotly from 'react-plotly.js';
-import SaveReport from './SaveReport';
+import SaveReport from '../Components/SaveReport/SaveReport';
 import { useCSVReader } from 'react-papaparse';
-import BoxPlot from './Boxplot';
-import ReportList from './ReportList';
+import BoxPlot from '../Components/BoxPlot/Boxplot';
+import ReportList from '../Components/ReportList/ReportList';
 
 
-import './App.css';
-import { BoxPlotState, ParseResult, PivotState, CSVReaderProps } from './Types';
+import '../styles/App.css';
+import { BoxPlotState, ParseResult, PivotState, CSVReaderProps } from '../types/Types';
 
 
 
