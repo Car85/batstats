@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
+    "module": "ESNext",
     "target": "ES2020",
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
     "jsx": "react-jsx",
-    "esModuleInterop": true,
     "allowJs": true,
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "types": ["jest", "@testing-library/react", "@testing-library/jest-dom"],
+    "types": ["vitest", "@testing-library/react", "@testing-library/user-event"],
     "baseUrl": "./",
+    "moduleResolution": "node",
     "paths": {
-      "*": ["node_modules/*"]
+      "@/*": ["src/*"]
     }
   },
   "include": ["src", "src/types"]

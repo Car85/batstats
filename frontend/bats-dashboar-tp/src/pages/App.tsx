@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 
 import PivotTableUI from 'react-pivottable/PivotTableUI';

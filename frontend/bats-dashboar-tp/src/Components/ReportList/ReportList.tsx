@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
+import { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import 'react-pivottable/pivottable.css';
 import { PivotState, BoxPlotState } from '../../types/Types';
 

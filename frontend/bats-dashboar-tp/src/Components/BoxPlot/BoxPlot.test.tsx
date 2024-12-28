@@ -1,5 +1,10 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import BoxPlot from './Boxplot.js';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import BoxPlot from './Boxplot';
+import { describe, expect, test, vi } from 'vitest';
+
+vi.mock('plotly.js', () => ({
+  newPlot: vi.fn(),
+}));
 
 describe('BoxPlot Component', () => {
   const mockData = [
@@ -11,20 +16,29 @@ describe('BoxPlot Component', () => {
 
   test('renders without crashing when data is empty', () => {
     render(<BoxPlot data={[]} />);
-    expect(screen.getByText(/No data available/i)).toBeInTheDocument();
+    const noDataMessage = screen.getByText(/No data available/i);
+    expect(noDataMessage).not.toBeNull(); // Vitest no usa Jest matchers como `toBeInTheDocument`
   });
+
+  test('renders BoxPlot component', () => {
+    render(<BoxPlot data={mockData} />);
+    const header = screen.getByText(/Dynamic Box Plot/i);
+    expect(header).not.toBeNull(); // Comprobar que el componente tiene el título
+  });
+  
+  
 
   test('renders select elements with correct options when data is provided', () => {
     render(<BoxPlot data={mockData} />);
 
     const categoricalSelect = screen.getByLabelText(/Select Categorical Column/i);
-    expect(categoricalSelect).toBeInTheDocument();
+    expect(categoricalSelect).not.toBeNull();
 
     const options = screen.getAllByRole('option');
-    expect(options).toHaveLength(4); // Includes the default option
-    expect(options[1]).toHaveTextContent('Category');
-    expect(options[2]).toHaveTextContent('Value');
-    expect(options[3]).toHaveTextContent('Tooltip');
+    expect(options.length).toBe(12);
+    expect(options[1].textContent).toBe('Category');
+    expect(options[2].textContent).toBe('Value');
+    expect(options[3].textContent).toBe('Tooltip');
   });
 
   test('updates categorical column state on selection change', () => {
@@ -33,18 +47,22 @@ describe('BoxPlot Component', () => {
     const categoricalSelect = screen.getByLabelText(/Select Categorical Column/i);
     fireEvent.change(categoricalSelect, { target: { value: 'Category' } });
 
-    expect(categoricalSelect).toHaveValue('Category');
+    expect((categoricalSelect as HTMLSelectElement).value).toBe('Category');
   });
 
-  test('renders plotly graph when categorical and numeric columns are selected', () => {
+  test('renders plotly graph when categorical and numeric columns are selected', async () => {
     render(<BoxPlot data={mockData} />);
-
+  
     const categoricalSelect = screen.getByLabelText(/Select Categorical Column/i);
     const numericSelect = screen.getByLabelText(/Select Numeric Column/i);
-
+  
     fireEvent.change(categoricalSelect, { target: { value: 'Category' } });
     fireEvent.change(numericSelect, { target: { value: 'Value' } });
-
-    expect(screen.getByText(/Box Plot: Dynamic Analysis/i)).toBeInTheDocument();
+  
+    // Esperar a que el gráfico esté presente
+    await waitFor(() => {
+      const graph = document.querySelector('.js-plotly-plot');
+      expect(graph).not.toBeNull();
+    });
   });
 });

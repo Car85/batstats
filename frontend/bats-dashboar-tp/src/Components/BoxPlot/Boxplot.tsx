@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Plotly from 'react-plotly.js';
-import { BoxPlotState } from '../../types/Types.js';
+import { BoxPlotState } from '../../types/Types';
 import { Data } from 'plotly.js';
 
 const BoxPlot = ({ data }: BoxPlotState) => {
-  const [categoricalColumn, setCategoricalColumn] = useState<string | null>(null);
+  const [categoricalColumn, setCategoricalColumn] = useState<string>('');
+  const [tooltipColumn, setTooltipColumn] = useState<string>('');
   const [numericColumn, setNumericColumn] = useState<string | null>(null);
-  const [tooltipColumn, setTooltipColumn] = useState<string>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
 
@@ -35,6 +35,7 @@ const BoxPlot = ({ data }: BoxPlotState) => {
     const options = Array.from(event.target.selectedOptions, (option) => option.value);
     setSelectedCategories(options);
   };
+  
 
   const boxPlotData = (): Data[] => {
     if (!categoricalColumn || !numericColumn) return [];
@@ -75,7 +76,7 @@ const BoxPlot = ({ data }: BoxPlotState) => {
           id="categoricalColumn"
           value={categoricalColumn || ''}
           onChange={handleCategoricalChange}
-        >
+          >
           <option value="">--Select Categorical Column--</option>
           {headers.map((header) => (
             <option key={header} value={header}>
