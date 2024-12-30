@@ -6,7 +6,7 @@ interface SaveReportProps {
   boxPlotState: object; 
 }
 
-interface Report {
+export interface Report {
   id: string; 
   name: string;
   type: string;
