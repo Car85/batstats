@@ -24,7 +24,7 @@ describe('SaveReport Component', () => {
     test('renders the input fields and button', () =>{
         render(<SaveReport pivotState={{}} boxPlotState={{}} />);
         const nameInput = screen.getByPlaceholderText(/Example: Batting Analysis/i);
-        const descriptionInput = screen.getByPlaceholderText(/Example: Batting/i);
+        const descriptionInput = screen.getAllByPlaceholderText(/Example: Batting/i);
         const button = screen.getByText(/Save Report/i);
 
         expect(nameInput).not.toBeNull();
