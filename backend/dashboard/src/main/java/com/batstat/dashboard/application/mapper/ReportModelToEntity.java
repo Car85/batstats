@@ -1,0 +1,5 @@
+package com.batstat.dashboard.application.mapper;
+
+public class ReportModelToEntity {
+
+}

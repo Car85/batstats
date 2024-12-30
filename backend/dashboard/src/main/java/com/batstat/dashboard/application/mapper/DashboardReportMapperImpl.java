@@ -1,6 +1,5 @@
-package com.batstat.dashboard.application.mapper.impl;
+package com.batstat.dashboard.application.mapper;
 
-import com.batstat.dashboard.application.mapper.DashboardReportMapper;
 import com.batstat.dashboard.domain.model.DashboardReportModel;
 import com.batstat.dashboard.infrastructure.persistence.entity.DashboardReportEntity;
 import com.batstat.dashboard.infrastructure.persistence.factory.ReportEntityFactory;

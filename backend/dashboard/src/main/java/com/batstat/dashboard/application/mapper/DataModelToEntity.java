@@ -1,0 +1,20 @@
+package com.batstat.dashboard.application.mapper;
+
+import com.batstat.dashboard.domain.model.DashboardDataModel;
+import com.batstat.dashboard.infrastructure.persistence.entity.DashboardDataEntity;
+
+public class DataModelToEntity implements ModelToEntity<DashboardDataModel, DashboardDataEntity>{
+ 
+
+@Override
+public DashboardDataEntity convertToEntity(DashboardDataModel model) {
+    return new DashboardDataEntity(
+        model.name(),
+        model.description(),
+        model.date(),
+        model.jsonData()
+    );
+}
+
+
+}
