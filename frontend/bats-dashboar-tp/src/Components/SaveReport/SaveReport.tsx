@@ -46,7 +46,7 @@ function SaveReport({ pivotState, boxPlotState }: Readonly<SaveReportProps>) {
         }
 
         try {
-            const response = await fetch('http://localhost/batstats/report/save-report', {
+            const response = await fetch('http://localhost/batstats/report/command/save-report', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

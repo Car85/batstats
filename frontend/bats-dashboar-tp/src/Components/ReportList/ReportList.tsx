@@ -26,7 +26,7 @@ function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListPro
 
   const handleLoadReport = async (reportId: string) => {
     try {
-      const response = await fetch(`http://localhost/batstats/report/${reportId}`);
+      const response = await fetch(`http://localhost/batstats/report/query/${reportId}`);
       if (!response.ok) {
         throw new Error('Error loading report');
       }
