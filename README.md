@@ -86,21 +86,23 @@ The frontend leverages **React with TypeScript** and integrates the **Plotly** l
 
 ## **🚧 Roadmap**  
 
-- [X] **Incorporate LocalStorage with UUID** for persistent dataset without user registration.
+- ✅ **Incorporate LocalStorage with UUID** for persistent dataset without user registration.
 
     Video Demo:
       
      [📽️ Watch Demo Video](https://github.com/user-attachments/assets/98e25ee1-da33-429e-b9ce-be699eaec608)
    
       
-- [X] **Create the icon for batstats**
+- ✅ **Create the icon for batstats**
       
      Preliminary version of the icon:
 
      ![batstats](https://github.com/Car85/batstats/blob/2de8763c3dc1d413f101dd5ea7c467fd7c9fd58d/icon/icon_batstats.png)
       
-- [ ] **Back and Front Testing.** 
-- [ ] Implement more chart types (e.g., histograms, scatter plots).  
+### ✅ **Back and Front Testing** 🚧
+The initial testing framework for both backend and frontend has been implemented. ⚠️ **However, this is an ongoing process** as new features and improvements are added. The testing suite will be continuously updated to ensure the application remains robust and reliable.- [ ] Implement more chart types (e.g., histograms, scatter plots).  
+
+
 - [ ] Support additional file formats (e.g., Excel).  
 - [ ] Add interactive filters for real-time data analysis.  
 - [ ] Enable report sharing via unique links.
