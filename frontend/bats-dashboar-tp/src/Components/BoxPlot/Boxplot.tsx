@@ -14,7 +14,7 @@ const BoxPlot = ({ data }: BoxPlotState) => {
     return <p>No data available</p>; 
   }
 
-  const headers = data[0] as string[]; 
+  const headers = data[0]; 
   const rows = data.slice(1); 
 
   const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

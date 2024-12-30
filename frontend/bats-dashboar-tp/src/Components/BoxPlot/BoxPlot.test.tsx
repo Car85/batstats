@@ -17,13 +17,13 @@ describe('BoxPlot Component', () => {
   test('renders without crashing when data is empty', () => {
     render(<BoxPlot data={[]} />);
     const noDataMessage = screen.getByText(/No data available/i);
-    expect(noDataMessage).not.toBeNull(); // Vitest no usa Jest matchers como `toBeInTheDocument`
+    expect(noDataMessage).not.toBeNull(); 
   });
 
   test('renders BoxPlot component', () => {
     render(<BoxPlot data={mockData} />);
     const header = screen.getByText(/Dynamic Box Plot/i);
-    expect(header).not.toBeNull(); // Comprobar que el componente tiene el título
+    expect(header).not.toBeNull(); 
   });
   
   
@@ -59,7 +59,6 @@ describe('BoxPlot Component', () => {
     fireEvent.change(categoricalSelect, { target: { value: 'Category' } });
     fireEvent.change(numericSelect, { target: { value: 'Value' } });
   
-    // Esperar a que el gráfico esté presente
     await waitFor(() => {
       const graph = document.querySelector('.js-plotly-plot');
       expect(graph).not.toBeNull();

@@ -37,7 +37,7 @@ if (typeof window.HTMLCanvasElement.prototype.getContext === 'undefined') {
         strokeText: () => {},
         fillText: () => {},
       } as unknown as CanvasRenderingContext2D;
-    }
+    } 
     return null;
   };
 }

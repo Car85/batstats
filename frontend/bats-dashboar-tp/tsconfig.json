@@ -8,7 +8,11 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "types": ["vitest", "@testing-library/react", "@testing-library/user-event"],
+    "types": ["vitest", 
+              "@testing-library/react",
+              "@testing-library/user-event",
+              "plotly.js",
+              "react-plotly.js"],
     "baseUrl": "./",
     "moduleResolution": "node",
     "paths": {
