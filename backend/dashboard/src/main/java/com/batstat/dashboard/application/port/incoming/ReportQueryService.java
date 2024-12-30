@@ -5,12 +5,10 @@ import java.util.UUID;
 
 import com.batstat.dashboard.domain.model.DashboardReportModel;
 
-public interface DashboardReportServiceInterface {
-
-    void saveReport(DashboardReportModel report);
-
-    List<DashboardReportModel> getAllReports();
+public interface ReportQueryService {
 
     DashboardReportModel getReportById(UUID id);
+    List<DashboardReportModel> getAllReports();
+
 
 }
