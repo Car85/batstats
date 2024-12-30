@@ -100,9 +100,11 @@ The frontend leverages **React with TypeScript** and integrates the **Plotly** l
    ![batstats](https://github.com/Car85/batstats/blob/2de8763c3dc1d413f101dd5ea7c467fd7c9fd58d/icon/icon_batstats.png)
       
 ### ✅ **Back and Front Testing** 🚧
-The initial testing framework for both backend and frontend has been implemented. ⚠️ **However, this is an ongoing process** as new features and improvements are added. The testing suite will be continuously updated to ensure the application remains robust and reliable.- [ ] Implement more chart types (e.g., histograms, scatter plots).  
+The initial testing framework for both backend and frontend has been implemented. ⚠️ **However, this is an ongoing process** as new features and improvements are added. The testing suite will be continuously updated to ensure the application remains robust and reliable.
 
+---
 
+- [ ] Implement more chart types (e.g., histograms, scatter plots).  
 - [ ] Support additional file formats (e.g., Excel).  
 - [ ] Add interactive filters for real-time data analysis.  
 - [ ] Enable report sharing via unique links.
