@@ -9,12 +9,12 @@ import com.batstat.dashboard.domain.model.DashboardReportModel;
 import com.batstat.dashboard.infrastructure.persistence.entity.DashboardReportEntity;
 import com.batstat.dashboard.infrastructure.persistence.repository.DashboardReportRepository;
 
-public class SqliteReportQueryService implements com.batstat.dashboard.application.port.incoming.ReportQueryService{
+public class ReportQueryService implements com.batstat.dashboard.application.port.incoming.ReportQueryService{
 
      private final DashboardReportRepository repository;
     private final ReportEntityToModel mapper;
 
-    public SqliteReportQueryService(DashboardReportRepository repository, ReportEntityToModel mapper) {
+    public ReportQueryService(DashboardReportRepository repository, ReportEntityToModel mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
@@ -28,8 +28,8 @@ public class SqliteReportQueryService implements com.batstat.dashboard.applicati
 
     @Override
     public List<DashboardReportModel> getAllReports() {
-        List<DashboardReportEntity> list_reports = repository.findAll();       
-        return list_reports.stream()
+        List<DashboardReportEntity> listReports = repository.findAll();       
+        return listReports.stream()
            .map(mapper::convertToModel)
            .collect(Collectors.toList());
     }

@@ -10,5 +10,4 @@ public interface ReportQueryService {
     DashboardReportModel getReportById(UUID id);
     List<DashboardReportModel> getAllReports();
 
-
 }
