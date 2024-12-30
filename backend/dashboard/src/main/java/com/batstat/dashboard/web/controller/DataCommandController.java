@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.batstat.dashboard.application.port.incoming.DashboardDataServiceInterface;
+import com.batstat.dashboard.application.port.incoming.DataCommandService;
 import com.batstat.dashboard.domain.model.DashboardDataModel;
 
 import org.springframework.http.ResponseEntity;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 @RestController
-@RequestMapping("/batstats/json")
-public class JsonController {
+@RequestMapping("/batstats/data/command")
+public class DataCommandController {
 
-    private final DashboardDataServiceInterface service;
+    private final DataCommandService service;
 
-    public JsonController(DashboardDataServiceInterface service) {
+    public DataCommandController(DataCommandService service) {
         this.service = service;
     }
 

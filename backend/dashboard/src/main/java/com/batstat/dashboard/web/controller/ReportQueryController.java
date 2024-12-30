@@ -6,28 +6,20 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.batstat.dashboard.application.port.incoming.DashboardReportServiceInterface;
+import com.batstat.dashboard.application.port.incoming.ReportQueryService;
 import com.batstat.dashboard.domain.model.DashboardReportModel;
 
 @RestController
-@RequestMapping("/batstats/report")
-public class ReportController {
-    
-    private final DashboardReportServiceInterface service;
+@RequestMapping("/batstats/report/query")
+public class ReportQueryController {
 
-    public ReportController(DashboardReportServiceInterface service) {
+    private final ReportQueryService service;
+
+    public ReportQueryController(ReportQueryService service) {
         this.service = service;
-    }
-
-    @PostMapping("/save-report")
-    public ResponseEntity<String> saveReport(@RequestBody DashboardReportModel report) {
-        service.saveReport(report);
-        return ResponseEntity.ok("Report saved successfully");
     }
 
     @GetMapping("/getAllReports")
@@ -36,7 +28,7 @@ public class ReportController {
         return ResponseEntity.ok(reports);
     }
 
-     @GetMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<DashboardReportModel> getReportById(@PathVariable UUID id) {
         DashboardReportModel report = service.getReportById(id);
         if (report == null) {
@@ -45,4 +37,3 @@ public class ReportController {
         return ResponseEntity.ok(report);
     }
 }
-
