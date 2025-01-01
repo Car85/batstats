@@ -73,7 +73,7 @@ describe('ReportsList Component - Fetch', () => {
       fireEvent.change(screen.getByRole('combobox'), { target: { value: '1' } });
   
       await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalledWith('http://localhost/batstats/report/1');
+        expect(global.fetch).toHaveBeenCalledWith('http://localhost/batstats/report/query/1');
         expect(mockSetPivotState).toHaveBeenCalledWith({ rows: ['test'] });
         expect(mockSetBoxPlotState).toHaveBeenCalledWith({ x: 'testX' });
       });

@@ -50,13 +50,11 @@ const BarChart = ({ data }: BarChartState) => {
       }
     });
 
-    // Ordenar las categorías en base al valor de las barras (de mayor a menor)
     const sortedGroupedData = Object.entries(groupedData)
       .sort(([, a], [, b]) => {
-        // Sumar los valores de cada categoría y ordenar de mayor a menor
         const sumA = a.values.reduce((acc, val) => acc + val, 0);
         const sumB = b.values.reduce((acc, val) => acc + val, 0);
-        return sumB - sumA; // Orden descendente
+        return sumB - sumA;
       })
       .map(([key, { values, tooltips }]) => ({
         y: values,
@@ -64,6 +62,7 @@ const BarChart = ({ data }: BarChartState) => {
         name: key,
         text: tooltips,
         hoverinfo: 'text',
+        textposition: 'none',
       }));
 
     return sortedGroupedData;
