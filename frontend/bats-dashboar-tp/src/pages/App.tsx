@@ -23,7 +23,7 @@ const PlotlyRenderers = createPlotlyRenderers(Plotly);
 const App = () => {
   const [pivotState, setPivotState] = useState<PivotState>({});
   const [boxPlotState, setBoxPlotState] = useState<BoxPlotState>({});
-  const [barChartState, setBoxPlotState] = useState<BarChartState>({});
+  const [barChartState, setBarChartState] = useState<BarChartState>({});
   const [data, setData] = useState<string[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
   const [usePivotStateData, setUsePivotStateData] = useState(false); 
@@ -106,7 +106,7 @@ const App = () => {
         <section className="snapSection">
           <BarChart
             data={Array.isArray(barChartState.data) && barChartState.data.length > 0 ? barChartState.data : data}
-            onChange={(newState: BarChartState) => setBoxPlotState({ ...barChartState, ...newState })}
+            onChange={(newState: BarChartState) => setBarChartState({ ...barChartState, ...newState })}
         />
 
         </section>
