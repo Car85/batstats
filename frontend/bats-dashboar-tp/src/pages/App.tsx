@@ -117,9 +117,9 @@ const App = () => {
        {csvLoaded && (
         <section className="snapSection">
           <ReportList
-            setPivotState={(state: PivotState) => setPivotState(state)}
-            setBoxPlotState={(state: BoxPlotState) => setBoxPlotState(state)}
-        />
+            setPivotState={handleCsvUpload}
+            setBoxPlotState={handleCsvUpload}
+          />
         </section>
       )}
     </div>

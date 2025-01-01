@@ -29,8 +29,9 @@ public class ReportQueryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DashboardReportModel> getReportById(@PathVariable UUID id) {
-        DashboardReportModel report = service.getReportById(id);
+    public ResponseEntity<DashboardReportModel> getReportById(@PathVariable String id) {
+        UUID uuid = UUID.fromString(id);
+        DashboardReportModel report = service.getReportById(uuid);
         if (report == null) {
             return ResponseEntity.notFound().build();
         }
