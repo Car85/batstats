@@ -13,7 +13,8 @@ import ReportList from '../Components/ReportList/ReportList';
 
 
 import '../styles/App.css';
-import { BoxPlotState, ParseResult, PivotState, CSVReaderProps } from '../types/Types';
+import { BoxPlotState, ParseResult, PivotState, CSVReaderProps, BarChartState } from '../types/Types';
+import BarChart from '@/Components/Barchart/BarChart';
 
 
 
@@ -22,6 +23,7 @@ const PlotlyRenderers = createPlotlyRenderers(Plotly);
 const App = () => {
   const [pivotState, setPivotState] = useState<PivotState>({});
   const [boxPlotState, setBoxPlotState] = useState<BoxPlotState>({});
+  const [barChartState, setBoxPlotState] = useState<BarChartState>({});
   const [data, setData] = useState<string[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
   const [usePivotStateData, setUsePivotStateData] = useState(false); 
@@ -95,6 +97,16 @@ const App = () => {
           <BoxPlot
             data={Array.isArray(boxPlotState.data) && boxPlotState.data.length > 0 ? boxPlotState.data : data}
             onChange={(newState: BoxPlotState) => setBoxPlotState({ ...boxPlotState, ...newState })}
+        />
+
+        </section>
+      )}
+
+      {csvLoaded && (
+        <section className="snapSection">
+          <BarChart
+            data={Array.isArray(barChartState.data) && barChartState.data.length > 0 ? barChartState.data : data}
+            onChange={(newState: BarChartState) => setBoxPlotState({ ...barChartState, ...newState })}
         />
 
         </section>

@@ -23,6 +23,15 @@ export interface ParseResult<T> {
     labels?: string[]; 
     [key: string]: unknown; 
   }
+
+
+  export interface BarChartState {
+    map?: string;
+    data?: string[][]; 
+    labels?: string[]; 
+    [key: string]: unknown; 
+  }
+  
   
 
   export interface CSVReaderProps {
