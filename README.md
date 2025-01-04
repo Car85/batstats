@@ -107,6 +107,7 @@ The initial **unitary** testing for both backend and frontend has been implement
 ### ✅ **Implement correlation matrix.**  
 - [ ] Support additional file formats (e.g., Excel).
 - [ ] Security
+- [ ] Button that build the dashboard to landscape
 - [ ] Add interactive filters for real-time data analysis.  
 - [ ] Enable report sharing via unique links.
 - [ ] Generate a pdf dashboard with all the generated charts and relevant info
