@@ -13,8 +13,9 @@ import ReportList from '../Components/ReportList/ReportList';
 
 
 import '../styles/App.css';
-import { BoxPlotState, ParseResult, PivotState, CSVReaderProps, BarChartState } from '../types/Types';
+import { BoxPlotState, ParseResult, PivotState, CSVReaderProps, BarChartState, MatrixDataState } from '../types/Types';
 import BarChart from '@/Components/Barchart/BarChart';
+import CorrelationMatrix from '@/Components/CorrelationMatrix/CorrelationMatrix';
 
 
 
@@ -24,6 +25,7 @@ const App = () => {
   const [pivotState, setPivotState] = useState<PivotState>({});
   const [boxPlotState, setBoxPlotState] = useState<BoxPlotState>({});
   const [barChartState, setBarChartState] = useState<BarChartState>({});
+  const [CorrelationMatrixState, SetCorrelationMatrixState] = useState<MatrixDataState>({});
   const [data, setData] = useState<string[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
   const [usePivotStateData, setUsePivotStateData] = useState(false); 
@@ -111,6 +113,17 @@ const App = () => {
 
         </section>
       )}
+
+      {csvLoaded && (
+        <section className="snapSection">
+          <CorrelationMatrix
+          data={Array.isArray(CorrelationMatrixState.data) && CorrelationMatrixState.data.length > 0 
+          ? CorrelationMatrixState.data 
+          : data}
+          />
+        </section>
+      )}
+
 
       {csvLoaded && (
         <section className="snapSection">

@@ -43,7 +43,7 @@ export interface ParseResult<T> {
 
   export interface MatrixDataState {
     data: (string | number)[][]; 
-    headers: string[];
-    correlationMatrix: number[][];  }
+}
+
   
   

@@ -52,11 +52,11 @@ describe('BarChart Component', () => {
   test('updates additional numeric column selection on change', () => {
     render(<BarChart data={mockData} />);
     
-    fireEvent.change(screen.getByLabelText(/Select Additional Numeric Column for Tooltip/) as HTMLSelectElement, {
+    fireEvent.change(screen.getByLabelText(/Select Additional Column for Tooltip/) as HTMLSelectElement, {
       target: { value: 'Additional Value' },
     });
 
-    expect((screen.getByLabelText(/Select Additional Numeric Column for Tooltip/) as HTMLSelectElement).value).toBe('Additional Value');
+    expect((screen.getByLabelText(/Select Additional Column for Tooltip/) as HTMLSelectElement).value).toBe('Additional Value');
   });
 
   test('renders the Plotly component when required fields are selected', async () => {
@@ -68,7 +68,7 @@ describe('BarChart Component', () => {
     fireEvent.change(screen.getByLabelText(/Select Numeric Column/) as HTMLSelectElement, {
       target: { value: 'Value' },
     });
-    fireEvent.change(screen.getByLabelText(/Select Additional Numeric Column for Tooltip/) as HTMLSelectElement, {
+    fireEvent.change(screen.getByLabelText(/Select Additional Column for Tooltip/) as HTMLSelectElement, {
       target: { value: 'Additional Value' },
     });
 
