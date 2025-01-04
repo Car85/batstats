@@ -11,7 +11,7 @@ const BarChart = ({ data }: BarChartState) => {
 
   const [categoricalColumn, setCategoricalColumn] = useState<string>('');
   const [numericColumn, setNumericColumn] = useState<string | null>(null);
-  const [additionalNumericColumn, setAdditionalNumericColumn] = useState<string | null>(null); // Nuevo estado para el valor adicional
+  const [additionalColumn, setAdditionalColumn] = useState<string>('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const headers = data[0]; 
@@ -26,27 +26,27 @@ const BarChart = ({ data }: BarChartState) => {
     setNumericColumn(event.target.value);
   };
 
-  const handleAdditionalNumericChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setAdditionalNumericColumn(event.target.value);
+  const handleAdditionalColumnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setAdditionalColumn(event.target.value);
   };
 
   const barChartData = (): Data[] => {
 
-    if (!categoricalColumn || !numericColumn || !additionalNumericColumn) return [];
+    if (!categoricalColumn || !numericColumn || !additionalColumn) return [];
 
     const groupedData: { [key: string]: { values: number[]; tooltips: string[] } } = {};
 
     rows.forEach((row) => {
       const category = row[headers.indexOf(categoricalColumn)] as string;
       const numericValue = Number(row[headers.indexOf(numericColumn)]);
-      const additionalValue = Number(row[headers.indexOf(additionalNumericColumn)]);
+      const additionalValue = row[headers.indexOf(additionalColumn)];
 
       if (!selectedCategories.length || selectedCategories.includes(category)) {
         if (!groupedData[category]) {
           groupedData[category] = { values: [], tooltips: [] };
         }
         groupedData[category].values.push(numericValue);
-        groupedData[category].tooltips.push(`${category}, ${numericValue}, ${additionalNumericColumn}: ${additionalValue}`);
+        groupedData[category].tooltips.push(`${category}, ${numericValue}, ${additionalColumn}: ${additionalValue}`);
       }
     });
 
@@ -105,13 +105,13 @@ const BarChart = ({ data }: BarChartState) => {
       </div>
 
       <div>
-        <label htmlFor="additionalNumericColumn">Select Additional Numeric Column for Tooltip:</label>
+        <label htmlFor="additionalNumericColumn">Select Additional Column for Tooltip:</label>
         <select
           id="additionalNumericColumn"
-          value={additionalNumericColumn || ''}
-          onChange={handleAdditionalNumericChange}
+          value={additionalColumn || ''}
+          onChange={handleAdditionalColumnChange}
         >
-          <option value="">--Select Additional Numeric Column--</option>
+          <option value="">--Select Additional Column--</option>
           {headers.map((header) => (
             <option key={header} value={header}>
               {header}
@@ -121,7 +121,7 @@ const BarChart = ({ data }: BarChartState) => {
       </div>
 
       <div>
-        {categoricalColumn && numericColumn && additionalNumericColumn && (
+        {categoricalColumn && numericColumn && additionalColumn && (
           <Plotly
             data={barChartData()}
             layout={{
