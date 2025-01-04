@@ -104,7 +104,7 @@ The initial **unitary** testing for both backend and frontend has been implement
 
 ---
 
-- [ ] Implement more chart types (e.g., histograms, scatter plots).  
+### ✅ **Implement correlation matrix.**  
 - [ ] Support additional file formats (e.g., Excel).  
 - [ ] Add interactive filters for real-time data analysis.  
 - [ ] Enable report sharing via unique links.
