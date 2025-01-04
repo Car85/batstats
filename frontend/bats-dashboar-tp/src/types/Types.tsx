@@ -39,5 +39,11 @@ export interface ParseResult<T> {
     acceptedFile: File | null;
     ProgressBar: React.ComponentType<React.CSSProperties>; 
   }
+
+
+  export interface MatrixDataState {
+    data: (string | number)[][]; 
+    headers: string[];
+    correlationMatrix: number[][];  }
   
   
