@@ -1,42 +1,32 @@
 import { useState } from 'react';
 import Plotly from 'react-plotly.js';
 import { BoxPlotState } from '../../types/Types';
+import useBoxPlotState from './useBoxPlotState';
 import { Data } from 'plotly.js';
 
 const BoxPlot = ({ data }: BoxPlotState) => {
-  const [categoricalColumn, setCategoricalColumn] = useState<string>('');
-  const [tooltipColumn, setTooltipColumn] = useState<string>('');
-  const [numericColumn, setNumericColumn] = useState<string | null>(null);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-
 
   if (!data || data.length === 0) {
     return <p>No data available</p>; 
   }
 
+
   const headers = data[0]; 
   const rows = data.slice(1); 
 
-  const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategoricalColumn(event.target.value);
-    setSelectedCategories([]); 
-  };
 
+  const {
+    categoricalColumn,
+    tooltipColumn,
+    numericColumn,
+    selectedCategories,
+    handleCategoricalChange,
+    handleNumericChange,
+    handleTooltipChange,
+    handleCategoryChange
+  } = useBoxPlotState(headers);   
+ 
   
-  const handleNumericChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setNumericColumn(event.target.value);
-  };
-
-  const handleTooltipChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setTooltipColumn(event.target.value);
-  };
-
-  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const options = Array.from(event.target.selectedOptions, (option) => option.value);
-    setSelectedCategories(options);
-  };
-  
-
   const boxPlotData = (): Data[] => {
     if (!categoricalColumn || !numericColumn) return [];
   

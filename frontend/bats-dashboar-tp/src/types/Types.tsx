@@ -42,7 +42,8 @@ export interface ParseResult<T> {
 
 
   export interface MatrixDataState {
-    data: (string | number)[][]; 
+    map?: string;
+    data?: (string | number)[][];     
 }
 
   
