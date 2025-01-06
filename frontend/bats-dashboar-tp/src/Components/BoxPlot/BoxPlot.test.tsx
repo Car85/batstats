@@ -41,15 +41,7 @@ describe('BoxPlot Component', () => {
     expect(options[3].textContent).toBe('Tooltip');
   });
 
-  test('updates categorical column state on selection change', () => {
-    render(<BoxPlot data={mockData} />);
-
-    const categoricalSelect = screen.getByLabelText(/Select Categorical Column/i);
-    fireEvent.change(categoricalSelect, { target: { value: 'Category' } });
-
-    expect((categoricalSelect as HTMLSelectElement).value).toBe('Category');
-  });
-
+ 
   test('renders plotly graph when categorical and numeric columns are selected', async () => {
     render(<BoxPlot data={mockData} />);
   

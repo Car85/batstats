@@ -1,4 +1,4 @@
-import { defineConfig, configDefaults } from 'vitest/config';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 async function loadTsconfigPaths() {
@@ -7,13 +7,16 @@ async function loadTsconfigPaths() {
   return tsconfigPaths;
 }
 
+const getRandomPort = () => Math.floor(Math.random() * (4000 - 3000 + 1)) + 3000;
+
+
 export default defineConfig(async () => {
   const tsconfigPaths = await loadTsconfigPaths(); // load dynamically
 
   return {
     plugins: [react(), tsconfigPaths()],
     server: {
-      port: 54992,
+      port: getRandomPort(),
       proxy: {
         '/batstats': {
           target: 'http://localhost:33899',

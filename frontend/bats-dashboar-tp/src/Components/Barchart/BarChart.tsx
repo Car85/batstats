@@ -1,7 +1,8 @@
-import { useState } from 'react';
 import { BarChartState } from '../../types/Types';
 import Plotly from 'react-plotly.js';
 import { Data } from 'plotly.js';
+
+import useBarChartState from './useBarChartState';
 
 const BarChart = ({ data }: BarChartState) => {
 
@@ -9,27 +10,20 @@ const BarChart = ({ data }: BarChartState) => {
     return <p>No data available</p>; 
   }
 
-  const [categoricalColumn, setCategoricalColumn] = useState<string>('');
-  const [numericColumn, setNumericColumn] = useState<string | null>(null);
-  const [additionalColumn, setAdditionalColumn] = useState<string>('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-
+  
   const headers = data[0]; 
   const rows = data.slice(1); 
 
-  const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategoricalColumn(event.target.value);
-    setSelectedCategories([]); 
-  };
-
-  const handleNumericChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setNumericColumn(event.target.value);
-  };
-
-  const handleAdditionalColumnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setAdditionalColumn(event.target.value);
-  };
-
+  const {
+    categoricalColumn,
+    numericColumn,
+    additionalColumn,
+    selectedCategories,
+    handleCategoricalChange,
+    handleNumericChange,
+    handleAdditionalColumnChange,
+  } = useBarChartState(headers);
+  
   const barChartData = (): Data[] => {
 
     if (!categoricalColumn || !numericColumn || !additionalColumn) return [];

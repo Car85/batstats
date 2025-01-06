@@ -6,28 +6,32 @@ const useBoxPlotState = (headers: string[]) => {
   const [numericColumn, setNumericColumn] = useState<string | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const handleCategoricalChange = (value: string) => {
-    setCategoricalColumn(value);
+  const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setCategoricalColumn(event.target.value);
     setSelectedCategories([]);
+};
+
+
+  const handleNumericChange = (event:  React.ChangeEvent<HTMLSelectElement>) => {
+    setNumericColumn((event.target.value));
   };
 
-  const handleNumericChange = (value: string) => {
-    setNumericColumn(value);
+  const handleTooltipChange = (event:  React.ChangeEvent<HTMLSelectElement>) => {
+    setTooltipColumn((event.target.value));
   };
 
-  const handleTooltipChange = (value: string) => {
-    setTooltipColumn(value);
-  };
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValues = Array.from(event.target.selectedOptions, option => option.value);
+    setSelectedCategories(selectedValues);
+};
 
-  const handleCategoryChange = (values: string[]) => {
-    setSelectedCategories(values);
-  };
 
   return {
     categoricalColumn,
     tooltipColumn,
     numericColumn,
     selectedCategories,
+    setSelectedCategories,
     handleCategoricalChange,
     handleNumericChange,
     handleTooltipChange,

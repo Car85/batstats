@@ -31,13 +31,13 @@ describe('BarChart Component', () => {
 
   test('updates categorical column selection on change', () => {
     render(<BarChart data={mockData} />);
-    
-    fireEvent.change(screen.getByLabelText(/Select Categorical Column/) as HTMLSelectElement, {
-      target: { value: 'Category' },
-    });
 
-    expect((screen.getByLabelText(/Select Categorical Column/) as HTMLSelectElement).value).toBe('Category');
-  });
+    const categoricalSelect = screen.getByLabelText(/Select Categorical Column/) as HTMLSelectElement;
+    fireEvent.change(categoricalSelect, { target: { value: 'Category' } });
+
+    expect(categoricalSelect.value).toBe('Category');
+});
+
 
   test('updates numeric column selection on change', () => {
     render(<BarChart data={mockData} />);
@@ -49,6 +49,7 @@ describe('BarChart Component', () => {
     expect((screen.getByLabelText(/Select Numeric Column/) as HTMLSelectElement).value).toBe('Value');
   });
 
+  
   test('updates additional numeric column selection on change', () => {
     render(<BarChart data={mockData} />);
     

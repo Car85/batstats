@@ -20,6 +20,7 @@ const BoxPlot = ({ data }: BoxPlotState) => {
     tooltipColumn,
     numericColumn,
     selectedCategories,
+    setSelectedCategories,
     handleCategoricalChange,
     handleNumericChange,
     handleTooltipChange,
@@ -64,7 +65,7 @@ const BoxPlot = ({ data }: BoxPlotState) => {
         <label htmlFor="categoricalColumn">Select Categorical Column:</label>
         <select
           id="categoricalColumn"
-          value={categoricalColumn || ''}
+          value={categoricalColumn}
           onChange={handleCategoricalChange}
           >
           <option value="">--Select Categorical Column--</option>
