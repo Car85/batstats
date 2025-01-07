@@ -5,12 +5,13 @@ import createPlotlyRenderers from "react-pivottable/PlotlyRenderers";
 import "react-pivottable/pivottable.css";
 import TableRenderers from "react-pivottable/TableRenderers";
 import * as XLSX from "xlsx";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Plotly from "react-plotly.js";
 import { useDropzone } from "react-dropzone";
 import SaveReport from "../Components/SaveReport/SaveReport";
 import BoxPlot from "../Components/BoxPlot/Boxplot";
 import ReportList from "../Components/ReportList/ReportList";
+import DashboardLandscape from "../Components/Dashboard/DashboardLandscape"
 
 import "../styles/App.css";
 import {
@@ -18,10 +19,12 @@ import {
   PivotState,
   BarChartState,
   MatrixDataState,
+  DashboardState,
 } from "../types/Types";
 import BarChart from "@/Components/Barchart/BarChart";
 import CorrelationMatrix from "@/Components/CorrelationMatrix/CorrelationMatrix";
 import Papa from "papaparse";
+import { Link, Route, Router, Routes } from "react-router-dom";
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
@@ -29,7 +32,10 @@ const App = () => {
   const [pivotState, setPivotState] = useState<PivotState>({});
   const [boxPlotState, setBoxPlotState] = useState<BoxPlotState>({});
   const [barChartState, setBarChartState] = useState<BarChartState>({});
-  const [CorrelationMatrixState] =   useState<MatrixDataState>({});
+  const [CorrelationMatrixState, setCorrelationMatrixState] =   useState<MatrixDataState>({});
+  const [showDashboard, setShowDashboard] = useState<DashboardState>({});
+
+
   const [data, setData] = useState<string[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
   const [usePivotStateData] = useState(false);
@@ -54,14 +60,13 @@ const App = () => {
                 const data = new Uint8Array(event.target?.result as ArrayBuffer);
                 const workbook = XLSX.read(data, {
                     type: "array",
-                    raw: false,  // Forzar normalización de celdas
+                    raw: false,  
                     cellText: true, 
-                    cellDates: true, // Tratar fechas correctamente
+                    cellDates: true, 
                 });
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
 
-                // Convertir a array plano de filas
                 const excelData = XLSX.utils.sheet_to_json(worksheet, {
                     header: 1, 
                     blankrows: false
@@ -83,6 +88,10 @@ const App = () => {
         console.log("Format data no valid");
         toast.error("You can import only csv and xsls files.")
     }
+};
+
+const handleGenerateDashboard = () => {
+  setShowDashboard(true);
 };
 
 
@@ -173,6 +182,9 @@ const App = () => {
                 ? CorrelationMatrixState.data
                 : data
             }
+            onChange={(newState: MatrixDataState) =>
+              setCorrelationMatrixState({ ...CorrelationMatrixState, ...newState })
+            }
           />
         </section>
       )}
@@ -199,6 +211,42 @@ const App = () => {
           />
         </section>
       )}
+      
+    <div>
+    <section className="snapSection">
+
+    <Router>
+      <div>
+        <h1>Interactive Charts</h1>
+        <PivotTable state={pivotState} setState={setPivotState} data={[]} />
+        <BoxPlot state={boxPlotState} setState={setBoxPlotState} data={[]} />
+        <BarChart state={barChartState} setState={setBarChartState} data={[]} />
+        <CorrelationMatrix state={CorrelationMatrixState} setState={setCorrelationMatrixState} data={[]} />
+        
+        <Link
+          to="/dashboard"
+          state={{ pivotState, boxPlotState, barChartState, CorrelationMatrixState }}
+        >
+          <button>Generate Dashboard</button>
+        </Link>
+
+        <Routes>
+          <Route
+            path="/dashboard"
+            element={
+              <DashboardLandscape
+                pivotState={pivotState}
+                boxPlotState={boxPlotState}
+                barChartState={barChartState}
+                correlationMatrixState={CorrelationMatrixState}
+              />
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
+      </section>
+    </div>
     </div>
   );
 };

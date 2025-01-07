@@ -46,5 +46,15 @@ export interface ParseResult<T> {
     data?: (string | number)[][];     
 }
 
+
+
+export interface DashboardState {
+  pivotState: PivotState; 
+  boxPlotState: BoxPlotState; 
+  barChartState: BarChartState; 
+  correlationMatrixState: MatrixDataState; 
+}
+
+
   
   

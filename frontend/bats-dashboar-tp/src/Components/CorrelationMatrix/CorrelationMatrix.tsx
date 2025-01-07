@@ -17,7 +17,6 @@ const CorrelationMatrix = ({ data }: CorrelationMatrixProps) => {
     headers.forEach((_, colIndex) => {
         const column = rows.map(row => row[colIndex]);
         const hasNumbers = column.some(cell => /\d/.test(cell));  
-        const hasLetters = column.some(cell => /[a-zA-Z]/.test(cell));  
 
         if (hasNumbers) {
             numericalColumnIndices.push(colIndex);
