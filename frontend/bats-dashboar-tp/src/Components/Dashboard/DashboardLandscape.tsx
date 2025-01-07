@@ -2,6 +2,8 @@ import PivotTable from "react-pivottable/PivotTable";
 import BoxPlot from "../BoxPlot/Boxplot";
 import BarChart from "../Barchart/BarChart";
 import CorrelationMatrix from "../CorrelationMatrix/CorrelationMatrix";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const DashboardLandscape = ({ pivotState, boxPlotState, barChartState, correlationMatrixState }) => {
     const exportAsImageOrPDF = async (format) => {
