@@ -11,7 +11,7 @@ const getRandomPort = () => Math.floor(Math.random() * (4000 - 3000 + 1)) + 3000
 
 
 export default defineConfig(async () => {
-  const tsconfigPaths = await loadTsconfigPaths(); // load dynamically
+  const tsconfigPaths = await loadTsconfigPaths(); 
 
   return {
     plugins: [react(), tsconfigPaths()],

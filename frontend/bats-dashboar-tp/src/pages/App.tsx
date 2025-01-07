@@ -4,23 +4,24 @@ import PivotTableUI from "react-pivottable/PivotTableUI";
 import createPlotlyRenderers from "react-pivottable/PlotlyRenderers";
 import "react-pivottable/pivottable.css";
 import TableRenderers from "react-pivottable/TableRenderers";
+import * as XLSX from "xlsx";
+import { ToastContainer, toast } from "react-toastify";
 import Plotly from "react-plotly.js";
+import { useDropzone } from "react-dropzone";
 import SaveReport from "../Components/SaveReport/SaveReport";
-import { useCSVReader } from "react-papaparse";
 import BoxPlot from "../Components/BoxPlot/Boxplot";
 import ReportList from "../Components/ReportList/ReportList";
 
 import "../styles/App.css";
 import {
   BoxPlotState,
-  ParseResult,
   PivotState,
-  CSVReaderProps,
   BarChartState,
   MatrixDataState,
 } from "../types/Types";
 import BarChart from "@/Components/Barchart/BarChart";
 import CorrelationMatrix from "@/Components/CorrelationMatrix/CorrelationMatrix";
+import Papa from "papaparse";
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
@@ -31,40 +32,78 @@ const App = () => {
   const [CorrelationMatrixState] =   useState<MatrixDataState>({});
   const [data, setData] = useState<string[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
-  const [usePivotStateData, setUsePivotStateData] = useState(false);
+  const [usePivotStateData] = useState(false);
 
-  const { CSVReader } = useCSVReader();
 
-  const handleCsvUpload = (results: ParseResult<string[]>) => {
-    console.log(results.data);
-    if (results && results.data) {
-      setData(results.data);
-      setCsvLoaded(true);
-      setUsePivotStateData(false);
+ const handleFileUpload = (file: File) => {
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
-      setPivotState({ ...pivotState, data: results.data });
-      setBoxPlotState({ ...boxPlotState, data: results.data });
+    if (fileExtension === "csv") {
+        Papa.parse(file, {
+            complete: (results) => {
+                setData(results.data);
+                setCsvLoaded(true);
+                setPivotState({ data: results.data });
+            },
+            header: false,
+        });
+    } else if (fileExtension === "xlsx" || fileExtension === "xls") {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const data = new Uint8Array(event.target?.result as ArrayBuffer);
+                const workbook = XLSX.read(data, {
+                    type: "array",
+                    raw: false,  // Forzar normalización de celdas
+                    cellText: true, 
+                    cellDates: true, // Tratar fechas correctamente
+                });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+
+                // Convertir a array plano de filas
+                const excelData = XLSX.utils.sheet_to_json(worksheet, {
+                    header: 1, 
+                    blankrows: false
+                });
+
+                if (excelData.length === 0) {
+                    throw new Error("El archivo XLSX parece estar vacío o corrupto.");
+                }
+
+                setData(excelData);
+                setCsvLoaded(true);
+                setPivotState({ data: excelData });
+            } catch (error) {
+                alert("Error al procesar el archivo XLSX: " + error.message);
+            }
+        };
+        reader.readAsArrayBuffer(file);
     } else {
-      console.error("Result data not valid:", results);
+        console.log("Format data no valid");
+        toast.error("You can import only csv and xsls files.")
     }
-  };
+};
+
+
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: {
+      "text/csv": [".csv"],
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
+    },
+    onDrop: (acceptedFiles) => {
+      acceptedFiles.forEach((file) => handleFileUpload(file));
+    },
+  });
 
   return (
     <div className="appContainer">
       {!csvLoaded && (
         <section className="snapSection">
-          <CSVReader onUploadAccepted={handleCsvUpload}>
-            {({ getRootProps, acceptedFile, ProgressBar }: CSVReaderProps) => (
-              <div {...getRootProps()} className="dropZone">
-                {acceptedFile ? (
-                  <p>{acceptedFile.name}</p>
-                ) : (
-                  <p>DROP YOUR CSV OR XLSX DATASET HERE</p>
-                )}
-                <ProgressBar />
-              </div>
-            )}
-          </CSVReader>
+        <section className="dropZone" {...getRootProps()}>
+          <input {...getInputProps()} />
+          <p>DROP HERE YOUR CSV OR XLSX DATASET HERE</p>
+          </section>      
         </section>
       )}
 
@@ -155,8 +194,8 @@ const App = () => {
       {csvLoaded && (
         <section className="snapSection">
           <ReportList
-            setPivotState={handleCsvUpload}
-            setBoxPlotState={handleCsvUpload}
+            setPivotState={handleFileUpload}
+            setBoxPlotState={handleFileUpload}
           />
         </section>
       )}
