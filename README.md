@@ -33,7 +33,7 @@ The frontend leverages **React with TypeScript** and integrates the **Plotly** l
 ## **📊 How It Works**  
 
 1. **Upload a CSV File**  
-   Drag and drop your CSV dataset into the app.  
+   Drag and drop your CSV or XSLS dataset into the dropzone.  
 
 2. **Visualize Data**  
    - Use **Pivot Tables** to generate charts and insights.  
@@ -105,7 +105,7 @@ The initial **unitary** testing for both backend and frontend has been implement
 ---
 
 ### ✅ **Implement correlation matrix.**  
-- [ ] Support additional file formats (e.g., Excel).
+### ✅ **Support additional xsls (Excel) file formats.**
 - [ ] Security
 - [ ] Button that build the dashboard to landscape
 - [ ] Add interactive filters for real-time data analysis.  
