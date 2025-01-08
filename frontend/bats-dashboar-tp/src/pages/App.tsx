@@ -4,10 +4,12 @@ import PivotTableUI from "react-pivottable/PivotTableUI";
 import createPlotlyRenderers from "react-pivottable/PlotlyRenderers";
 import "react-pivottable/pivottable.css";
 import TableRenderers from "react-pivottable/TableRenderers";
-import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
 import Plotly from "react-plotly.js";
 import { useDropzone } from "react-dropzone";
+import * as XLSX from "sheetjs-style";
+
+
 import SaveReport from "../Components/SaveReport/SaveReport";
 import BoxPlot from "../Components/BoxPlot/Boxplot";
 import ReportList from "../Components/ReportList/ReportList";
