@@ -1,11 +1,9 @@
+import { MatrixDataState } from '@/types/Types';
 import React, { useState, useEffect } from 'react';
 import { sampleCorrelation } from 'simple-statistics';
 
-interface CorrelationMatrixProps {
-  data: string[][];
-}
 
-const CorrelationMatrix = ({ data }: CorrelationMatrixProps) => {
+const CorrelationMatrix = ({ data }: MatrixDataState) => {
   const [correlationMatrix, setCorrelationMatrix] = useState<number[][]>([]);
   const [filteredHeaders, setFilteredHeaders] = useState<string[]>([]);
 

@@ -24,7 +24,8 @@ import {
 import BarChart from "@/Components/Barchart/BarChart";
 import CorrelationMatrix from "@/Components/CorrelationMatrix/CorrelationMatrix";
 import Papa from "papaparse";
-import { Link, Route, Router, Routes } from "react-router-dom";
+
+import { BrowserRouter as Link, Route, Router, Routes } from "react-router-dom";
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
@@ -218,42 +219,40 @@ const App = () => {
                   />
                 </section>
               )}
-            </div>
-          }
-        />
+              {csvLoaded && (  
+                <section className="snapSection">
+      
+                <h1>Interactive Charts</h1>
+                  <PivotTable state={pivotState} setState={setPivotState} data={[]} />
+                  <BoxPlot state={boxPlotState} setState={setBoxPlotState} data={[]} />
+                  <BarChart state={barChartState} setState={setBarChartState} data={[]} />
+                  <CorrelationMatrix data={CorrelationMatrixState} setState={setCorrelationMatrixState} />
 
-        <section className="snapSection">
-
-          <div>
-            <h1>Interactive Charts</h1>
-            <PivotTable state={pivotState} setState={setPivotState} data={[]} />
-            <BoxPlot state={boxPlotState} setState={setBoxPlotState} data={[]} />
-            <BarChart state={barChartState} setState={setBarChartState} data={[]} />
-            <CorrelationMatrix state={CorrelationMatrixState} setState={setCorrelationMatrixState} data={[]} />
-
-            <Link
-              to="/dashboard"
-              state={{ pivotState, boxPlotState, barChartState, CorrelationMatrixState }}
-            >
-              <button>Generate Dashboard</button>
-            </Link>
-
-            <Routes>
-              <Route
-                path="/dashboard"
-                element={
-                  <DashboardLandscape
-                    pivotState={pivotState}
-                    boxPlotState={boxPlotState}
-                    barChartState={barChartState}
-                    correlationMatrixState={CorrelationMatrixState}
-                  />
-                }
+                  <Link
+                    to="/dashboard"
+                    state={{ pivotState, boxPlotState, barChartState, CorrelationMatrixState }}
+                  >
+                    <button>Generate Dashboard</button>
+                  </Link>
+                </section>  
+              )}
+          <Route
+          path="/dashboard"
+          element={
+            <section className="snapSection">
+              <DashboardLandscape
+                pivotState={pivotState}
+                boxPlotState={boxPlotState}
+                barChartState={barChartState}
+                correlationMatrixState={CorrelationMatrixState}
               />
-            </Routes>
+            </section>
+          }
+        />  
+        </div>               
+      </Routes>      
+    </Router>
+  )};
 
-          </Router>
-          );
-  };
 
-          export default App;
+export default App;

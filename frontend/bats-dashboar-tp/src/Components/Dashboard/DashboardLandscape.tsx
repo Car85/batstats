@@ -4,11 +4,21 @@ import BarChart from "../Barchart/BarChart";
 import CorrelationMatrix from "../CorrelationMatrix/CorrelationMatrix";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { DashboardState } from "@/types/Types";
 
-const DashboardLandscape = ({ pivotState, boxPlotState, barChartState, correlationMatrixState }) => {
-    const exportAsImageOrPDF = async (format) => {
+const DashboardLandscape = ({ 
+  pivotState,
+  boxPlotState,
+  barChartState,
+  correlationMatrixState }: DashboardState) => {
+
+
+
+    const exportAsImageOrPDF = async (format: "image" | "pdf") => {
       const dashboardElement = document.getElementById("dashboard-container");
   
+      if (!dashboardElement) return;
+
       const canvas = await html2canvas(dashboardElement);
       const image = canvas.toDataURL("image/png");
   
@@ -27,6 +37,8 @@ const DashboardLandscape = ({ pivotState, boxPlotState, barChartState, correlati
         pdf.save("dashboard.pdf");
       }
     };
+
+
   
     return (
       <div>
@@ -43,7 +55,7 @@ const DashboardLandscape = ({ pivotState, boxPlotState, barChartState, correlati
           }}
         >
           <div>
-            <PivotTable data={pivotState?.data || []} state={pivotState} />
+            <PivotTable data={pivotState?.data || []}/>
           </div>
           <div>
             <BoxPlot data={boxPlotState.data} state={boxPlotState} />
@@ -52,7 +64,7 @@ const DashboardLandscape = ({ pivotState, boxPlotState, barChartState, correlati
             <BarChart data={barChartState.data} state={barChartState} />
           </div>
           <div>
-            <CorrelationMatrix data={correlationMatrixState} />
+            <CorrelationMatrix data={correlationMatrixState.data || []} />
           </div>
         </div>
       </div>
