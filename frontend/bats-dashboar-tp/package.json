@@ -23,9 +23,7 @@
     "react-pivottable": "^0.10.0",
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^7.1.1",
-    "react-spreadsheet": "^0.9.5",
-    "react-toastify": "^11.0.2",
-    "sheetjs-style": "^0.15.8",
+    "react-spreadsheet-import": "^4.7.1",
     "simple-statistics": "^7.8.7",
     "uuid": "^11.0.3"
   },
