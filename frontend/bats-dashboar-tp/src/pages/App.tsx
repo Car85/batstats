@@ -161,6 +161,9 @@ const App = () => {
                           onChange={(newState: BoxPlotState) =>
                             setBoxPlotState({ ...boxPlotState, ...newState })
                           }
+                          renderes={{
+                            ...PlotlyRenderers
+                          }}
                         />
                       </section>
                     )}
@@ -226,10 +229,60 @@ const App = () => {
 
                     
                         <h1>Interactive Charts</h1>
-                          <PivotTable state={pivotState} setState={setPivotState} data={[]} />
-                          <BoxPlot state={boxPlotState} setState={setBoxPlotState} data={[]} />
-                          <BarChart state={barChartState} setState={setBarChartState} data={[]} />
-                          <CorrelationMatrix data={CorrelationMatrixState} setState={setCorrelationMatrixState} />
+                        <PivotTableUI
+                            data={
+                              Array.isArray(pivotState.data) && pivotState.data.length > 0
+                                ? pivotState.data.map((row) =>
+                                  row.map((cell) => String(cell))
+                                )
+                                : data.map((row) => row.map((cell) => String(cell)))
+                            }
+                            onChange={(newState) =>
+                              setPivotState({
+                                ...newState,
+                                data: usePivotStateData ? pivotState.data : data,
+                              })
+                            }
+                            renderers={{
+                              ...TableRenderers,
+                              ...PlotlyRenderers,
+                            }}
+                            {...pivotState}
+                          />                     
+                          
+                          <BoxPlot
+                          data={
+                            Array.isArray(boxPlotState.data) && boxPlotState.data.length > 0
+                              ? boxPlotState.data
+                              : data
+                          }
+                          onChange={(newState: BoxPlotState) =>
+                            setBoxPlotState({ ...boxPlotState, ...newState })
+                          }
+                        />
+                        
+                        <BarChart
+                          data={
+                            Array.isArray(barChartState.data) && barChartState.data.length > 0
+                              ? barChartState.data
+                              : data
+                          }
+                          onChange={(newState: BarChartState) =>
+                            setBarChartState({ ...barChartState, ...newState })
+                          }
+                        />
+                          
+                          
+                          <CorrelationMatrix 
+                            data={
+                              Array.isArray(CorrelationMatrixState.data) &&
+                                CorrelationMatrixState.data.length > 0
+                                ? CorrelationMatrixState.data
+                                : data
+                            }
+                            onChange={(newState: MatrixDataState) =>
+                              setCorrelationMatrixState({ ...CorrelationMatrixState, ...newState })
+                            }/>
 
                           <Link
                             to="/dashboard"
@@ -243,10 +296,6 @@ const App = () => {
                   }  
             
              />
-         
-       
-
-
           
         <Route
           path="/dashboard"
