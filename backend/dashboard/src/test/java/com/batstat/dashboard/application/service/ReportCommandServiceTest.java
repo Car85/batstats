@@ -9,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.batstat.dashboard.application.mapper.ReportModelToEntity;
+import com.batstat.dashboard.mapper.ReportModelToEntity;
 import com.batstat.dashboard.domain.model.DashboardReportModel;
 import com.batstat.dashboard.infrastructure.persistence.entity.DashboardReportEntity;
 import com.batstat.dashboard.infrastructure.persistence.repository.DashboardReportRepository;
@@ -26,7 +26,7 @@ class ReportCommandServiceTest {
     private ReportModelToEntity mapper;
 
     @InjectMocks
-    private ReportCommandService service;
+    private SQLiteReportCommandService service;
 
     @Test
     void testSaveReport() {

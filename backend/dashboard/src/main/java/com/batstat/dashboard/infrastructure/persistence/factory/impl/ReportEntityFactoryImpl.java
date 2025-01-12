@@ -6,7 +6,7 @@ import com.batstat.dashboard.infrastructure.persistence.factory.ReportEntityFact
 public class ReportEntityFactoryImpl implements ReportEntityFactory {
 
     @Override
-    public DashboardReportEntity createEntity() {
+    public DashboardReportEntity createEntity() {        
         return new DashboardReportEntity();
     }
 

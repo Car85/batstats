@@ -1,4 +1,4 @@
-package com.batstat.dashboard.application.mapper;
+package com.batstat.dashboard.mapper;
 
 
 import java.util.UUID;

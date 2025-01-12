@@ -5,7 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 
-import com.batstat.dashboard.application.mapper.DataModelToEntity;
+import com.batstat.dashboard.mapper.DataModelToEntity;
 import com.batstat.dashboard.domain.model.DashboardDataModel;
 import com.batstat.dashboard.infrastructure.persistence.entity.DashboardDataEntity;
 import com.batstat.dashboard.infrastructure.persistence.repository.DashboardDataRepository;
@@ -26,7 +26,7 @@ class DataCommandServiceTest {
     private DataModelToEntity mapper;
 
     @InjectMocks
-    private DataCommandService service;
+    private SQLiteDataCommandService service;
 
     @Test
     void testSaveData() {

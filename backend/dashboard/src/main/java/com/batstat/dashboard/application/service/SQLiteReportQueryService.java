@@ -6,18 +6,18 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.batstat.dashboard.application.mapper.ReportEntityToModel;
+import com.batstat.dashboard.mapper.ReportEntityToModel;
 import com.batstat.dashboard.domain.model.DashboardReportModel;
 import com.batstat.dashboard.infrastructure.persistence.entity.DashboardReportEntity;
 import com.batstat.dashboard.infrastructure.persistence.repository.DashboardReportRepository;
 
 @Service
-public class ReportQueryService implements com.batstat.dashboard.application.port.incoming.ReportQueryService{
+public class SQLiteReportQueryService implements com.batstat.dashboard.application.port.incoming.ReportQueryService{
 
     private final DashboardReportRepository repository;
     private final ReportEntityToModel mapper;
 
-    public ReportQueryService(DashboardReportRepository repository, ReportEntityToModel mapper) {
+    public SQLiteReportQueryService(DashboardReportRepository repository, ReportEntityToModel mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
