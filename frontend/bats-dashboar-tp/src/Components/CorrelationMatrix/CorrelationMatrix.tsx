@@ -57,8 +57,8 @@ const calculateCorrelationMatrix = (numericRows: string[][]): number[][] => {
 };
 
 useEffect(() => {
-    if (data.length > 1) {
-        const mergedData = filterNumericalColumns(data);
+    if (data!.length > 1) {
+        const mergedData = filterNumericalColumns(data!);
         const headers = mergedData[0];
         const filteredData = mergedData.slice(1);
 

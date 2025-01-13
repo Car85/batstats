@@ -26,7 +26,6 @@ import CorrelationMatrix from "@/Components/CorrelationMatrix/CorrelationMatrix"
 import Papa from "papaparse";
 
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import PivotTable from "react-pivottable/PivotTable";
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
@@ -35,68 +34,79 @@ const App = () => {
   const [boxPlotState, setBoxPlotState] = useState<BoxPlotState>({});
   const [barChartState, setBarChartState] = useState<BarChartState>({});
   const [CorrelationMatrixState, setCorrelationMatrixState] = useState<MatrixDataState>({});
-  const [showDashboard, setShowDashboard] = useState<DashboardState>({});
+  // const [showDashboard, setShowDashboard] = useState<DashboardState>({});
 
 
   const [data, setData] = useState<string[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
   const [usePivotStateData] = useState(false);
 
+  const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
+
+
 
   const handleFileUpload = (file: File) => {
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
     if (fileExtension === "csv") {
-      Papa.parse(file, {
-        complete: (results) => {
-          setData(results.data);
-          setCsvLoaded(true);
-          setPivotState({ data: results.data });
+        Papa.parse<String[]>(file, {
+          complete: (results) => {
+            const parsedData = results.data.every(row => Array.isArray(row) && row.every(cell => typeof cell === 'string'))
+                ? (results.data as string[][])
+                : [];
+    
+            if (parsedData.length === 0) {
+                alert("The CSV data is invalid or empty.");
+                return;
+            }
+    
+            setData(parsedData);
+            setCsvLoaded(true);
+            setPivotState({ data: parsedData });
         },
-        header: false,
-      });
+            header: false,
+        });
     } else if (fileExtension === "xlsx" || fileExtension === "xls") {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        try {
-          const data = new Uint8Array(event.target?.result as ArrayBuffer);
-          const workbook = XLSX.read(data, {
-            type: "array",
-            raw: false,
-            cellText: true,
-            cellDates: true,
-          });
-          const sheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[sheetName];
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const data = new Uint8Array(event.target?.result as ArrayBuffer);
+                const workbook = XLSX.read(data, {
+                    type: "array",
+                    raw: false,
+                    cellText: true,
+                    cellDates: true,
+                });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
 
-          const excelData = XLSX.utils.sheet_to_json(worksheet, {
-            header: 1,
-            blankrows: false
-          });
+                const excelData = XLSX.utils.sheet_to_json(worksheet, {
+                    header: 1,
+                    blankrows: false
+                }) as string[][];
 
-          if (excelData.length === 0) {
-            throw new Error("El archivo XLSX parece estar vacío o corrupto.");
-          }
+                if (excelData.length === 0) {
+                    throw new Error("The XLSX file seems empty or corrupt.");
+                }
 
-          setData(excelData);
-          setCsvLoaded(true);
-          setPivotState({ data: excelData });
-        } catch (error) {
-          alert("Error al procesar el archivo XLSX: " + error.message);
-        }
-      };
-      reader.readAsArrayBuffer(file);
+                setData(excelData);
+                setCsvLoaded(true);
+                setPivotState({ data: excelData });
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    alert("Error processing XLSX file: " + error.message);
+                } else {
+                    alert("An unknown error occurred");
+                }
+            } 
+        };
+        reader.readAsArrayBuffer(file);
     } else {
-      console.log("Format data no valid");
-      toast.error("You can import only csv and xsls files.")
+        console.log("Format data no valid");
+        toast.error("You can import only CSV and XLS files.");
     }
-  };
-
-  const handleGenerateDashboard = () => {
-    setShowDashboard(true);
-  };
-
-
+};
+ 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "text/csv": [".csv"],
@@ -126,7 +136,7 @@ const App = () => {
                     {csvLoaded && (
                       <section className="snapSection">
                         <div className="pivotContainer">
-                          <PivotTableUI
+                          <PivotTableUIComponent
                             data={
                               Array.isArray(pivotState.data) && pivotState.data.length > 0
                                 ? pivotState.data.map((row) =>
@@ -134,7 +144,7 @@ const App = () => {
                                 )
                                 : data.map((row) => row.map((cell) => String(cell)))
                             }
-                            onChange={(newState) =>
+                            onChange={(newState: PivotState) =>
                               setPivotState({
                                 ...newState,
                                 data: usePivotStateData ? pivotState.data : data,
@@ -192,9 +202,9 @@ const App = () => {
                                 ? CorrelationMatrixState.data
                                 : data
                             }
-                            onChange={(newState: MatrixDataState) =>
-                              setCorrelationMatrixState({ ...CorrelationMatrixState, ...newState })
-                            }
+                            // onChange={(newState: MatrixDataState) =>
+                            //   setCorrelationMatrixState({ ...CorrelationMatrixState, ...newState })
+                            // }
                           />
                         </section>
                       )}
@@ -229,7 +239,7 @@ const App = () => {
 
                     
                         <h1>Interactive Charts</h1>
-                        <PivotTableUI
+                        <PivotTableUIComponent
                             data={
                               Array.isArray(pivotState.data) && pivotState.data.length > 0
                                 ? pivotState.data.map((row) =>
@@ -237,7 +247,7 @@ const App = () => {
                                 )
                                 : data.map((row) => row.map((cell) => String(cell)))
                             }
-                            onChange={(newState) =>
+                            onChange={(newState: PivotState) =>
                               setPivotState({
                                 ...newState,
                                 data: usePivotStateData ? pivotState.data : data,
@@ -280,9 +290,10 @@ const App = () => {
                                 ? CorrelationMatrixState.data
                                 : data
                             }
-                            onChange={(newState: MatrixDataState) =>
-                              setCorrelationMatrixState({ ...CorrelationMatrixState, ...newState })
-                            }/>
+                            // onChange={(newState: MatrixDataState) =>
+                            //   setCorrelationMatrixState({ ...CorrelationMatrixState, ...newState })
+                            // }
+                            />
 
                           <Link
                             to="/dashboard"

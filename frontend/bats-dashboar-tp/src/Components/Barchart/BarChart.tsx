@@ -1,8 +1,8 @@
 import { BarChartState } from '../../types/Types';
-import Plotly from 'react-plotly.js';
-import { Data } from 'plotly.js';
 
 import useBarChartState from './useBarChartState';
+import PivotTableUI from 'react-pivottable';
+import { PlotData } from 'plotly.js'; 
 
 const BarChart = ({ data }: BarChartState) => {
 
@@ -13,6 +13,8 @@ const BarChart = ({ data }: BarChartState) => {
   
   const headers = data[0]; 
   const rows = data.slice(1); 
+  const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
+
 
   const {
     categoricalColumn,
@@ -24,7 +26,7 @@ const BarChart = ({ data }: BarChartState) => {
     handleAdditionalColumnChange,
   } = useBarChartState(headers);
   
-  const barChartData = (): Data[] => {
+  const barChartData = (): PlotData[] => {
 
     if (!categoricalColumn || !numericColumn || !additionalColumn) return [];
 
@@ -44,21 +46,22 @@ const BarChart = ({ data }: BarChartState) => {
       }
     });
 
-    const sortedGroupedData = Object.entries(groupedData)
-      .sort(([, a], [, b]) => {
+    const sortedGroupedData: PlotData[] = Object.entries(groupedData)
+    .sort(([, a], [, b]) => {
         const sumA = a.values.reduce((acc, val) => acc + val, 0);
         const sumB = b.values.reduce((acc, val) => acc + val, 0);
         return sumB - sumA;
-      })
-      .map(([key, { values, tooltips }]) => ({
+    })
+    .map(([key, { values, tooltips }]) => ({
         y: values,
-        type: 'bar' as const,
+        x: Array.from({ length: values.length }, (_, i) => i + 1), // Añadido eje x ordenado
+        type: 'bar',
         name: key,
         text: tooltips,
         hoverinfo: 'text',
         textposition: 'none',
-      }));
-
+    }));
+    
     return sortedGroupedData;
   };
 
@@ -116,7 +119,7 @@ const BarChart = ({ data }: BarChartState) => {
 
       <div>
         {categoricalColumn && numericColumn && additionalColumn && (
-          <Plotly
+          <PivotTableUIComponent
             data={barChartData()}
             layout={{
               title: 'Bar Chart: Dynamic Analysis',
