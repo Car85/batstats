@@ -2,7 +2,6 @@ import { BarChartState } from '../../types/Types';
 
 import useBarChartState from './useBarChartState';
 import PivotTableUI from 'react-pivottable';
-import { PlotData } from 'plotly.js'; 
 
 const BarChart = ({ data }: BarChartState) => {
 
@@ -26,7 +25,7 @@ const BarChart = ({ data }: BarChartState) => {
     handleAdditionalColumnChange,
   } = useBarChartState(headers);
   
-  const barChartData = (): PlotData[] => {
+  const barChartData = (): BarChartState[] => {
 
     if (!categoricalColumn || !numericColumn || !additionalColumn) return [];
 
@@ -46,7 +45,7 @@ const BarChart = ({ data }: BarChartState) => {
       }
     });
 
-    const sortedGroupedData: PlotData[] = Object.entries(groupedData)
+    const sortedGroupedData: BarChartState[] = Object.entries(groupedData)
     .sort(([, a], [, b]) => {
         const sumA = a.values.reduce((acc, val) => acc + val, 0);
         const sumB = b.values.reduce((acc, val) => acc + val, 0);
@@ -54,8 +53,8 @@ const BarChart = ({ data }: BarChartState) => {
     })
     .map(([key, { values, tooltips }]) => ({
         y: values,
-        x: Array.from({ length: values.length }, (_, i) => i + 1), // Añadido eje x ordenado
-        type: 'bar',
+        x: Array.from({ length: values.length }, (_, i) => i + 1), 
+        type: 'bar' as const,
         name: key,
         text: tooltips,
         hoverinfo: 'text',
