@@ -17,14 +17,18 @@ export interface ParseResult<T> {
     [key: string]: unknown; 
   }
   
-  export interface BoxPlotState {
-    map?: string;
-    data?: string[][]; 
-    options?: Record<string, unknown>;
-    labels?: string[]; 
-    [key: string]: unknown; 
-  }
 
+  export interface BoxPlotState {
+    data?: string[][];          
+    options?: Record<string, unknown>; 
+    labels?: string[];           
+    categoricalColumn?: string;  
+    numericColumn?: string;      
+    selectedCategories?: string[]; 
+    tooltipColumn?: string;
+    [key: string]: unknown;
+  }
+  
 
   export interface BarChartState {
     map?: string;

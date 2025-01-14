@@ -9,7 +9,7 @@ import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
 import SaveReport from "../Components/SaveReport/SaveReport";
-import BoxPlot from "../Components/BoxPlot/Boxplot";
+import BoxPlot, { boxPlotData } from "../Components/BoxPlot/Boxplot";
 import ReportList from "../Components/ReportList/ReportList";
 import DashboardLandscape from "../Components/Dashboard/DashboardLandscape"
 
@@ -21,13 +21,13 @@ import {
   MatrixDataState,
   DashboardState,
 } from "../types/Types";
-import useBoxPlotState from "@/Components/BoxPlot/useBoxPlotState";
+
+
 import BarChart from "@/Components/Barchart/BarChart";
 import CorrelationMatrix from "@/Components/CorrelationMatrix/CorrelationMatrix";
 import Papa from "papaparse";
 
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import Plot from "react-plotly.js";
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
@@ -45,11 +45,14 @@ const App = () => {
   const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
   const headers = data[0]; 
 
-
-  const {
-    categoricalColumn,
-    numericColumn   
-  } = useBoxPlotState(headers);   
+  const dataForPlot = boxPlotData(
+    headers,
+    boxPlotState.data || [],
+    boxPlotState.categoricalColumn || '',
+    boxPlotState.numericColumn || '',
+    boxPlotState.tooltipColumn || '',
+    boxPlotState.selectedCategories || []
+  );
 
 
   const handleFileUpload = (file: File) => {
@@ -271,11 +274,11 @@ const App = () => {
                           />                     
                           
                           <Plotly
-                            data={boxPlotState.data}
+                            data={dataForPlot}
                             layout={{
                               title: 'Box Plot: Dynamic Analysis',
-                              yaxis: { title: numericColumn },
-                              xaxis: { title: categoricalColumn },
+                              yaxis: { title: boxPlotState.numericColumn },
+                              xaxis: { title: boxPlotState.categoricalColumn },
                             }}
                           />
                         

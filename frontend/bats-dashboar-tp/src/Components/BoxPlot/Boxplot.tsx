@@ -3,6 +3,42 @@ import { BoxPlotState } from '../../types/Types';
 import useBoxPlotState from './useBoxPlotState';
 import { Data } from 'plotly.js';
 
+
+export const boxPlotData = ( 
+  headers: string[],
+  rows: string[][],
+  categoricalColumn: string,
+  numericColumn: string,
+  tooltipColumn: string,
+  selectedCategories: string[]): Data[] => {
+  
+  if (!categoricalColumn || !numericColumn) return [];
+
+  const groupedData: { [key: string]: { values: number[]; tooltips: string[] } } = {};
+
+  rows.forEach((row) => {
+    const category = row[headers.indexOf(categoricalColumn)] as string;
+    const numericValue = Number(row[headers.indexOf(numericColumn)]);
+    const tooltipValue = String(row[headers.indexOf(tooltipColumn)]);
+
+    if (!selectedCategories.length || selectedCategories.includes(category)) {
+      if (!groupedData[category]) {
+        groupedData[category] = { values: [], tooltips: [] };
+      }
+      groupedData[category].values.push(numericValue);
+      groupedData[category].tooltips.push(`${category}, ${numericValue}, ${tooltipColumn}: ${tooltipValue}`);
+    }
+  });
+
+  return Object.entries(groupedData).map(([key, { values, tooltips }]) => ({
+    y: values,
+    type: 'box', 
+    name: key, 
+    text: tooltips, 
+    hoverinfo: 'text', 
+  }));
+};
+
 const BoxPlot = ({ data }: BoxPlotState) => {
 
   if (!data || data.length === 0) {
@@ -27,33 +63,7 @@ const BoxPlot = ({ data }: BoxPlotState) => {
   } = useBoxPlotState(headers);   
  
   
-  const boxPlotData = (): Data[] => {
-    if (!categoricalColumn || !numericColumn) return [];
-  
-    const groupedData: { [key: string]: { values: number[]; tooltips: string[] } } = {};
-  
-    rows.forEach((row) => {
-      const category = row[headers.indexOf(categoricalColumn)] as string;
-      const numericValue = Number(row[headers.indexOf(numericColumn)]);
-      const tooltipValue = String(row[headers.indexOf(tooltipColumn)]);
-  
-      if (!selectedCategories.length || selectedCategories.includes(category)) {
-        if (!groupedData[category]) {
-          groupedData[category] = { values: [], tooltips: [] };
-        }
-        groupedData[category].values.push(numericValue);
-        groupedData[category].tooltips.push(`${category}, ${numericValue}, ${tooltipColumn}: ${tooltipValue}`);
-      }
-    });
-  
-    return Object.entries(groupedData).map(([key, { values, tooltips }]) => ({
-      y: values,
-      type: 'box' as const, 
-      name: key, 
-      text: tooltips, 
-      hoverinfo: 'text', 
-    }));
-  };
+ 
   
 
   return (
@@ -143,7 +153,7 @@ const BoxPlot = ({ data }: BoxPlotState) => {
 
       {categoricalColumn && numericColumn && (
         <Plotly
-          data={boxPlotData()}
+          data={boxPlotData(headers, rows, categoricalColumn, numericColumn, tooltipColumn, selectedCategories)}
           layout={{
             title: 'Box Plot: Dynamic Analysis',
             yaxis: { title: numericColumn },
