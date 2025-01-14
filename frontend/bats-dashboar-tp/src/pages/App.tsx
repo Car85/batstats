@@ -1,12 +1,12 @@
 import { useState } from "react";
 
 import PivotTableUI from "react-pivottable/PivotTableUI";
+import Plotly from 'react-plotly.js';
 import createPlotlyRenderers from "react-pivottable/PlotlyRenderers";
 import "react-pivottable/pivottable.css";
 import TableRenderers from "react-pivottable/TableRenderers";
 import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
-import Plotly from "react-plotly.js";
 import { useDropzone } from "react-dropzone";
 import SaveReport from "../Components/SaveReport/SaveReport";
 import BoxPlot from "../Components/BoxPlot/Boxplot";
@@ -21,11 +21,13 @@ import {
   MatrixDataState,
   DashboardState,
 } from "../types/Types";
+import useBoxPlotState from "@/Components/BoxPlot/useBoxPlotState";
 import BarChart from "@/Components/Barchart/BarChart";
 import CorrelationMatrix from "@/Components/CorrelationMatrix/CorrelationMatrix";
 import Papa from "papaparse";
 
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import Plot from "react-plotly.js";
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
@@ -33,8 +35,7 @@ const App = () => {
   const [pivotState, setPivotState] = useState<PivotState>({});
   const [boxPlotState, setBoxPlotState] = useState<BoxPlotState>({});
   const [barChartState, setBarChartState] = useState<BarChartState>({});
-  const [CorrelationMatrixState, setCorrelationMatrixState] = useState<MatrixDataState>({});
-  // const [showDashboard, setShowDashboard] = useState<DashboardState>({});
+  const [CorrelationMatrixState] = useState<MatrixDataState>({});
 
 
   const [data, setData] = useState<string[][]>([]);
@@ -42,7 +43,13 @@ const App = () => {
   const [usePivotStateData] = useState(false);
 
   const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
+  const headers = data[0]; 
 
+
+  const {
+    categoricalColumn,
+    numericColumn   
+  } = useBoxPlotState(headers);   
 
 
   const handleFileUpload = (file: File) => {
@@ -189,6 +196,9 @@ const App = () => {
                           onChange={(newState: BarChartState) =>
                             setBarChartState({ ...barChartState, ...newState })
                           }
+                          renderes={{
+                            ...PlotlyRenderers
+                          }}
                         />
                       </section>
                     )}
@@ -260,16 +270,14 @@ const App = () => {
                             {...pivotState}
                           />                     
                           
-                          <BoxPlot
-                          data={
-                            Array.isArray(boxPlotState.data) && boxPlotState.data.length > 0
-                              ? boxPlotState.data
-                              : data
-                          }
-                          onChange={(newState: BoxPlotState) =>
-                            setBoxPlotState({ ...boxPlotState, ...newState })
-                          }
-                        />
+                          <Plotly
+                            data={boxPlotState.data}
+                            layout={{
+                              title: 'Box Plot: Dynamic Analysis',
+                              yaxis: { title: numericColumn },
+                              xaxis: { title: categoricalColumn },
+                            }}
+                          />
                         
                         <BarChart
                           data={

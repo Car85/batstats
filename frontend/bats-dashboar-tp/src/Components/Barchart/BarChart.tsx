@@ -1,7 +1,7 @@
 import { BarChartState } from '../../types/Types';
 
 import useBarChartState from './useBarChartState';
-import PivotTableUI from 'react-pivottable';
+import Plot from 'react-plotly.js';
 
 const BarChart = ({ data }: BarChartState) => {
 
@@ -12,7 +12,6 @@ const BarChart = ({ data }: BarChartState) => {
   
   const headers = data[0]; 
   const rows = data.slice(1); 
-  const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
 
 
   const {
@@ -118,7 +117,7 @@ const BarChart = ({ data }: BarChartState) => {
 
       <div>
         {categoricalColumn && numericColumn && additionalColumn && (
-          <PivotTableUIComponent
+          <Plot
             data={barChartData()}
             layout={{
               title: 'Bar Chart: Dynamic Analysis',

@@ -20,6 +20,7 @@ export interface ParseResult<T> {
   export interface BoxPlotState {
     map?: string;
     data?: string[][]; 
+    options?: Record<string, unknown>;
     labels?: string[]; 
     [key: string]: unknown; 
   }
@@ -28,6 +29,7 @@ export interface ParseResult<T> {
   export interface BarChartState {
     map?: string;
     data?: string[][]; 
+    options?: Record<string, unknown>;
     labels?: string[]; 
     [key: string]: unknown; 
   }

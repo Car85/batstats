@@ -1,10 +1,10 @@
-import PivotTable from "react-pivottable/PivotTable";
 import BoxPlot from "../BoxPlot/Boxplot";
 import BarChart from "../Barchart/BarChart";
 import CorrelationMatrix from "../CorrelationMatrix/CorrelationMatrix";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { DashboardState } from "@/types/Types";
+import PivotTableUI from "react-pivottable";
 
 const DashboardLandscape = ({ 
   pivotState,
@@ -12,6 +12,7 @@ const DashboardLandscape = ({
   barChartState,
   correlationMatrixState }: DashboardState) => {
 
+    const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
 
 
     const exportAsImageOrPDF = async (format: "image" | "pdf") => {
@@ -55,7 +56,7 @@ const DashboardLandscape = ({
           }}
         >
           <div>
-            <PivotTable data={pivotState?.data || []}/>
+            <PivotTableUIComponent data={pivotState?.data || []}/>
           </div>
           <div>
             <BoxPlot data={boxPlotState.data} state={boxPlotState} />
