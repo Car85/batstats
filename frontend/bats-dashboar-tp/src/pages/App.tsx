@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SetStateAction, useCallback, useState } from "react";
 
 import PivotTableUI from "react-pivottable/PivotTableUI";
 import Plotly from 'react-plotly.js';
@@ -28,6 +28,7 @@ import CorrelationMatrix from "@/Components/CorrelationMatrix/CorrelationMatrix"
 import Papa from "papaparse";
 
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { Data } from "plotly.js";
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
@@ -43,17 +44,14 @@ const App = () => {
   const [usePivotStateData] = useState(false);
 
   const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
-  const headers = data[0]; 
 
-  const dataForPlot = boxPlotData(
-    headers,
-    boxPlotState.data || [],
-    boxPlotState.categoricalColumn || '',
-    boxPlotState.numericColumn || '',
-    boxPlotState.tooltipColumn || '',
-    boxPlotState.selectedCategories || []
-  );
+  const [savedPlotData, setSavedPlotData] = useState<{ data: any[]; layout: any } | null>(null);
+ 
 
+
+  const handleStateChange = (state: { data: Data[]; layout: any }) => {
+    setSavedPlotData(state);
+  };
 
   const handleFileUpload = (file: File) => {
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
@@ -116,6 +114,7 @@ const App = () => {
         toast.error("You can import only CSV and XLS files.");
     }
 };
+
  
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -174,13 +173,11 @@ const App = () => {
                       <section className="snapSection">
                         <BoxPlot
                           data={
-                            Array.isArray(boxPlotState.data) && boxPlotState.data.length > 0
-                              ? boxPlotState.data
+                            Array.isArray(savedPlotData) && savedPlotData.length > 0
+                              ? savedPlotData
                               : data
                           }
-                          onChange={(newState: BoxPlotState) =>
-                            setBoxPlotState({ ...boxPlotState, ...newState })
-                          }
+                          onStateChange={handleStateChange}
                           renderes={{
                             ...PlotlyRenderers
                           }}
@@ -273,15 +270,10 @@ const App = () => {
                             {...pivotState}
                           />                     
                           
-                          <Plotly
-                            data={dataForPlot}
-                            layout={{
-                              title: 'Box Plot: Dynamic Analysis',
-                              yaxis: { title: boxPlotState.numericColumn },
-                              xaxis: { title: boxPlotState.categoricalColumn },
-                            }}
-                          />
-                        
+                          <BoxPlot
+                            data={savedPlotData?.data || []} 
+                            layout={savedPlotData?.layout || { title: '', xaxis: {}, yaxis: {} }} 
+                        />                        
                         <BarChart
                           data={
                             Array.isArray(barChartState.data) && barChartState.data.length > 0

@@ -2,6 +2,7 @@ import Plotly from 'react-plotly.js';
 import { BoxPlotState } from '../../types/Types';
 import useBoxPlotState from './useBoxPlotState';
 import { Data } from 'plotly.js';
+import { useEffect, useMemo} from 'react';
 
 
 export const boxPlotData = ( 
@@ -13,6 +14,7 @@ export const boxPlotData = (
   selectedCategories: string[]): Data[] => {
   
   if (!categoricalColumn || !numericColumn) return [];
+ 
 
   const groupedData: { [key: string]: { values: number[]; tooltips: string[] } } = {};
 
@@ -30,7 +32,8 @@ export const boxPlotData = (
     }
   });
 
-  return Object.entries(groupedData).map(([key, { values, tooltips }]) => ({
+  return Object.entries(groupedData).map(([key, { values, tooltips }], index) => ({
+    key: `box-${index}`,
     y: values,
     type: 'box', 
     name: key, 
@@ -39,12 +42,12 @@ export const boxPlotData = (
   }));
 };
 
-const BoxPlot = ({ data }: BoxPlotState) => {
-
+const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (state: { data: Data[]; layout: any }) => void }) => {
+ 
+ 
   if (!data || data.length === 0) {
-    return <p>No data available</p>; 
+    return <p>No data available</p>;
   }
-
 
   const headers = data[0]; 
   const rows = data.slice(1); 
@@ -63,8 +66,25 @@ const BoxPlot = ({ data }: BoxPlotState) => {
   } = useBoxPlotState(headers);   
  
   
- 
-  
+  const plotData = useMemo(() => {
+    return boxPlotData(headers, rows, categoricalColumn, numericColumn as string, tooltipColumn, selectedCategories);
+  }, [headers, rows, categoricalColumn, numericColumn, tooltipColumn, selectedCategories]);
+
+   const plotLayout = useMemo(() => {
+    return {
+      title: 'Box Plot: Dynamic Analysis',
+      yaxis: { title: numericColumn || 'Y-Axis' },
+      xaxis: { title: categoricalColumn || 'X-Axis' },
+    };
+  }, [numericColumn, categoricalColumn]);
+
+
+
+  useEffect(() => {
+    if (onStateChange) {
+      onStateChange({ data: plotData, layout: plotLayout });
+    }
+  }, [plotData, plotLayout, onStateChange]);
 
   return (
     <div>
@@ -78,11 +98,11 @@ const BoxPlot = ({ data }: BoxPlotState) => {
           onChange={handleCategoricalChange}
           >
           <option value="">--Select Categorical Column--</option>
-          {headers.map((header) => (
-            <option key={header} value={header}>
-              {header}
-            </option>
-          ))}
+              {headers.map((header) => (
+              <option key={header} value={header}>
+                {header}
+              </option>
+            ))}
         </select>
       </div>
 
@@ -94,8 +114,8 @@ const BoxPlot = ({ data }: BoxPlotState) => {
           onChange={handleNumericChange}
         >
           <option value="">--Select Numeric Column--</option>
-          {headers.map((header) => (
-            <option key={header} value={header}>
+          {headers.map((header, index) => (
+            <option key={`${header}-${index}`} value={header}>
               {header}
             </option>
           ))}
@@ -129,9 +149,9 @@ const BoxPlot = ({ data }: BoxPlotState) => {
             onChange={handleCategoryChange}
           >
             {Array.from(new Set(rows.map((row) => row[headers.indexOf(categoricalColumn)]))).map(
-              (category) => (
-                <option key={category} value={category as string}>
-                  {category as string}
+              (category, index) => (
+                <option key={`${category}-${index}`} value={category}>
+                  {category}
                 </option>
               )
             )}
@@ -152,14 +172,7 @@ const BoxPlot = ({ data }: BoxPlotState) => {
       )}
 
       {categoricalColumn && numericColumn && (
-        <Plotly
-          data={boxPlotData(headers, rows, categoricalColumn, numericColumn, tooltipColumn, selectedCategories)}
-          layout={{
-            title: 'Box Plot: Dynamic Analysis',
-            yaxis: { title: numericColumn },
-            xaxis: { title: categoricalColumn },
-          }}
-        />
+        <Plotly data={plotData} layout={plotLayout} />
       )}
     </div>
   );
