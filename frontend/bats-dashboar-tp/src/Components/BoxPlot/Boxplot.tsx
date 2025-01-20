@@ -1,8 +1,8 @@
 import Plotly from 'react-plotly.js';
-import { BoxPlotState } from '../../types/Types';
+import { BoxPlotState, PlotYaout } from '../../types/Types';
 import useBoxPlotState from './useBoxPlotState';
 import { Data } from 'plotly.js';
-import { useEffect, useMemo} from 'react';
+import { useEffect, useMemo } from 'react';
 
 
 export const boxPlotData = ( 
@@ -42,15 +42,11 @@ export const boxPlotData = (
   }));
 };
 
-const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (state: { data: Data[]; layout: any }) => void }) => {
- 
- 
-  if (!data || data.length === 0) {
-    return <p>No data available</p>;
-  }
-
-  const headers = data[0]; 
-  const rows = data.slice(1); 
+const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (state: { data: Data[]; layout: PlotYaout }) => void }) => {
+  
+  
+  const headers = useMemo(() => (Array.isArray(data) && data.length > 0 && Array.isArray(data[0]) ? data[0] : []), [data]);
+  const rows = useMemo(() => (data && data.length > 1 ? data.slice(1) : []), [data]);
 
 
   const {
@@ -63,28 +59,38 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
     handleNumericChange,
     handleTooltipChange,
     handleCategoryChange
-  } = useBoxPlotState(headers);   
+  } = useBoxPlotState(headers);
+ 
+ 
+
+ 
  
   
-  const plotData = useMemo(() => {
-    return boxPlotData(headers, rows, categoricalColumn, numericColumn as string, tooltipColumn, selectedCategories);
+  const plotData = useMemo((): Data[] => {
+    if (!headers.length || !rows.length) return [];
+    return boxPlotData(headers, rows, categoricalColumn, numericColumn || '', tooltipColumn, selectedCategories);
   }, [headers, rows, categoricalColumn, numericColumn, tooltipColumn, selectedCategories]);
 
-   const plotLayout = useMemo(() => {
+
+   const plotLayout = useMemo((): PlotYaout => {
     return {
       title: 'Box Plot: Dynamic Analysis',
       yaxis: { title: numericColumn || 'Y-Axis' },
       xaxis: { title: categoricalColumn || 'X-Axis' },
-    };
+    }as PlotYaout;
   }, [numericColumn, categoricalColumn]);
 
 
 
   useEffect(() => {
-    if (onStateChange) {
+    if (onStateChange && plotData.length > 0) {
       onStateChange({ data: plotData, layout: plotLayout });
     }
   }, [plotData, plotLayout, onStateChange]);
+
+  if (!data || data.length === 0) {
+    return <p>No data available</p>;
+  }
 
   return (
     <div>
@@ -98,11 +104,12 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
           onChange={handleCategoricalChange}
           >
           <option value="">--Select Categorical Column--</option>
-              {headers.map((header) => (
-              <option key={header} value={header}>
-                {header}
-              </option>
-            ))}
+          {Array.isArray(headers) &&
+            headers.map((header) => (
+            <option key={header} value={header}>
+              {header}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -130,7 +137,9 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
           onChange={handleTooltipChange}
         >
           <option value="">--Select Tooltip Column--</option>
-          {headers.map((header) => (
+
+          {Array.isArray(headers) &&
+            headers.map((header) => (
             <option key={header} value={header}>
               {header}
             </option>

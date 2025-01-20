@@ -62,5 +62,16 @@ export interface DashboardState {
 }
 
 
+export interface PlotYaout {
+  title: string;
+  yaxis: {
+    title: string;
+  };
+  xaxis: {
+    title: string;
+  };
+
+}
+
   
   
