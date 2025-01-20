@@ -1,3 +1,5 @@
+import { Data } from "plotly.js";
+
 export interface ParseResult<T> {
     data: T[];
     errors: string[];
@@ -17,6 +19,10 @@ export interface ParseResult<T> {
     [key: string]: unknown; 
   }
   
+  export interface BoxReplica {
+    data?: Data[];
+    plotlayout?: PlotYaout;
+  }
 
   export interface BoxPlotState {
     data?: string[][];          
@@ -28,6 +34,7 @@ export interface ParseResult<T> {
     tooltipColumn?: string;
     [key: string]: unknown;
   }
+
   
 
   export interface BarChartState {

@@ -20,6 +20,8 @@ import {
   BarChartState,
   MatrixDataState,
   DashboardState,
+  BoxReplica,
+  PlotYaout,
 } from "../types/Types";
 
 
@@ -28,6 +30,7 @@ import CorrelationMatrix from "@/Components/CorrelationMatrix/CorrelationMatrix"
 import Papa from "papaparse";
 
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import Plot from "react-plotly.js";
 import { Data } from "plotly.js";
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
@@ -38,6 +41,9 @@ const App = () => {
   const [barChartState, setBarChartState] = useState<BarChartState>({});
   const [CorrelationMatrixState] = useState<MatrixDataState>({});
 
+  const [plotState, setPlotState] = useState<{ data: Data[]; layout: PlotYaout } | null>(null);
+
+
 
   const [data, setData] = useState<string[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
@@ -45,14 +51,7 @@ const App = () => {
 
   const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
 
-  const [savedPlotData, setSavedPlotData] = useState<{ data: any[]; layout: any } | null>(null);
  
-
-
-  const handleStateChange = (state: { data: Data[]; layout: any }) => {
-    setSavedPlotData(state);
-  };
-
   const handleFileUpload = (file: File) => {
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
@@ -168,18 +167,22 @@ const App = () => {
                         </div>
                       </section>
                     )}
-
                     {csvLoaded && (
                       <section className="snapSection">
                         <BoxPlot
                           data={
-                            Array.isArray(savedPlotData) && savedPlotData.length > 0
-                              ? savedPlotData
+                            Array.isArray(boxPlotState.data) && boxPlotState.data.length > 0
+                              ? boxPlotState.data
                               : data
                           }
-                          onStateChange={handleStateChange}
-                          renderes={{
-                            ...PlotlyRenderers
+                          onStateChange={(state) => {
+                            setPlotState(state);
+                          }}
+                          onChange={(newState: BoxPlotState) => {
+                            setBoxPlotState({ ...boxPlotState, ...newState });                            
+                          }}
+                          renderers={{
+                            ...PlotlyRenderers,
                           }}
                         />
                       </section>
@@ -193,6 +196,9 @@ const App = () => {
                               ? barChartState.data
                               : data
                           }
+                          onStateChange={(state: SetStateAction<{ data: Data[]; layout: PlotYaout; } | null>) => {
+                            setPlotState(state);
+                          }}
                           onChange={(newState: BarChartState) =>
                             setBarChartState({ ...barChartState, ...newState })
                           }
@@ -269,22 +275,18 @@ const App = () => {
                             }}
                             {...pivotState}
                           />                     
-                          
-                          <BoxPlot
-                            data={savedPlotData?.data || []} 
-                            layout={savedPlotData?.layout || { title: '', xaxis: {}, yaxis: {} }} 
-                        />                        
-                        <BarChart
-                          data={
-                            Array.isArray(barChartState.data) && barChartState.data.length > 0
-                              ? barChartState.data
-                              : data
-                          }
-                          onChange={(newState: BarChartState) =>
-                            setBarChartState({ ...barChartState, ...newState })
-                          }
-                        />
-                          
+                         {plotState && (
+                          <div>
+                            <h2>Box Plot</h2>
+                            <Plotly data={plotState.data} layout={plotState.layout} />
+                          </div>
+                          )}
+                         {plotState && (
+                          <div>
+                            <h2>BarChart</h2>
+                            <Plotly data={plotState.data} layout={plotState.layout} />
+                          </div>
+                          )}
                           
                           <CorrelationMatrix 
                             data={
