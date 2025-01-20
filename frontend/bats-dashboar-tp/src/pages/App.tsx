@@ -22,6 +22,7 @@ import {
   DashboardState,
   BoxReplica,
   PlotYaout,
+  BarLayout,
 } from "../types/Types";
 
 
@@ -42,7 +43,7 @@ const App = () => {
   const [CorrelationMatrixState] = useState<MatrixDataState>({});
 
   const [plotState, setPlotState] = useState<{ data: Data[]; layout: PlotYaout } | null>(null);
-
+  const [barState, setBarState] = useState<{data: Data[]; layout: BarLayout } | null>(null);
 
 
   const [data, setData] = useState<string[][]>([]);
@@ -196,8 +197,8 @@ const App = () => {
                               ? barChartState.data
                               : data
                           }
-                          onStateChange={(state: SetStateAction<{ data: Data[]; layout: PlotYaout; } | null>) => {
-                            setPlotState(state);
+                          onStateChange={(state: SetStateAction<{ data: Data[]; layout: BarLayout; } | null>) => {
+                            setBarState(state);
                           }}
                           onChange={(newState: BarChartState) =>
                             setBarChartState({ ...barChartState, ...newState })
@@ -281,10 +282,10 @@ const App = () => {
                             <Plotly data={plotState.data} layout={plotState.layout} />
                           </div>
                           )}
-                         {plotState && (
+                         {barState && (
                           <div>
                             <h2>BarChart</h2>
-                            <Plotly data={plotState.data} layout={plotState.layout} />
+                            <Plotly data={barState.data} layout={barState.layout} />
                           </div>
                           )}
                           

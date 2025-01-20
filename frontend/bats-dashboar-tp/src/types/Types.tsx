@@ -35,6 +35,21 @@ export interface ParseResult<T> {
     [key: string]: unknown;
   }
 
+  export interface BarChartReplica {
+    data: BarData[];
+    layout: PlotYaout;
+  }
+  
+  export interface BarData {
+    y: number[] | string[]; 
+    x: number[] | string[]; 
+    type: 'bar'; 
+    name: string; 
+    text: string[]; 
+    hoverinfo: string; 
+    textposition: string; 
+  }
+
   
 
   export interface BarChartState {
@@ -76,6 +91,24 @@ export interface PlotYaout {
   };
   xaxis: {
     title: string;
+  };
+
+}
+
+
+export interface BarLayout {
+  title: string;
+  yaxis: {
+    autorange: boolean;
+    title: string;
+    range: number[];
+    type: string;
+  };
+  xaxis: {
+    autorange: boolean;
+    title: string;
+    range: number[];
+    type: string;
   };
 
 }
