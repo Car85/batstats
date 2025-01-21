@@ -97,18 +97,22 @@ export interface PlotYaout {
 
 
 export interface BarLayout {
-  title: string;
+  title: {
+    text: string;}
   yaxis: {
-    autorange: boolean;
-    title: string;
+    title: {
+      text: string;}
+    type: '-' | 'linear' | 'log' | 'date' | 'category' | 'multicategory';
     range: number[];
-    type: string;
+    autorange: boolean;
+
   };
   xaxis: {
-    autorange: boolean;
-    title: string;
+    title: {
+      text: string;}
+    type: '-' | 'linear' | 'log' | 'date' | 'category' | 'multicategory';
     range: number[];
-    type: string;
+    autorange: boolean;
   };
 
 }

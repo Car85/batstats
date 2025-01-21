@@ -1,9 +1,11 @@
-import { BarChartState } from '../../types/Types';
+import { Data } from 'plotly.js';
+import { BarChartState, BarLayout } from '../../types/Types';
 
 import useBarChartState from './useBarChartState';
 import Plot from 'react-plotly.js';
+import { useEffect } from 'react';
 
-const BarChart = ({ data }: BarChartState) => {
+const BarChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (state: { data: Data[]; layout: BarLayout }) => void }) => {
 
   if (!data || data.length === 0) {
     return <p>No data available</p>; 
@@ -62,6 +64,24 @@ const BarChart = ({ data }: BarChartState) => {
     
     return sortedGroupedData;
   };
+
+  useEffect(() => {
+    if (onStateChange) {
+      const layout: BarLayout = {
+        title: {
+          text: 'Bar Chart: Dynamic Analysis',
+        },
+        yaxis: { title: numericColumn || '' },
+        xaxis: { title: categoricalColumn || '' },
+      };
+
+      onStateChange({
+        data: barChartData(),
+        layout,
+      });
+    }
+  }, [categoricalColumn, numericColumn, additionalColumn, selectedCategories]);
+
 
   return (
     <div>

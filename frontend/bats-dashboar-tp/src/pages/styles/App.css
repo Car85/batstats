@@ -1,0 +1,20 @@
+.dashboard-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);  /* 2 columnas en landscape */
+    grid-template-rows: repeat(2, 1fr);     /* 2 filas en landscape */
+    gap: 20px;  /* Espacio entre los elementos */
+    width: 100%;
+    height: 100vh;  /* Ocupa toda la altura de la ventana */
+  }
+  
+  .dashboard-item {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
