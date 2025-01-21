@@ -22,6 +22,7 @@ export const boxPlotData = (
     const category = row[headers.indexOf(categoricalColumn)] as string;
     const numericValue = Number(row[headers.indexOf(numericColumn)]);
     const tooltipValue = String(row[headers.indexOf(tooltipColumn)]);
+    
 
     if (!selectedCategories.length || selectedCategories.includes(category)) {
       if (!groupedData[category]) {
