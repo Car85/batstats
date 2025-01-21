@@ -272,7 +272,7 @@ const App = () => {
                             }
                             renderers={{
                               ...TableRenderers,
-                              ...PlotlyRenderers,
+                              ...PlotlyRenderers,   
                             }}
                             {...pivotState}
                           />                     
@@ -288,6 +288,7 @@ const App = () => {
                             <Plotly data={barState.data} layout={barState.layout} />
                           </div>
                           )}
+                          
                           
                           <CorrelationMatrix 
                             data={
