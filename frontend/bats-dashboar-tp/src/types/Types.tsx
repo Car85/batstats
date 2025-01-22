@@ -1,4 +1,4 @@
-import { Data } from "plotly.js";
+import { Data, Layout } from "plotly.js";
 
 export interface ParseResult<T> {
     data: T[];
@@ -16,6 +16,7 @@ export interface ParseResult<T> {
     map?: string; 
     data?: string[][];
     options?: Record<string, unknown>;
+    layout?: Partial<Layout>; 
     [key: string]: unknown; 
   }
   

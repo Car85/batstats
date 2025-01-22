@@ -258,11 +258,14 @@ const App = () => {
                   <div className="dashboard-item">
                     <h1>Interactive Charts</h1>
                     <PivotTableUIComponent
-                      data={
-                        Array.isArray(pivotState.data) && pivotState.data.length > 0
-                          ? pivotState.data.map((row) => row.map((cell) => String(cell)))
-                          : data.map((row) => row.map((cell) => String(cell)))
-                      }
+                      data={pivotState.data}
+                      plotlyOptions={{
+                        autosize: true, 
+                        margin: { t: 50, l: 50, r: 50, b: 50 }, 
+                      }}
+                      plotlyConfig={{
+                        responsive: true, 
+                      }}
                       onChange={(newState: PivotState) =>
                         setPivotState({
                           ...newState,
@@ -273,6 +276,11 @@ const App = () => {
                         ...TableRenderers,
                         ...PlotlyRenderers,
                       }}
+                      hiddenAttributes={[]} // Oculta todas las columnas no deseadas
+                      hiddenFromAggregators={['ColumnA', 'ColumnB']} // Oculta columnas de los agregadores
+                      hiddenFromDragDrop={['ColumnC', 'ColumnD']} // Oculta columnas del área de arrastrar y soltar
+                      unusedOrientationCutoff={0} // Oculta completamente el área de atributos no utilizados
+                      menuLimit={0} // Deshabilita el menú de opciones
                       {...pivotState}
                     />
                   </div>
@@ -280,14 +288,28 @@ const App = () => {
                   {plotState && (
                     <div className="dashboard-item">
                       <h2>Box Plot</h2>
-                      <Plotly data={plotState.data} layout={plotState.layout} />
+                      <Plotly data={plotState.data} 
+                      layout={{
+                        ...plotState.layout,
+                        autosize: true,
+                        margin: { t: 45, l: 45, r: 45, b: 85},
+                        }}
+                        useResizeHandler={true}
+                        style={{ width: "100%", height: "100%" }} />
                     </div>
                   )}
 
                   {barState && (
                     <div className="dashboard-item">
                       <h2>BarChart</h2>
-                      <Plotly data={barState.data} layout={barState.layout} />
+                      <Plotly data={barState.data} 
+                      layout={{
+                        ...barState.layout,
+                        autosize: true,
+                        margin: { t: 45, l: 45, r: 45, b: 85},
+                        }}
+                        useResizeHandler={true}
+                        style={{ width: "100%", height: "100%" }} />
                     </div>
                   )}
 
