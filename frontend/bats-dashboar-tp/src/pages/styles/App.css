@@ -18,3 +18,17 @@
     overflow: hidden;
   }
   
+
+  .pivotContainer {
+    transform: scale(1); /* Escala la tabla al 50% */
+    transform-origin: top left; /* Punto de referencia para la escala */
+    width: 100%; /* Ajusta el ancho para evitar corte por el escalado */
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .pvtUi-quadrant {
+    transform: scale(0.6) translate(-25%, -30%); /* Ajusta hacia la izquierda y arriba */
+    transform-origin: top left;
+  }
+  

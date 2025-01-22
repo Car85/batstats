@@ -126,6 +126,7 @@ const App = () => {
     },
   });
 
+
   return (
 
     <Router>
@@ -225,120 +226,89 @@ const App = () => {
                   // }
                   />
                 </section>
-              )}
+              )}           
 
               {csvLoaded && (
                 <section className="snapSection">
-                  <div style={{ width: "90%" }}>
-                    <div className="snapSection">
-                      <div className="buttonContainer">
-                        <SaveReport
-                          pivotState={pivotState}
-                          boxPlotState={boxPlotState}
+                  <div className="dashboard-container">
+                    <div className="dashboard-item">
+                      <div className="pvtUi-quadrant">
+                        <h1>Interactive Charts</h1>
+                        <PivotTableUIComponent
+                          data={pivotState.data}
+                          plotlyOptions={{
+                            autosize: true,
+                            margin: { t: 50, l: 50, r: 50, b: 50 },
+                            showlegend: false, // Ocultar leyenda
+                            xaxis: { title: "Eje X" }, // Configurar el eje X
+                            yaxis: { title: "Eje Y" }, // Configurar el eje Y
+                          }}
+                          menuLimit={0} // Deshabilita los menús desplegables
+
+                          onChange={(newState: PivotState) => setPivotState(newState)}
+                          renderers={{
+                            ...TableRenderers,
+                            ...PlotlyRenderers,
+                          }}
+                          {...pivotState}
+                          hiddenAttributes={[pivotState.data]}
                         />
                       </div>
+
                     </div>
-                  </div>
-                </section>
-              )}
 
-              {csvLoaded && (
-                <section className="snapSection">
-                  <ReportList
-                    setPivotState={handleFileUpload}
-                    setBoxPlotState={handleFileUpload}
-                  />
-                </section>
-              )}
+                    {plotState && (
+                      <div className="dashboard-item">
+                        <h2>Box Plot</h2>
+                        <Plotly data={plotState.data}
+                          layout={{
+                            ...plotState.layout,
+                            autosize: true,
+                            margin: { t: 45, l: 45, r: 45, b: 85 },
+                          }}
+                          useResizeHandler={true}
+                          style={{ width: "100%", height: "100%" }} />
+                      </div>
+                    )}
 
+                    {barState && (
+                      <div className="dashboard-item">
+                        <h2>BarChart</h2>
+                        <Plotly data={barState.data}
+                          layout={{
+                            ...barState.layout,
+                            autosize: true,
+                            margin: { t: 45, l: 45, r: 45, b: 85 },
+                          }}
+                          useResizeHandler={true}
+                          style={{ width: "100%", height: "100%" }} />
+                      </div>
+                    )}
 
-              {csvLoaded && (
-                <section className="snapSection">
-                  <div className="dashboard-container"> 
-                  <div className="dashboard-item">
-                    <h1>Interactive Charts</h1>
-                    <PivotTableUIComponent
-                      data={pivotState.data}
-                      plotlyOptions={{
-                        autosize: true, 
-                        margin: { t: 50, l: 50, r: 50, b: 50 }, 
-                      }}
-                      plotlyConfig={{
-                        responsive: true, 
-                      }}
-                      onChange={(newState: PivotState) =>
-                        setPivotState({
-                          ...newState,
-                          data: usePivotStateData ? pivotState.data : data,
-                        })
-                      }
-                      renderers={{
-                        ...TableRenderers,
-                        ...PlotlyRenderers,
-                      }}
-                      hiddenAttributes={[]} // Oculta todas las columnas no deseadas
-                      hiddenFromAggregators={['ColumnA', 'ColumnB']} // Oculta columnas de los agregadores
-                      hiddenFromDragDrop={['ColumnC', 'ColumnD']} // Oculta columnas del área de arrastrar y soltar
-                      unusedOrientationCutoff={0} // Oculta completamente el área de atributos no utilizados
-                      menuLimit={0} // Deshabilita el menú de opciones
-                      {...pivotState}
-                    />
-                  </div>
-
-                  {plotState && (
                     <div className="dashboard-item">
-                      <h2>Box Plot</h2>
-                      <Plotly data={plotState.data} 
-                      layout={{
-                        ...plotState.layout,
-                        autosize: true,
-                        margin: { t: 45, l: 45, r: 45, b: 85},
-                        }}
-                        useResizeHandler={true}
-                        style={{ width: "100%", height: "100%" }} />
+                      <h2>Correlation Matrix</h2>
+                      <CorrelationMatrix
+                        data={
+                          Array.isArray(CorrelationMatrixState.data) &&
+                            CorrelationMatrixState.data.length > 0
+                            ? CorrelationMatrixState.data
+                            : data
+                        }
+                      />
                     </div>
-                  )}
 
-                  {barState && (
-                    <div className="dashboard-item">
-                      <h2>BarChart</h2>
-                      <Plotly data={barState.data} 
-                      layout={{
-                        ...barState.layout,
-                        autosize: true,
-                        margin: { t: 45, l: 45, r: 45, b: 85},
+                      <Link
+                        to="/dashboard"
+                        state={{
+                          pivotState,
+                          boxPlotState,
+                          barChartState,
+                          CorrelationMatrixState,
                         }}
-                        useResizeHandler={true}
-                        style={{ width: "100%", height: "100%" }} />
+                      >
+                        <button>Generate Dashboard</button>
+                      </Link>
                     </div>
-                  )}
-
-                  <div className="dashboard-item">
-                    <h2>Correlation Matrix</h2>
-                    <CorrelationMatrix
-                      data={
-                        Array.isArray(CorrelationMatrixState.data) &&
-                          CorrelationMatrixState.data.length > 0
-                          ? CorrelationMatrixState.data
-                          : data
-                      }
-                    />
-                  </div>
-
-                  <div className="dashboard-item">
-                    <Link
-                      to="/dashboard"
-                      state={{
-                        pivotState,
-                        boxPlotState,
-                        barChartState,
-                        CorrelationMatrixState,
-                      }}
-                    >
-                      <button>Generate Dashboard</button>
-                    </Link>
-                  </div>
-                  </div>
                 </section>
               )}
 
@@ -362,6 +332,30 @@ const App = () => {
         />
 
       </Routes>
+      {csvLoaded && (
+                <section className="snapSection">
+                  <div style={{ width: "90%" }}>
+                    <div className="snapSection">
+                      <div className="buttonContainer">
+                        <SaveReport
+                          pivotState={pivotState}
+                          boxPlotState={boxPlotState}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              )}
+
+              {csvLoaded && (
+                <section className="snapSection">
+                  <ReportList
+                    setPivotState={handleFileUpload}
+                    setBoxPlotState={handleFileUpload}
+                  />
+                </section>
+              )}
+
     </Router>
   )
 };
