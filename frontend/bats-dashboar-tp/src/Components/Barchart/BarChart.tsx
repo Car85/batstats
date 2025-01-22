@@ -67,12 +67,26 @@ const BarChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (st
 
   useEffect(() => {
     if (onStateChange) {
+      const numericValues = data.map((d: any) => d[numericColumn]);
+      const minNumeric = Math.min(...numericValues);
+      const maxNumeric = Math.max(...numericValues);
       const layout: BarLayout = {
         title: {
           text: 'Bar Chart: Dynamic Analysis',
         },
-        yaxis: { title: numericColumn || '' },
-        xaxis: { title: categoricalColumn || '' },
+        yaxis: { title: {
+          text: numericColumn },
+        type: 'linear',
+        range: [minNumeric, maxNumeric],
+        autorange: true, },
+
+        xaxis: {
+          title: {
+            text: categoricalColumn },
+          type: 'category',
+          range: [0, data.length - 1],
+          autorange: true,
+        },
       };
 
       onStateChange({

@@ -3,7 +3,7 @@ import { useState } from 'react';
 const userBarChartState = (headers: string[]) => {
 
     const [categoricalColumn, setCategoricalColumn] = useState<string>('');
-    const [numericColumn, setNumericColumn] = useState<string | null>(null);
+    const [numericColumn, setNumericColumn] = useState<string>('');
     const [additionalColumn, setAdditionalColumn] = useState<string>('');
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
