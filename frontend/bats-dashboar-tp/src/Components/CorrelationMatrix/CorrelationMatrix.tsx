@@ -74,9 +74,9 @@ useEffect(() => {
 
   return (
     <div>
-      <h2>Correlation Matrix (Table)</h2>
+      <h3>Correlation Matrix (Table)</h3>
       {correlationMatrix.length > 0 ? (
-        <table border={1} cellPadding={5} style={{ borderCollapse: 'collapse' }}>
+        <table border={1} cellPadding={5}>
           <thead>
             <tr>
               <th></th>
@@ -95,7 +95,7 @@ useEffect(() => {
                   <td
                     key={`cell-${i}-${j}`}
                     style={{
-                      backgroundColor: `rgba(0, 0, 255, ${Math.abs(value)})`,
+                      backgroundColor: `rgba(2, 55, 250, ${Math.abs(value)})`,
                       color: Math.abs(value) > 0.5 ? 'white' : 'black',
                     }}
                   >

@@ -11,7 +11,7 @@
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    background-color: #fff;
+    background-color: #fdf2f2;
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
@@ -30,5 +30,33 @@
     transform: scale(0.6) translate(-25%, -30%); 
     transform-origin: top left;
   }
+
+
+  .table-container {
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .table-container h3 {
+    color: black;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: auto; /* Deja que el contenido determine el ancho */
+    background-color: rgb(99, 96, 96);
+  }
+  
+  th, td {
+    min-width: 100px; /* Ajusta según tus necesidades */
+    text-align: center;
+    padding: 8px;
+    background-color: rgb(49, 51, 50);
+  }
+  
   
   

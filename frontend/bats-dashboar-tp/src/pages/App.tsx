@@ -220,10 +220,7 @@ const App = () => {
                         CorrelationMatrixState.data.length > 0
                         ? CorrelationMatrixState.data
                         : data
-                    }
-                  // onChange={(newState: MatrixDataState) =>
-                  //   setCorrelationMatrixState({ ...CorrelationMatrixState, ...newState })
-                  // }
+                    }                  
                   />
                 </section>
               )}
@@ -239,11 +236,11 @@ const App = () => {
                           plotlyOptions={{
                             autosize: true,
                             margin: { t: 50, l: 50, r: 50, b: 50 },
-                            showlegend: false, // Ocultar leyenda
-                            xaxis: { title: "Eje X" }, // Configurar el eje X
-                            yaxis: { title: "Eje Y" }, // Configurar el eje Y
+                            showlegend: false,
+                            xaxis: { title: "X" }, 
+                            yaxis: { title: "Y" }, 
                           }}
-                          menuLimit={0} // Deshabilita los menús desplegables
+                          menuLimit={0} 
 
                           onChange={(newState: PivotState) => setPivotState(newState)}
                           renderers={{
@@ -286,8 +283,7 @@ const App = () => {
                     )}
 
                     <div className="dashboard-item">
-                      <div className="correlation-quadrant">
-                        <h2>Correlation Matrix</h2>
+                      <div className="table-container">
                         <CorrelationMatrix
                           data={
                             Array.isArray(CorrelationMatrixState.data) &&
