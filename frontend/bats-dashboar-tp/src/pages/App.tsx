@@ -226,7 +226,7 @@ const App = () => {
                   // }
                   />
                 </section>
-              )}           
+              )}
 
               {csvLoaded && (
                 <section className="snapSection">
@@ -264,7 +264,7 @@ const App = () => {
                           layout={{
                             ...plotState.layout,
                             autosize: true,
-                            margin: { t: 45, l: 45, r: 45, b: 85 },
+                            margin: { t: 35, l: 45, r: 45, b: 105 },
                           }}
                           useResizeHandler={true}
                           style={{ width: "100%", height: "100%" }} />
@@ -278,7 +278,7 @@ const App = () => {
                           layout={{
                             ...barState.layout,
                             autosize: true,
-                            margin: { t: 45, l: 45, r: 45, b: 85 },
+                            margin: { t: 25, l: 45, r: 45, b: 135 },
                           }}
                           useResizeHandler={true}
                           style={{ width: "100%", height: "100%" }} />
@@ -286,29 +286,31 @@ const App = () => {
                     )}
 
                     <div className="dashboard-item">
-                      <h2>Correlation Matrix</h2>
-                      <CorrelationMatrix
-                        data={
-                          Array.isArray(CorrelationMatrixState.data) &&
-                            CorrelationMatrixState.data.length > 0
-                            ? CorrelationMatrixState.data
-                            : data
-                        }
-                      />
+                      <div className="correlation-quadrant">
+                        <h2>Correlation Matrix</h2>
+                        <CorrelationMatrix
+                          data={
+                            Array.isArray(CorrelationMatrixState.data) &&
+                              CorrelationMatrixState.data.length > 0
+                              ? CorrelationMatrixState.data
+                              : data
+                          }                         
+                        /></div>
                     </div>
+                  </div>
 
-                      <Link
-                        to="/dashboard"
-                        state={{
-                          pivotState,
-                          boxPlotState,
-                          barChartState,
-                          CorrelationMatrixState,
-                        }}
-                      >
-                        <button>Generate Dashboard</button>
-                      </Link>
-                    </div>
+
+                  <Link
+                    to="/dashboard"
+                    state={{
+                      pivotState,
+                      boxPlotState,
+                      barChartState,
+                      CorrelationMatrixState,
+                    }}
+                  >
+                    <button>Generate Dashboard</button>
+                  </Link>
                 </section>
               )}
 
@@ -333,28 +335,28 @@ const App = () => {
 
       </Routes>
       {csvLoaded && (
-                <section className="snapSection">
-                  <div style={{ width: "90%" }}>
-                    <div className="snapSection">
-                      <div className="buttonContainer">
-                        <SaveReport
-                          pivotState={pivotState}
-                          boxPlotState={boxPlotState}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              )}
+        <section className="snapSection">
+          <div style={{ width: "90%" }}>
+            <div className="snapSection">
+              <div className="buttonContainer">
+                <SaveReport
+                  pivotState={pivotState}
+                  boxPlotState={boxPlotState}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
-              {csvLoaded && (
-                <section className="snapSection">
-                  <ReportList
-                    setPivotState={handleFileUpload}
-                    setBoxPlotState={handleFileUpload}
-                  />
-                </section>
-              )}
+      {csvLoaded && (
+        <section className="snapSection">
+          <ReportList
+            setPivotState={handleFileUpload}
+            setBoxPlotState={handleFileUpload}
+          />
+        </section>
+      )}
 
     </Router>
   )

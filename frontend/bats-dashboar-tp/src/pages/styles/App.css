@@ -1,17 +1,16 @@
 .dashboard-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);  /* 2 columnas en landscape */
-    grid-template-rows: repeat(2, 1fr);     /* 2 filas en landscape */
-    gap: 20px;  /* Espacio entre los elementos */
+    grid-template-columns: repeat(2, 1fr);  
+    grid-template-rows: repeat(2, 1fr);    
+    gap: 5px;  
     width: 100%;
-    height: 100vh;  /* Ocupa toda la altura de la ventana */
+    height: 100vh;  
   }
   
   .dashboard-item {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    padding: 10px;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -20,15 +19,16 @@
   
 
   .pivotContainer {
-    transform: scale(1); /* Escala la tabla al 50% */
-    transform-origin: top left; /* Punto de referencia para la escala */
-    width: 100%; /* Ajusta el ancho para evitar corte por el escalado */
+    transform: scale(1); 
+    transform-origin: top left;
+    width: 100%; 
     height: 100%;
     overflow: hidden;
   }
 
   .pvtUi-quadrant {
-    transform: scale(0.6) translate(-25%, -30%); /* Ajusta hacia la izquierda y arriba */
+    transform: scale(0.6) translate(-25%, -30%); 
     transform-origin: top left;
   }
+  
   
