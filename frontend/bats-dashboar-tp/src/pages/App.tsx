@@ -14,6 +14,9 @@ import BoxPlot, { boxPlotData } from "../Components/BoxPlot/Boxplot";
 import ReportList from "../Components/ReportList/ReportList";
 import DashboardLandscape from "../Components/Dashboard/DashboardLandscape"
 
+import { LineChart } from "@tremor/react";
+
+
 import "../styles/App.css";
 import {
   BoxPlotState,
@@ -127,6 +130,32 @@ const App = () => {
   });
 
 
+  const [xAxis, setXAxis] = useState<string | null>(null);
+  const [yAxis, setYAxis] = useState<string | null>(null);
+  const [formattedData, setFormattedData] = useState<any[]>([]);
+
+  const handleColumnSelect = (axis: "x" | "y", column: string) => {
+    if (axis === "x") {
+      setXAxis(column);
+    } else {
+      setYAxis(column);
+    }
+  };
+
+  const handleTransformData = () => {
+    if (!xAxis || !yAxis) return;
+
+    // Transform data to match Tremor's LineChart format
+    const transformedData = data.map((row) => ({
+      x: row[xAxis],
+      y: parseFloat(row[yAxis]) || 0,
+    }));
+
+    setFormattedData(transformedData);
+  };
+
+
+
   return (
 
     <Router>
@@ -146,26 +175,54 @@ const App = () => {
               {csvLoaded && (
                 <section className="snapSection">
                   <div className="pivotContainer">
-                    <PivotTableUIComponent
-                      data={
-                        Array.isArray(pivotState.data) && pivotState.data.length > 0
-                          ? pivotState.data.map((row) =>
-                            row.map((cell) => String(cell))
-                          )
-                          : data.map((row) => row.map((cell) => String(cell)))
-                      }
-                      onChange={(newState: PivotState) =>
-                        setPivotState({
-                          ...newState,
-                          data: usePivotStateData ? pivotState.data : data,
-                        })
-                      }
-                      renderers={{
-                        ...TableRenderers,
-                        ...PlotlyRenderers,
-                      }}
-                      {...pivotState}
-                    />
+                    <div>
+                      <label>
+                        Select X-Axis:
+                        <select
+                          onChange={(e) => handleColumnSelect("x", e.target.value)}
+                          defaultValue=""
+                        >
+                          <option value="" disabled>
+                            Choose column
+                          </option>
+                          {data[0]?.map((col, index) => (
+                            <option key={`x-${index}`} value={index}>
+                              {col}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </div>
+
+                    <div>
+                      <label>
+                        Select Y-Axis:
+                        <select
+                          onChange={(e) => handleColumnSelect("y", e.target.value)}
+                          defaultValue=""
+                        >
+                          <option value="" disabled>
+                            Choose column
+                          </option>
+                          {data[0]?.map((col, index) => (
+                            <option key={`y-${index}`} value={index}>
+                              {col}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </div>
+
+                    <button onClick={handleTransformData}>Generate Chart</button>
+
+                    {formattedData.length > 0 && (
+                      <LineChart
+                        data={formattedData}
+                        dataKey="x"
+                        categories={["y"]}
+                        colors={["blue"]}
+                      />
+                    )}
                   </div>
                 </section>
               )}
@@ -189,7 +246,6 @@ const App = () => {
                   />
                 </section>
               )}
-
               {csvLoaded && (
                 <section className="snapSection">
                   <BarChart
@@ -220,7 +276,7 @@ const App = () => {
                         CorrelationMatrixState.data.length > 0
                         ? CorrelationMatrixState.data
                         : data
-                    }                  
+                    }
                   />
                 </section>
               )}
@@ -237,10 +293,10 @@ const App = () => {
                             autosize: true,
                             margin: { t: 50, l: 50, r: 50, b: 50 },
                             showlegend: false,
-                            xaxis: { title: "X" }, 
-                            yaxis: { title: "Y" }, 
+                            xaxis: { title: "X" },
+                            yaxis: { title: "Y" },
                           }}
-                          menuLimit={0} 
+                          menuLimit={0}
 
                           onChange={(newState: PivotState) => setPivotState(newState)}
                           renderers={{
@@ -256,12 +312,11 @@ const App = () => {
 
                     {plotState && (
                       <div className="dashboard-item">
-                        <h2>Box Plot</h2>
                         <Plotly data={plotState.data}
                           layout={{
                             ...plotState.layout,
                             autosize: true,
-                            margin: { t: 35, l: 45, r: 45, b: 105 },
+                            margin: { t: 55, l: 45, r: 45, b: 105 },
                           }}
                           useResizeHandler={true}
                           style={{ width: "100%", height: "100%" }} />
@@ -270,12 +325,11 @@ const App = () => {
 
                     {barState && (
                       <div className="dashboard-item">
-                        <h2>BarChart</h2>
                         <Plotly data={barState.data}
                           layout={{
                             ...barState.layout,
                             autosize: true,
-                            margin: { t: 25, l: 45, r: 45, b: 135 },
+                            margin: { t: 35, l: 45, r: 45, b: 135 },
                           }}
                           useResizeHandler={true}
                           style={{ width: "100%", height: "100%" }} />
@@ -290,7 +344,7 @@ const App = () => {
                               CorrelationMatrixState.data.length > 0
                               ? CorrelationMatrixState.data
                               : data
-                          }                         
+                          }
                         /></div>
                     </div>
                   </div>

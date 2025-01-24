@@ -26,7 +26,7 @@ export interface ParseResult<T> {
   }
 
   export interface BoxPlotState {
-    data?: string[][];          
+    data?: string[][] | any;          
     options?: Record<string, unknown>; 
     labels?: string[];           
     categoricalColumn?: string;  
