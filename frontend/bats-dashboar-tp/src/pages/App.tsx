@@ -46,6 +46,7 @@ const App = () => {
   const [barChartState, setBarChartState] = useState<BarChartState>({});
   const [CorrelationMatrixState] = useState<MatrixDataState>({});
 
+  const [lineState, setLineState] = useState<{data: BoxPlotState; layout: PlotYaout} | null>(null);
   const [plotState, setPlotState] = useState<{ data: Data[]; layout: PlotYaout } | null>(null);
   const [barState, setBarState] = useState<{ data: Data[]; layout: BarLayout } | null>(null);
 
@@ -148,12 +149,12 @@ const App = () => {
 
               {csvLoaded && (
                 <section className="snapSection">
-                 
-
-                    {filteredData.length > 0 && (
+                  {(
                       <LineChart                        
                         data={lineChartState.data}  
-                        onChange={(state)=>setLineChartState(state)}                      
+                      //  onChange={(newState: LineChartState) => {
+                       //   setLineChartState({ ...lineChartState, ...newState });
+                       // }}                     
                       />
                     )}
                 </section>

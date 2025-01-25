@@ -1,87 +1,50 @@
-import React, { useState } from "react";
-import { Chart as ChartJS, defaults, ChartOptions, ChartData } from "chart.js/auto";
-import { Bar, Doughnut, Line } from "react-chartjs-2";
+import React, { useMemo, useState } from "react";
+import { Chart as ChartOptions, ChartData } from "chart.js/auto";
+import { Line } from "react-chartjs-2";
 
 import "./App.css";
 import { LineChartState, PlotYaout } from "@/types/Types";
 
-
-const [categoricalColumn, setCategoricalColumn] = useState<string>('');
-const [numericColumn, setNumericColumn] = useState<string>('');
-const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+const [selectedX, setSelectedX] = useState<number | null>(null);
+const [selectedY, setSelectedY] = useState<number | null>(null);
 
 
-
-const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategoricalColumn(event.target.value);
-    setSelectedCategories([]);
-};
-  
-
-
-const handleNumericChange = (event:  React.ChangeEvent<HTMLSelectElement>) => {
-  setNumericColumn((event.target.value));
+const handleXChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const value = parseInt(e.target.value, 10);
+  setSelectedX(value);
 };
 
-  
-
-interface RevenueData {
-  label: string;
-  revenue: number;
-  cost: number;
-}
-
-interface SourceData {
-  label: string;
-  value: number;
-}
-
+const handleYChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const value = parseInt(e.target.value, 10);
+  setSelectedY(value);
+};
 
 const LineChart = ({ data, onStateChange }: LineChartState & { onStateChange?: (state: { data: LineChartState; layout: PlotYaout }) => void }) => {
+
+    const headers = useMemo(() => (Array.isArray(data) && data.length > 0 && Array.isArray(data[0]) ? data[0] : []), [data]);
+    const rows = useMemo(() => (data && data.datasets.length > 1 ? data.datasets.slice(1) : []), [data]);
+
    
     const revenueChartData: ChartData<'line'> = {
-    labels: revenueData.map((data: RevenueData) => data.label),
-    datasets: [
-      {
-        label: selectedCategories.,
-        data: revenueData.map((data: RevenueData) => data.revenue),
-        backgroundColor: "#064FF0",
-        borderColor: "#064FF0",
-      },
-      {
-        label: selectedCategories,
-        data: revenueData.map((data: RevenueData) => data.cost),
-        backgroundColor: "#FF3030",
-        borderColor: "#FF3030",
-      },
-    ],
-  }; 
+        labels: ['Dinamic LineChart'],
+        datasets: [
+          {
+            label: "Revenue",
+            data: Array.isArray(selectedY) ? selectedY : [selectedY],
+            backgroundColor: "#064FF0",
+            borderColor: "#064FF0",
+          },
+          {
+            label: "Cost",
+            data: Array.isArray(selectedX) ? selectedX : [selectedX], // Ensure it's an array
+            backgroundColor: "#FF3030",
+            borderColor: "#FF3030",
+          },
+        ],
+      };
 
 
-  const lineChartOptions: ChartOptions = {
-    scales: {
-      y: {
-        type: "linear",  
-        beginAtZero: true,
-      },
-    },
-    elements: {
-      line: {
-        tension: 0.5,
-      },
-    },
-    plugins: {
-      title: {
-        display: true,
-        text: "Monthly Revenue & Cost",
-        font: {
-          size: 20,
-        },
-      },
-    },
-  };
-  
-
+ 
   
   return (
     <div className="lineContainer">
@@ -89,15 +52,15 @@ const LineChart = ({ data, onStateChange }: LineChartState & { onStateChange?: (
       <label>
         Select X-Axis:
         <select
-          onChange={(e) => handleNumericChange(e)}
+          onChange={(e) => handleXChange(e)}
           defaultValue=""
         >
           <option value="" disabled>
             Choose column
           </option>
-          {data[0]?.map((col, index) => (
-            <option key={`x-${index}`} value={index}>
-              {col}
+          {headers.map((header, index) => (
+            <option key={`${header}-${index}`} value={header}>
+              {header}
             </option>
           ))}
         </select>
@@ -108,15 +71,15 @@ const LineChart = ({ data, onStateChange }: LineChartState & { onStateChange?: (
       <label>
         Select Y-Axis:
         <select
-          onChange={(e) => handleCategoricalChange(e)}
+          onChange={(e) => handleYChange(e)}
           defaultValue=""
         >
           <option value="" disabled>
             Choose column
           </option>
-          {data[0]?.map((col, index) => (
-            <option key={`y-${index}`} value={index}>
-              {col}
+          {headers.map((header, index) => (
+            <option key={`${header}-${index}`} value={header}>
+              {header}
             </option>
           ))}
         </select>
@@ -126,7 +89,7 @@ const LineChart = ({ data, onStateChange }: LineChartState & { onStateChange?: (
 
     <div className="App">
       <div className="dataCard revenueCard">
-        <Line data={revenueChartData} options={lineChartOptions} />
+        <Line data={revenueChartData} />
       </div>
 
     </div>
