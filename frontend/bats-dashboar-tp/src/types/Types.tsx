@@ -119,5 +119,26 @@ export interface BarLayout {
 
 }
 
+export interface LineChartState {
+  data?: {
+    labels: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      backgroundColor: string;
+      borderColor: string;
+    }[];
+  };
+  options?: {
+    responsive: boolean;
+    scales: {
+      y: {
+        type: "linear";
+        beginAtZero: boolean;
+      };
+    };
+  };
+}
+
   
   

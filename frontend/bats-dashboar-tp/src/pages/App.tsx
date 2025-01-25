@@ -10,11 +10,10 @@ import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
 import SaveReport from "../Components/SaveReport/SaveReport";
+import LineChart from "../Components/LineChart/LineChart";
 import BoxPlot, { boxPlotData } from "../Components/BoxPlot/Boxplot";
 import ReportList from "../Components/ReportList/ReportList";
 import DashboardLandscape from "../Components/Dashboard/DashboardLandscape"
-
-import { LineChart } from "@tremor/react";
 
 
 import "../styles/App.css";
@@ -23,6 +22,7 @@ import {
   PivotState,
   BarChartState,
   MatrixDataState,
+  LineChartState,
   DashboardState,
   BoxReplica,
   PlotYaout,
@@ -42,6 +42,7 @@ const PlotlyRenderers = createPlotlyRenderers(Plotly);
 const App = () => {
   const [pivotState, setPivotState] = useState<PivotState>({});
   const [boxPlotState, setBoxPlotState] = useState<BoxPlotState>({});
+  const [lineChartState, setLineChartState] = useState<LineChartState>({});
   const [barChartState, setBarChartState] = useState<BarChartState>({});
   const [CorrelationMatrixState] = useState<MatrixDataState>({});
 
@@ -51,13 +52,8 @@ const App = () => {
 
   const [data, setData] = useState<string[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
-  const [usePivotStateData] = useState(false);
 
   const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
-
-  const [categoricalColumn, setCategoricalColumn] = useState<string>('');
-  const [numericColumn, setNumericColumn] = useState<string>('');
-
 
   const handleFileUpload = (file: File) => {
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
@@ -134,25 +130,6 @@ const App = () => {
 
 
   
-  const [formattedData, setFormattedData] = useState<any[]>([]);
-  const filteredData = formattedData.filter((item) => item.index !== "");
-
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-
-
-  const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategoricalColumn(event.target.value);
-    setSelectedCategories([]);
-};
-  
-
-
-const handleNumericChange = (event:  React.ChangeEvent<HTMLSelectElement>) => {
-  setNumericColumn((event.target.value));
-};
-
-
-  
   return (
 
     <Router>
@@ -174,13 +151,9 @@ const handleNumericChange = (event:  React.ChangeEvent<HTMLSelectElement>) => {
                  
 
                     {filteredData.length > 0 && (
-                      <LineChart
-                        className="h-80"
-                        data={filteredData}
-                        index="0"
-                        categories={[numericColumn, categoricalColumn]} 
-                        colors={["blue"]}
-                        style={{ height: "200px", width: "200px" }}
+                      <LineChart                        
+                        data={lineChartState.data}  
+                        onChange={(state)=>setLineChartState(state)}                      
                       />
                     )}
                 </section>
