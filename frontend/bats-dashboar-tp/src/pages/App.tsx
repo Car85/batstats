@@ -55,6 +55,9 @@ const App = () => {
 
   const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
 
+  const [categoricalColumn, setCategoricalColumn] = useState<string>('');
+  const [numericColumn, setNumericColumn] = useState<string>('');
+
 
   const handleFileUpload = (file: File) => {
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
@@ -130,41 +133,26 @@ const App = () => {
   });
 
 
-  const [xAxis, setXAxis] = useState<number | null>(null);
-  const [yAxis, setYAxis] = useState<number | null>(null);
+  
   const [formattedData, setFormattedData] = useState<any[]>([]);
   const filteredData = formattedData.filter((item) => item.index !== "");
 
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const handleColumnSelect = (axis: "x" | "y", column: string) => {
-    const columnIndex = parseInt(column, 10);
-    console.log(`Selected ${axis}-Axis:`, columnIndex); 
-    if (axis === "x") {
-      setXAxis(columnIndex);
-    } else {
-      setYAxis(columnIndex);
-    }
-  };
+
+  const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setCategoricalColumn(event.target.value);
+    setSelectedCategories([]);
+};
   
 
-  const handleTransformData = () => {
-    console.log("Button clicked");
 
-    console.log("xAxis:", xAxis, "yAxis:", yAxis); 
-    if (xAxis === null || yAxis === null) {
-      console.log("Axis not selected!");
-      return;
-    }
-  
-    const transformedData = data.map((row) => ({
-      index: row[xAxis],
-      y: parseFloat(row[yAxis]) || 0,
-    }));
-  
-    console.log("Transformed Data:", transformedData);
-    setFormattedData(transformedData);
-  };
+const handleNumericChange = (event:  React.ChangeEvent<HTMLSelectElement>) => {
+  setNumericColumn((event.target.value));
+};
 
+
+  
   return (
 
     <Router>
@@ -183,58 +171,18 @@ const App = () => {
 
               {csvLoaded && (
                 <section className="snapSection">
-                  <div className="pivotContainer">
-                    <div>
-                      <label>
-                        Select X-Axis:
-                        <select
-                          onChange={(e) => handleColumnSelect("x", e.target.value)}
-                          defaultValue=""
-                        >
-                          <option value="" disabled>
-                            Choose column
-                          </option>
-                          {data[0]?.map((col, index) => (
-                            <option key={`x-${index}`} value={index}>
-                              {col}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
-
-                    <div>
-                      <label>
-                        Select Y-Axis:
-                        <select
-                          onChange={(e) => handleColumnSelect("y", e.target.value)}
-                          defaultValue=""
-                        >
-                          <option value="" disabled>
-                            Choose column
-                          </option>
-                          {data[0]?.map((col, index) => (
-                            <option key={`y-${index}`} value={index}>
-                              {col}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
-
-                    <button onClick={handleTransformData}>Generate Chart</button>
+                 
 
                     {filteredData.length > 0 && (
                       <LineChart
                         className="h-80"
                         data={filteredData}
-                        index=""
-                        categories={[data[0][yAxis as number]]} 
+                        index="0"
+                        categories={[numericColumn, categoricalColumn]} 
                         colors={["blue"]}
                         style={{ height: "200px", width: "200px" }}
                       />
                     )}
-                  </div>
                 </section>
               )}
               {csvLoaded && (
