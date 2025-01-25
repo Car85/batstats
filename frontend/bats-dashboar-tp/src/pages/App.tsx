@@ -130,31 +130,40 @@ const App = () => {
   });
 
 
-  const [xAxis, setXAxis] = useState<string | null>(null);
-  const [yAxis, setYAxis] = useState<string | null>(null);
+  const [xAxis, setXAxis] = useState<number | null>(null);
+  const [yAxis, setYAxis] = useState<number | null>(null);
   const [formattedData, setFormattedData] = useState<any[]>([]);
+  const filteredData = formattedData.filter((item) => item.index !== "");
+
 
   const handleColumnSelect = (axis: "x" | "y", column: string) => {
+    const columnIndex = parseInt(column, 10);
+    console.log(`Selected ${axis}-Axis:`, columnIndex); 
     if (axis === "x") {
-      setXAxis(column);
+      setXAxis(columnIndex);
     } else {
-      setYAxis(column);
+      setYAxis(columnIndex);
     }
   };
+  
 
   const handleTransformData = () => {
-    if (!xAxis || !yAxis) return;
+    console.log("Button clicked");
 
-    // Transform data to match Tremor's LineChart format
+    console.log("xAxis:", xAxis, "yAxis:", yAxis); 
+    if (xAxis === null || yAxis === null) {
+      console.log("Axis not selected!");
+      return;
+    }
+  
     const transformedData = data.map((row) => ({
-      x: row[xAxis],
+      index: row[xAxis],
       y: parseFloat(row[yAxis]) || 0,
     }));
-
+  
+    console.log("Transformed Data:", transformedData);
     setFormattedData(transformedData);
   };
-
-
 
   return (
 
@@ -215,12 +224,14 @@ const App = () => {
 
                     <button onClick={handleTransformData}>Generate Chart</button>
 
-                    {formattedData.length > 0 && (
+                    {filteredData.length > 0 && (
                       <LineChart
-                        data={formattedData}
-                        dataKey="x"
-                        categories={["y"]}
+                        className="h-80"
+                        data={filteredData}
+                        index=""
+                        categories={[data[0][yAxis as number]]} 
                         colors={["blue"]}
+                        style={{ height: "200px", width: "200px" }}
                       />
                     )}
                   </div>
