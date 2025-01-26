@@ -10,11 +10,9 @@ import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
 import SaveReport from "../Components/SaveReport/SaveReport";
-import LineChart from "../Components/LineChart/LineChart";
 import BoxPlot, { boxPlotData } from "../Components/BoxPlot/Boxplot";
 import ReportList from "../Components/ReportList/ReportList";
 import DashboardLandscape from "../Components/Dashboard/DashboardLandscape"
-
 
 import "../styles/App.css";
 import {
@@ -36,6 +34,7 @@ import Papa from "papaparse";
 
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Data } from "plotly.js";
+import LineChart from "@/Components/LineChart/LineChart";
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
@@ -46,15 +45,16 @@ const App = () => {
   const [barChartState, setBarChartState] = useState<BarChartState>({});
   const [CorrelationMatrixState] = useState<MatrixDataState>({});
 
-  const [lineState, setLineState] = useState<{data: BoxPlotState; layout: PlotYaout} | null>(null);
   const [plotState, setPlotState] = useState<{ data: Data[]; layout: PlotYaout } | null>(null);
   const [barState, setBarState] = useState<{ data: Data[]; layout: BarLayout } | null>(null);
 
 
   const [data, setData] = useState<string[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
+  const [usePivotStateData] = useState(false);
 
   const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
+
 
   const handleFileUpload = (file: File) => {
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
@@ -130,7 +130,6 @@ const App = () => {
   });
 
 
-  
   return (
 
     <Router>
@@ -149,14 +148,14 @@ const App = () => {
 
               {csvLoaded && (
                 <section className="snapSection">
-                  {(
-                      <LineChart                        
+                  <div className="pivotContainer">
+                  <LineChart                        
                         data={lineChartState.data}  
                       //  onChange={(newState: LineChartState) => {
                        //   setLineChartState({ ...lineChartState, ...newState });
                        // }}                     
                       />
-                    )}
+                  </div>
                 </section>
               )}
               {csvLoaded && (
@@ -179,6 +178,7 @@ const App = () => {
                   />
                 </section>
               )}
+
               {csvLoaded && (
                 <section className="snapSection">
                   <BarChart
@@ -209,7 +209,7 @@ const App = () => {
                         CorrelationMatrixState.data.length > 0
                         ? CorrelationMatrixState.data
                         : data
-                    }
+                    }                  
                   />
                 </section>
               )}
@@ -226,10 +226,10 @@ const App = () => {
                             autosize: true,
                             margin: { t: 50, l: 50, r: 50, b: 50 },
                             showlegend: false,
-                            xaxis: { title: "X" },
-                            yaxis: { title: "Y" },
+                            xaxis: { title: "X" }, 
+                            yaxis: { title: "Y" }, 
                           }}
-                          menuLimit={0}
+                          menuLimit={0} 
 
                           onChange={(newState: PivotState) => setPivotState(newState)}
                           renderers={{
@@ -245,11 +245,12 @@ const App = () => {
 
                     {plotState && (
                       <div className="dashboard-item">
+                        <h2>Box Plot</h2>
                         <Plotly data={plotState.data}
                           layout={{
                             ...plotState.layout,
                             autosize: true,
-                            margin: { t: 55, l: 45, r: 45, b: 105 },
+                            margin: { t: 35, l: 45, r: 45, b: 105 },
                           }}
                           useResizeHandler={true}
                           style={{ width: "100%", height: "100%" }} />
@@ -258,11 +259,12 @@ const App = () => {
 
                     {barState && (
                       <div className="dashboard-item">
+                        <h2>BarChart</h2>
                         <Plotly data={barState.data}
                           layout={{
                             ...barState.layout,
                             autosize: true,
-                            margin: { t: 35, l: 45, r: 45, b: 135 },
+                            margin: { t: 25, l: 45, r: 45, b: 135 },
                           }}
                           useResizeHandler={true}
                           style={{ width: "100%", height: "100%" }} />
@@ -277,7 +279,7 @@ const App = () => {
                               CorrelationMatrixState.data.length > 0
                               ? CorrelationMatrixState.data
                               : data
-                          }
+                          }                         
                         /></div>
                     </div>
                   </div>

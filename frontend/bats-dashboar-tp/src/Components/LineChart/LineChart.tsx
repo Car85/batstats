@@ -1,46 +1,48 @@
-import React, { useMemo, useState } from "react";
-import { Chart as ChartOptions, ChartData } from "chart.js/auto";
+import { useMemo, useState } from "react";
+import { Chart as ChartData } from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 
-import "./App.css";
 import { LineChartState, PlotYaout } from "@/types/Types";
 
-const [selectedX, setSelectedX] = useState<number | null>(null);
-const [selectedY, setSelectedY] = useState<number | null>(null);
+const [selectedX, setSelectedX] = useState<string | null>(null);
+const [selectedY, setSelectedY] = useState<string | null>(null);
 
 
 const handleXChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  const value = parseInt(e.target.value, 10);
+  const value = e.target.value;
   setSelectedX(value);
 };
 
 const handleYChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  const value = parseInt(e.target.value, 10);
+  const value = e.target.value;
   setSelectedY(value);
 };
 
 const LineChart = ({ data, onStateChange }: LineChartState & { onStateChange?: (state: { data: LineChartState; layout: PlotYaout }) => void }) => {
 
-    const headers = useMemo(() => (Array.isArray(data) && data.length > 0 && Array.isArray(data[0]) ? data[0] : []), [data]);
-    const rows = useMemo(() => (data && data.datasets.length > 1 ? data.datasets.slice(1) : []), [data]);
+      const headers: string[] = useMemo(() => (
+        Array.isArray(data) && data.length > 0 && Array.isArray(data[0]) ? data[0] : []
+      ), [data]);
+      const rows = useMemo(() => (data && data.datasets.length > 1 ? data.datasets.slice(1) : []), [data]);
 
    
-    const revenueChartData: ChartData<'line'> = {
-        labels: ['Dinamic LineChart'],
-        datasets: [
-          {
-            label: "Revenue",
-            data: Array.isArray(selectedY) ? selectedY : [selectedY],
-            backgroundColor: "#064FF0",
-            borderColor: "#064FF0",
+    const configChart = {
+        type: 'line',
+        data: rows,
+        options: {
+          plugins: {
+            filler: {
+              propagate: false,
+            },
+            title: {
+              display: true,
+              text: 'LineChart',
+            }
           },
-          {
-            label: "Cost",
-            data: Array.isArray(selectedX) ? selectedX : [selectedX], // Ensure it's an array
-            backgroundColor: "#FF3030",
-            borderColor: "#FF3030",
-          },
-        ],
+          interaction: {
+            intersect: false,
+          }
+        },
       };
 
 
