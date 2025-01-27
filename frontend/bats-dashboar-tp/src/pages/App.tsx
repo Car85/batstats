@@ -148,7 +148,6 @@ const App = () => {
 
               {csvLoaded && (
                 <section className="snapSection">
-                  <div className="pivotContainer">
                   <LineChart                        
                       data={
                         Array.isArray(lineChartState.data) && lineChartState.data.length > 0
@@ -159,7 +158,6 @@ const App = () => {
                         setLineState(state);
                       }}                         
                       />
-                  </div>
                 </section>
               )}
               {csvLoaded && (

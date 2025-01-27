@@ -45,21 +45,19 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
     });
 
     const sortedGroupedData: BarChartState[] = Object.entries(groupedData)
-      .sort(([, a], [, b]) => {
-        const sumA = a.values.reduce((acc, val) => acc + val, 0);
-        const sumB = b.values.reduce((acc, val) => acc + val, 0);
-        return sumB - sumA;
-      })
       .map(([key, { values, tooltips }]) => ({
         y: values,
-        x: Array.from({ length: values.length }, (_, i) => i + 1), 
-        type: 'scatter' as const, // Cambiado de 'bar' a 'scatter'
-        mode: 'lines', // Agregado modo 'lines' para gráfico de líneas
+        x: [key], 
+        type: 'scatter', 
+        mode: 'lines+points', 
         name: key,
         text: tooltips,
         hoverinfo: 'text',
         textposition: 'none',
+        
       }));
+
+
 
     return sortedGroupedData;
   };
@@ -71,22 +69,22 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       const maxNumeric = Math.max(...numericValues);
       const layout: BarLayout = {
         title: {
-          text: 'Line Chart: Dynamic Analysis', // Título modificado
+          text: 'Line Chart: Dynamic Analysis',
         },
         yaxis: {
           title: {
-            text: numericColumn },
-          type: 'linear', // Cambiado a 'linear' para líneas
+            text: numericColumn,
+          },
+          type: 'linear',
           range: [minNumeric, maxNumeric],
           autorange: true,
         },
-
         xaxis: {
           title: {
-            text: categoricalColumn },
-          type: 'category',
-          range: [0, data.length - 1],
-          autorange: true,
+            text: categoricalColumn,
+          },
+          type: 'category', 
+          autorange: true,  
         },
       };
 
@@ -152,9 +150,9 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       <div>
         {categoricalColumn && numericColumn && additionalColumn && (
           <Plot
-            data={lineChartData()} // Se usa la función `lineChartData()` aquí
+            data={lineChartData()}
             layout={{
-              title: 'Line Chart: Dynamic Analysis', // Título cambiado
+              title: 'Line Chart: Dynamic Analysis', 
               yaxis: { title: numericColumn },
               xaxis: { title: categoricalColumn },
             }}
