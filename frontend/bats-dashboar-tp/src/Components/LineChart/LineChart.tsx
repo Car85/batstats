@@ -1,102 +1,167 @@
-import { useMemo, useState } from "react";
-import { Chart as ChartData } from "chart.js/auto";
-import { Line } from "react-chartjs-2";
+import { Data } from 'plotly.js';
+import { BarChartState, BarLayout } from '../../types/Types';
 
-import { LineChartState, PlotYaout } from "@/types/Types";
+import useBarChartState from './useLineChartState';
+import Plot from 'react-plotly.js';
+import { useEffect } from 'react';
 
-const [selectedX, setSelectedX] = useState<string | null>(null);
-const [selectedY, setSelectedY] = useState<string | null>(null);
+const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (state: { data: Data[]; layout: BarLayout }) => void }) => {
 
+  if (!data || data.length === 0) {
+    return <p>No data available</p>; 
+  }
 
-const handleXChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  const value = e.target.value;
-  setSelectedX(value);
-};
+  const headers = data[0]; 
+  const rows = data.slice(1); 
 
-const handleYChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  const value = e.target.value;
-  setSelectedY(value);
-};
+  const {
+    categoricalColumn,
+    numericColumn,
+    additionalColumn,
+    selectedCategories,
+    handleCategoricalChange,
+    handleNumericChange,
+    handleAdditionalColumnChange,
+  } = useBarChartState(headers);
 
-const LineChart = ({ data, onStateChange }: LineChartState & { onStateChange?: (state: { data: LineChartState; layout: PlotYaout }) => void }) => {
+  const lineChartData = (): BarChartState[] => {
 
-      const headers: string[] = useMemo(() => (
-        Array.isArray(data) && data.length > 0 && Array.isArray(data[0]) ? data[0] : []
-      ), [data]);
-      const rows = useMemo(() => (data && data.datasets.length > 1 ? data.datasets.slice(1) : []), [data]);
+    if (!categoricalColumn || !numericColumn || !additionalColumn) return [];
 
-   
-    const configChart = {
-        type: 'line',
-        data: rows,
-        options: {
-          plugins: {
-            filler: {
-              propagate: false,
-            },
-            title: {
-              display: true,
-              text: 'LineChart',
-            }
-          },
-          interaction: {
-            intersect: false,
-          }
+    const groupedData: { [key: string]: { values: number[]; tooltips: string[] } } = {};
+
+    rows.forEach((row) => {
+      const category = row[headers.indexOf(categoricalColumn)] as string;
+      const numericValue = Number(row[headers.indexOf(numericColumn)]);
+      const additionalValue = row[headers.indexOf(additionalColumn)];
+
+      if (!selectedCategories.length || selectedCategories.includes(category)) {
+        if (!groupedData[category]) {
+          groupedData[category] = { values: [], tooltips: [] };
+        }
+        groupedData[category].values.push(numericValue);
+        groupedData[category].tooltips.push(`${category}, ${numericValue}, ${additionalColumn}: ${additionalValue}`);
+      }
+    });
+
+    const sortedGroupedData: BarChartState[] = Object.entries(groupedData)
+      .sort(([, a], [, b]) => {
+        const sumA = a.values.reduce((acc, val) => acc + val, 0);
+        const sumB = b.values.reduce((acc, val) => acc + val, 0);
+        return sumB - sumA;
+      })
+      .map(([key, { values, tooltips }]) => ({
+        y: values,
+        x: Array.from({ length: values.length }, (_, i) => i + 1), 
+        type: 'scatter' as const, // Cambiado de 'bar' a 'scatter'
+        mode: 'lines', // Agregado modo 'lines' para gráfico de líneas
+        name: key,
+        text: tooltips,
+        hoverinfo: 'text',
+        textposition: 'none',
+      }));
+
+    return sortedGroupedData;
+  };
+
+  useEffect(() => {
+    if (onStateChange) {
+      const numericValues = data.map((d: any) => d[numericColumn]);
+      const minNumeric = Math.min(...numericValues);
+      const maxNumeric = Math.max(...numericValues);
+      const layout: BarLayout = {
+        title: {
+          text: 'Line Chart: Dynamic Analysis', // Título modificado
+        },
+        yaxis: {
+          title: {
+            text: numericColumn },
+          type: 'linear', // Cambiado a 'linear' para líneas
+          range: [minNumeric, maxNumeric],
+          autorange: true,
+        },
+
+        xaxis: {
+          title: {
+            text: categoricalColumn },
+          type: 'category',
+          range: [0, data.length - 1],
+          autorange: true,
         },
       };
 
+      onStateChange({
+        data: lineChartData(),
+        layout,
+      });
+    }
+  }, [categoricalColumn, numericColumn, additionalColumn, selectedCategories]);
 
- 
-  
   return (
-    <div className="lineContainer">
     <div>
-      <label>
-        Select X-Axis:
+      <h2>LineChart</h2>
+      
+      <div>
+        <label htmlFor="categoricalColumn">Select Categorical Column:</label>
         <select
-          onChange={(e) => handleXChange(e)}
-          defaultValue=""
+          id="categoricalColumn"
+          value={categoricalColumn || ''}
+          onChange={handleCategoricalChange}
         >
-          <option value="" disabled>
-            Choose column
-          </option>
-          {headers.map((header, index) => (
-            <option key={`${header}-${index}`} value={header}>
+          <option value="">--Select Categorical Column--</option>
+          {headers.map((header) => (
+            <option key={header} value={header}>
               {header}
             </option>
           ))}
         </select>
-      </label>
-    </div>
-
-    <div>
-      <label>
-        Select Y-Axis:
+      </div>
+      
+      <div>
+        <label htmlFor="numericColumn">Select Numeric Column:</label>
         <select
-          onChange={(e) => handleYChange(e)}
-          defaultValue=""
+          id="numericColumn"
+          value={numericColumn || ''}
+          onChange={handleNumericChange}
         >
-          <option value="" disabled>
-            Choose column
-          </option>
-          {headers.map((header, index) => (
-            <option key={`${header}-${index}`} value={header}>
+          <option value="">--Select Numeric Column--</option>
+          {headers.map((header) => (
+            <option key={header} value={header}>
               {header}
             </option>
           ))}
         </select>
-      </label>
-    </div>
-
-
-    <div className="App">
-      <div className="dataCard revenueCard">
-        <Line data={revenueChartData} />
       </div>
 
+      <div>
+        <label htmlFor="additionalNumericColumn">Select Additional Column for Tooltip:</label>
+        <select
+          id="additionalNumericColumn"
+          value={additionalColumn || ''}
+          onChange={handleAdditionalColumnChange}
+        >
+          <option value="">--Select Additional Column--</option>
+          {headers.map((header) => (
+            <option key={header} value={header}>
+              {header}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        {categoricalColumn && numericColumn && additionalColumn && (
+          <Plot
+            data={lineChartData()} // Se usa la función `lineChartData()` aquí
+            layout={{
+              title: 'Line Chart: Dynamic Analysis', // Título cambiado
+              yaxis: { title: numericColumn },
+              xaxis: { title: categoricalColumn },
+            }}
+          />
+        )}
+      </div>
     </div>
-    </div> 
-    
   );
 };
 

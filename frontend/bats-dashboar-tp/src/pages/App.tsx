@@ -47,11 +47,11 @@ const App = () => {
 
   const [plotState, setPlotState] = useState<{ data: Data[]; layout: PlotYaout } | null>(null);
   const [barState, setBarState] = useState<{ data: Data[]; layout: BarLayout } | null>(null);
+  const [lineState, setLineState] = useState<{ data: Data[]; layout: BarLayout } | null>(null);
 
 
   const [data, setData] = useState<string[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
-  const [usePivotStateData] = useState(false);
 
   const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
 
@@ -150,10 +150,14 @@ const App = () => {
                 <section className="snapSection">
                   <div className="pivotContainer">
                   <LineChart                        
-                        data={lineChartState.data}  
-                      //  onChange={(newState: LineChartState) => {
-                       //   setLineChartState({ ...lineChartState, ...newState });
-                       // }}                     
+                      data={
+                        Array.isArray(lineChartState.data) && lineChartState.data.length > 0
+                          ? lineChartState.data
+                          : data
+                      }
+                      onStateChange={(state) => {
+                        setLineState(state);
+                      }}                         
                       />
                   </div>
                 </section>
