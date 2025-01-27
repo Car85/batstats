@@ -4,6 +4,7 @@ import { BarChartState, BarLayout } from '../../types/Types';
 import useBarChartState from './useLineChartState';
 import Plot from 'react-plotly.js';
 import { useEffect } from 'react';
+import { color } from 'html2canvas/dist/types/css/types/color';
 
 const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (state: { data: Data[]; layout: BarLayout }) => void }) => {
 
@@ -48,12 +49,10 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       .map(([key, { values, tooltips }]) => ({
         y: values,
         x: [key], 
-        type: 'scatter', 
-        mode: 'lines+points', 
-        name: key,
+        type: 'scatter',
+        mode: "lines+markers",         
         text: tooltips,
         hoverinfo: 'text',
-        textposition: 'none',
         
       }));
 
@@ -68,10 +67,11 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       const minNumeric = Math.min(...numericValues);
       const maxNumeric = Math.max(...numericValues);
       const layout: BarLayout = {
+       
         title: {
           text: 'Line Chart: Dynamic Analysis',
-        },
-        yaxis: {
+        },       
+        yaxis: {          
           title: {
             text: numericColumn,
           },
@@ -79,11 +79,11 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
           range: [minNumeric, maxNumeric],
           autorange: true,
         },
-        xaxis: {
+        xaxis: {          
           title: {
             text: categoricalColumn,
           },
-          type: 'category', 
+          type: 'multicategory', 
           autorange: true,  
         },
       };
@@ -154,7 +154,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
             layout={{
               title: 'Line Chart: Dynamic Analysis', 
               yaxis: { title: numericColumn },
-              xaxis: { title: categoricalColumn },
+              xaxis: { title: categoricalColumn }
             }}
           />
         )}
@@ -164,3 +164,50 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
 };
 
 export default LineChart;
+
+
+
+
+
+import React from "react";
+import Plot from "react-plotly.js";
+
+const LineChart: React.FC = () => {
+  return (
+    <Plot
+      data={[
+        {
+          x: [1, 2, 3, 4, 5], // Valores del eje X
+          y: [10, 15, 13, 17, 22], // Valores del eje Y
+          type: "scatter", // Tipo de gráfico: scatter se usa también para líneas
+          mode: "lines+markers", // Define líneas y puntos
+          marker: { color: "blue" }, // Color de los puntos
+          line: { shape: "linear", color: "red" }, // Configuración de la línea
+          name: "Dataset 1", // Nombre de la serie
+        },
+        {
+          x: [1, 2, 3, 4, 5],
+          y: [12, 9, 15, 12, 20],
+          type: "scatter",
+          mode: "lines+markers",
+          marker: { color: "green" },
+          line: { shape: "linear", color: "orange" },
+          name: "Dataset 2",
+        },
+      ]}
+      layout={{
+        title: "Line Chart Example",
+        xaxis: { title: "X Axis" },
+        yaxis: { title: "Y Axis" },
+        showlegend: true, // Muestra la leyenda
+        legend: { x: 1, y: 1 }, // Posición de la leyenda
+      }}
+      config={{
+        responsive: true, // Habilita el diseño responsivo
+      }}
+    />
+  );
+};
+
+export default LineChart;
+

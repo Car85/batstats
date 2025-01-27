@@ -1,4 +1,4 @@
-import { Data, Layout } from "plotly.js";
+import { Color, Dash, Data, Layout, ScatterLine } from "plotly.js";
 
 export interface ParseResult<T> {
     data: T[];
@@ -101,6 +101,13 @@ export interface PlotYaout {
 export interface BarLayout {
   title: {
     text: string;}
+  line: Partial<ScatterLine>;
+    "line.color": Color;
+    "line.width": number;
+    "line.dash": Dash;
+    "line.shape": "linear" | "spline" | "hv" | "vh" | "hvh" | "vhv";
+    "line.smoothing": number;
+    "line.simplify": boolean;
   yaxis: {
     title: {
       text: string;}
