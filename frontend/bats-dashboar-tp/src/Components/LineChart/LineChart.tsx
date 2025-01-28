@@ -1,4 +1,4 @@
-import { Data } from 'plotly.js';
+import { AxisType, Data } from 'plotly.js';
 import { BarChartState, BarLayout } from '../../types/Types';
 
 import useBarChartState from './useLineChartState';
@@ -6,7 +6,7 @@ import Plot from 'react-plotly.js';
 import { useEffect } from 'react';
 import { color } from 'html2canvas/dist/types/css/types/color';
 
-const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (state: { data: Data[]; layout: BarLayout }) => void }) => {
+const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (state: { data: Data[]; layout: Partial<Plotly.Layout> }) => void }) => {
 
   if (!data || data.length === 0) {
     return <p>No data available</p>; 
@@ -66,7 +66,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       const numericValues = data.map((d: any) => d[numericColumn]);
       const minNumeric = Math.min(...numericValues);
       const maxNumeric = Math.max(...numericValues);
-      const layout: BarLayout = {
+      const layout  = {
        
         title: {
           text: 'Line Chart: Dynamic Analysis',
@@ -75,7 +75,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
           title: {
             text: numericColumn,
           },
-          type: 'linear',
+          type: 'linear' as AxisType,
           range: [minNumeric, maxNumeric],
           autorange: true,
         },
@@ -83,7 +83,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
           title: {
             text: categoricalColumn,
           },
-          type: 'multicategory', 
+          type: "multicategory" as AxisType, 
           autorange: true,  
         },
       };
@@ -168,46 +168,4 @@ export default LineChart;
 
 
 
-
-import React from "react";
-import Plot from "react-plotly.js";
-
-const LineChart: React.FC = () => {
-  return (
-    <Plot
-      data={[
-        {
-          x: [1, 2, 3, 4, 5], // Valores del eje X
-          y: [10, 15, 13, 17, 22], // Valores del eje Y
-          type: "scatter", // Tipo de gráfico: scatter se usa también para líneas
-          mode: "lines+markers", // Define líneas y puntos
-          marker: { color: "blue" }, // Color de los puntos
-          line: { shape: "linear", color: "red" }, // Configuración de la línea
-          name: "Dataset 1", // Nombre de la serie
-        },
-        {
-          x: [1, 2, 3, 4, 5],
-          y: [12, 9, 15, 12, 20],
-          type: "scatter",
-          mode: "lines+markers",
-          marker: { color: "green" },
-          line: { shape: "linear", color: "orange" },
-          name: "Dataset 2",
-        },
-      ]}
-      layout={{
-        title: "Line Chart Example",
-        xaxis: { title: "X Axis" },
-        yaxis: { title: "Y Axis" },
-        showlegend: true, // Muestra la leyenda
-        legend: { x: 1, y: 1 }, // Posición de la leyenda
-      }}
-      config={{
-        responsive: true, // Habilita el diseño responsivo
-      }}
-    />
-  );
-};
-
-export default LineChart;
 
