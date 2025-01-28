@@ -98,7 +98,7 @@ const BarChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (st
 
 
   return (
-    <div>
+    <div className="lables">
       <h2>BarChart</h2>
       
       <div>

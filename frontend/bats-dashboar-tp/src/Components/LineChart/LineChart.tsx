@@ -3,7 +3,7 @@ import { BarChartState, BarLayout } from '../../types/Types';
 
 import useBarChartState from './useLineChartState';
 import Plot from 'react-plotly.js';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { color } from 'html2canvas/dist/types/css/types/color';
 
 const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (state: { data: Data[]; layout: Partial<Plotly.Layout> }) => void }) => {
@@ -47,7 +47,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
     });
 
     const sortedGroupedData: BarChartState[] = Object.entries(groupedData).map(
-      ([_, { x, y, tooltips }]) => ({
+      ([category, { x, y, tooltips }]) => ({
         x, 
         y, 
         type: 'scatter',
@@ -61,6 +61,9 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
 
     return sortedGroupedData;
   };
+
+  const memoizedData = useMemo(() => lineChartData(), [categoricalColumn, numericColumn, additionalColumn, rows]);
+
 
   useEffect(() => {
     if (onStateChange) {
@@ -97,7 +100,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
   }, [categoricalColumn, numericColumn, additionalColumn, selectedCategories]);
 
   return (
-    <div>
+    <div className="lables">
       <h2>LineChart</h2>
       
       <div>
@@ -151,7 +154,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       <div>
         {categoricalColumn && numericColumn && additionalColumn && (
           <Plot
-            data= {lineChartData()}
+            data= {memoizedData}
             layout={{
               title: 'Line Chart: Dynamic Analysis', 
               yaxis: { title: numericColumn },

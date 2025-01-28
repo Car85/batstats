@@ -94,7 +94,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
   }
 
   return (
-    <div>
+    <div className="lables">
       <h2>Dynamic Box Plot</h2>
 
       <div>
