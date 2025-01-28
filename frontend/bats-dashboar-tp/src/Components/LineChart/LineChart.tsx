@@ -29,7 +29,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
 
     if (!categoricalColumn || !numericColumn || !additionalColumn) return [];
 
-    const groupedData: { [key: string]: { values: number[]; tooltips: string[] } } = {};
+    const groupedData: { [key: string]: { x: numbe[]; y: number[], tooltips: string[] } } = {};
 
     rows.forEach((row) => {
       const category = row[headers.indexOf(categoricalColumn)] as string;
@@ -38,23 +38,24 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
 
       if (!selectedCategories.length || selectedCategories.includes(category)) {
         if (!groupedData[category]) {
-          groupedData[category] = { values: [], tooltips: [] };
+          groupedData[category] = { x: [], y: [], tooltips: [] };
         }
-        groupedData[category].values.push(numericValue);
+        groupedData[category].x.push(category);
+        groupedData[category].y.push(numericValue);
         groupedData[category].tooltips.push(`${category}, ${numericValue}, ${additionalColumn}: ${additionalValue}`);
       }
     });
 
-    const sortedGroupedData: BarChartState[] = Object.entries(groupedData)
-      .map(([key, { values, tooltips }]) => ({
-        y: values,
-        x: [key], 
+    const sortedGroupedData: BarChartState[] = Object.entries(groupedData).map(
+      ([_, { x, y, tooltips }]) => ({
+        x, 
+        y, 
         type: 'scatter',
-        mode: "lines+markers",         
+        mode: 'lines+markers', 
         text: tooltips,
         hoverinfo: 'text',
-        
-      }));
+      })
+    );
 
 
 
@@ -150,7 +151,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       <div>
         {categoricalColumn && numericColumn && additionalColumn && (
           <Plot
-            data={lineChartData()}
+            data= {lineChartData()}
             layout={{
               title: 'Line Chart: Dynamic Analysis', 
               yaxis: { title: numericColumn },
