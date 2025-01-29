@@ -5,6 +5,7 @@ import useBarChartState from './useLineChartState';
 import Plot from 'react-plotly.js';
 import { useEffect, useMemo } from 'react';
 import { color } from 'html2canvas/dist/types/css/types/color';
+import { Y } from 'vitest/dist/chunks/reporters.D7Jzd9GS';
 
 const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (state: { data: Data[]; layout: Partial<Plotly.Layout> }) => void }) => {
 
@@ -29,35 +30,34 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
 
     if (!categoricalColumn || !numericColumn || !additionalColumn) return [];
 
-    const groupedData: { [key: string]: { x: numbe[]; y: number[], tooltips: string[] } } = {};
+    const groupedData: { x: string[]; y: number[]; tooltips: string[] } = {
+      x: [],
+      y: [],
+      tooltips: []
+    };
 
     rows.forEach((row) => {
-      const category = row[headers.indexOf(categoricalColumn)] as string;
+      const category = row[headers.indexOf(categoricalColumn)];
       const numericValue = Number(row[headers.indexOf(numericColumn)]);
       const additionalValue = row[headers.indexOf(additionalColumn)];
 
       if (!selectedCategories.length || selectedCategories.includes(category)) {
-        if (!groupedData[category]) {
-          groupedData[category] = { x: [], y: [], tooltips: [] };
-        }
-        groupedData[category].x.push(category);
-        groupedData[category].y.push(numericValue);
-        groupedData[category].tooltips.push(`${category}, ${numericValue}, ${additionalColumn}: ${additionalValue}`);
+      
+        groupedData.x.push(category);
+        groupedData.y.push(numericValue);
+        groupedData.tooltips.push(`${category}, ${numericValue}, ${additionalColumn}: ${additionalValue}`);
       }
+
     });
-
-    const sortedGroupedData: BarChartState[] = Object.entries(groupedData).map(
-      ([category, { x, y, tooltips }]) => ({
-        x, 
-        y, 
+    console.log(groupedData);
+    const sortedGroupedData = ({
+        x: groupedData.x, 
+        y: groupedData.y, 
         type: 'scatter',
-        mode: 'lines+markers', 
-        text: tooltips,
-        hoverinfo: 'text',
-      })
-    );
-
-
+        mode: 'lines+markers',       
+        text: groupedData.tooltips,
+        hoverinfo: 'text',      
+      });
 
     return sortedGroupedData;
   };
@@ -68,28 +68,10 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
   useEffect(() => {
     if (onStateChange) {
       const numericValues = data.map((d: any) => d[numericColumn]);
-      const minNumeric = Math.min(...numericValues);
-      const maxNumeric = Math.max(...numericValues);
+    
       const layout  = {
-       
-        title: {
-          text: 'Line Chart: Dynamic Analysis',
-        },       
-        yaxis: {          
-          title: {
-            text: numericColumn,
-          },
-          type: 'linear' as AxisType,
-          range: [minNumeric, maxNumeric],
-          autorange: true,
-        },
-        xaxis: {          
-          title: {
-            text: categoricalColumn,
-          },
-          type: "multicategory" as AxisType, 
-          autorange: true,  
-        },
+        title: 
+          'Line Chart: Dynamic Analysis'    
       };
 
       onStateChange({
