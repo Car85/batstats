@@ -219,31 +219,27 @@ const App = () => {
                   
                   <div className="dashboard-container">
                     <div className="dashboard-item">
-                      <div className="pvtUi-quadrant">
-                      <h1>Interactive Charts</h1>
                       {lineState && lineState.data && lineState.layout && (
                         <Plotly data={lineState.data}
                           layout={{
                             ...lineState.layout,
                             autosize: true,
-                            margin: { t: 35, l: 25, r: 45, b: 105 },
+                            margin: { t: 55, l: 45, r: 45, b: 75 },
                           }}
                           useResizeHandler={true}
                           style={{ width: "100%", height: "100%" }} 
                         />
                       )}
-                      </div>
 
                     </div>
 
                     {plotState && (
                       <div className="dashboard-item">
-                        <h2>Box Plot</h2>
                         <Plotly data={plotState.data}
                           layout={{
                             ...plotState.layout,
                             autosize: true,
-                            margin: { t: 35, l: 45, r: 45, b: 105 },
+                            margin: { t: 55, l: 45, r: 45, b: 105 },
                           }}
                           useResizeHandler={true}
                           style={{ width: "100%", height: "100%" }} />
@@ -252,7 +248,6 @@ const App = () => {
 
                     {barState && (
                       <div className="dashboard-item">
-                        <h2>BarChart</h2>
                         <Plotly data={barState.data}
                           layout={{
                             ...barState.layout,
@@ -265,14 +260,14 @@ const App = () => {
                     )}
 
                     <div className="dashboard-item">
-                      <div className="table-container">
+                      <div className="correlation-matrix-container">
                         <CorrelationMatrix
                           data={
                             Array.isArray(CorrelationMatrixState.data) &&
                               CorrelationMatrixState.data.length > 0
                               ? CorrelationMatrixState.data
                               : data
-                          }                         
+                          }
                         /></div>
                     </div>
                   </div>

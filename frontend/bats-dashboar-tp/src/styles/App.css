@@ -53,4 +53,22 @@
     cursor: pointer;
     border-radius: 5px;
   }
+
+  .correlation-matrix-container {
+    max-width: 100%;
+    overflow-x: auto; 
+  }
+
+  .correlation-matrix-container th,
+.correlation-matrix-container td {
+  padding: 10px;
+  text-align: center;
+  min-width: 80px; /* Evita que las celdas sean demasiado pequeñas */
+}
+  
+  .correlation-matrix-container table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+  }
   
