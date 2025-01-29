@@ -1,16 +1,14 @@
 import { SetStateAction, useState } from "react";
 
-import PivotTableUI from "react-pivottable/PivotTableUI";
 import Plotly from 'react-plotly.js';
 import createPlotlyRenderers from "react-pivottable/PlotlyRenderers";
 import "react-pivottable/pivottable.css";
 import "./styles/App.css"
-import TableRenderers from "react-pivottable/TableRenderers";
 import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
 import SaveReport from "../Components/SaveReport/SaveReport";
-import BoxPlot, { boxPlotData } from "../Components/BoxPlot/Boxplot";
+import BoxPlot from "../Components/BoxPlot/Boxplot";
 import ReportList from "../Components/ReportList/ReportList";
 import DashboardLandscape from "../Components/Dashboard/DashboardLandscape"
 
@@ -22,7 +20,6 @@ import {
   MatrixDataState,
   LineChartState,
   DashboardState,
-  BoxReplica,
   PlotYaout,
   BarLayout,
 } from "../types/Types";
@@ -47,13 +44,11 @@ const App = () => {
 
   const [plotState, setPlotState] = useState<{ data: Data[]; layout: PlotYaout } | null>(null);
   const [barState, setBarState] = useState<{ data: Data[]; layout: BarLayout } | null>(null);
-  const [lineState, setLineState] = useState<{ data: Data[]; layout: BarLayout } | null>(null);
+  const [lineState, setLineState] = useState<{ data: Data[]; layout: Partial<Plotly.Layout> } | null>(null);
 
 
   const [data, setData] = useState<string[][]>([]);
   const [csvLoaded, setCsvLoaded] = useState(false);
-
-  const PivotTableUIComponent = PivotTableUI as unknown as React.FC<any>;
 
 
   const handleFileUpload = (file: File) => {
@@ -156,7 +151,10 @@ const App = () => {
                       }
                       onStateChange={(state) => {
                         setLineState(state);
-                      }}                         
+                      }}      
+                      onChange={(newState: LineChartState) => {
+                        setLineChartState({ ...lineChartState, ...newState });
+                      }}                   
                       />
                 </section>
               )}
@@ -218,29 +216,22 @@ const App = () => {
 
               {csvLoaded && (
                 <section className="snapSection">
+                  
                   <div className="dashboard-container">
                     <div className="dashboard-item">
                       <div className="pvtUi-quadrant">
-                        <h1>Interactive Charts</h1>
-                        <PivotTableUIComponent
-                          data={pivotState.data}
-                          plotlyOptions={{
+                      <h1>Interactive Charts</h1>
+                      {lineState && lineState.data && lineState.layout && (
+                        <Plotly data={lineState.data}
+                          layout={{
+                            ...lineState.layout,
                             autosize: true,
-                            margin: { t: 50, l: 50, r: 50, b: 50 },
-                            showlegend: false,
-                            xaxis: { title: "X" }, 
-                            yaxis: { title: "Y" }, 
+                            margin: { t: 35, l: 25, r: 45, b: 105 },
                           }}
-                          menuLimit={0} 
-
-                          onChange={(newState: PivotState) => setPivotState(newState)}
-                          renderers={{
-                            ...TableRenderers,
-                            ...PlotlyRenderers,
-                          }}
-                          {...pivotState}
-                          hiddenAttributes={[pivotState.data]}
+                          useResizeHandler={true}
+                          style={{ width: "100%", height: "100%" }} 
                         />
+                      )}
                       </div>
 
                     </div>

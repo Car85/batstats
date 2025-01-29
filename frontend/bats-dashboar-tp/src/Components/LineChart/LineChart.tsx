@@ -10,11 +10,11 @@ import { Y } from 'vitest/dist/chunks/reporters.D7Jzd9GS';
 const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (state: { data: Data[]; layout: Partial<Plotly.Layout> }) => void }) => {
 
   if (!data || data.length === 0) {
-    return <p>No data available</p>; 
+    return <p>No data available</p>;
   }
 
-  const headers = data[0]; 
-  const rows = data.slice(1); 
+  const headers = data[0];
+  const rows = data.slice(1);
 
   const {
     categoricalColumn,
@@ -26,7 +26,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
     handleAdditionalColumnChange,
   } = useBarChartState(headers);
 
-  const lineChartData = (): BarChartState[] => {
+  const lineChartData = () => {
 
     if (!categoricalColumn || !numericColumn || !additionalColumn) return [];
 
@@ -35,47 +35,58 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       y: [],
       tooltips: []
     };
+    const cleanRows = rows.filter(row => 
+      row.length > 1 && row.some(cell => cell !== null && cell !== undefined && cell !== "")
+    );
 
-    rows.forEach((row) => {
+    cleanRows.forEach((row) => {
       const category = row[headers.indexOf(categoricalColumn)];
       const numericValue = Number(row[headers.indexOf(numericColumn)]);
-      const additionalValue = row[headers.indexOf(additionalColumn)];
+      console.log("First 5 rows:", cleanRows);
+
+      const additionalValue = row[headers.indexOf(additionalColumn)] ?? "N/A"; 
 
       if (!selectedCategories.length || selectedCategories.includes(category)) {
-      
+
         groupedData.x.push(category);
         groupedData.y.push(numericValue);
         groupedData.tooltips.push(`${category}, ${numericValue}, ${additionalColumn}: ${additionalValue}`);
       }
 
     });
-    console.log(groupedData);
-    const sortedGroupedData = ({
-        x: groupedData.x, 
-        y: groupedData.y, 
-        type: 'scatter',
-        mode: 'lines+markers',       
-        text: groupedData.tooltips,
-        hoverinfo: 'text',      
-      });
+    groupedData.x = groupedData.x.filter(function (e) { return e; }); // delete null values
+    groupedData.y = groupedData.y.filter(function (e) { return e; });
 
-    return sortedGroupedData;
+
+    console.log("Categorical column (X-axis):", categoricalColumn);
+    console.log("Numeric column (Y-axis):", numericColumn);
+    console.log("Data for X:", groupedData.x);
+    console.log("Data for Y:", groupedData.y);
+    
+    return [{
+      x: groupedData.x,
+      y: groupedData.y,
+      type: 'scatter',
+      mode: 'lines+markers',
+      text: groupedData.tooltips,
+      hoverinfo: 'text',
+
+    }];
   };
+  
 
-  const memoizedData = useMemo(() => lineChartData(), [categoricalColumn, numericColumn, additionalColumn, rows]);
 
 
   useEffect(() => {
     if (onStateChange) {
-      const numericValues = data.map((d: any) => d[numericColumn]);
-    
-      const layout  = {
-        title: 
-          'Line Chart: Dynamic Analysis'    
+
+      const layout = {
+        title:
+          'Line Chart: Dynamic Analysis'
       };
 
       onStateChange({
-        data: lineChartData(),
+        data: lineChartData() as Data[],
         layout,
       });
     }
@@ -84,7 +95,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
   return (
     <div className="lables">
       <h2>LineChart</h2>
-      
+
       <div>
         <label htmlFor="categoricalColumn">Select Categorical Column:</label>
         <select
@@ -100,7 +111,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
           ))}
         </select>
       </div>
-      
+
       <div>
         <label htmlFor="numericColumn">Select Numeric Column:</label>
         <select
@@ -136,9 +147,9 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       <div>
         {categoricalColumn && numericColumn && additionalColumn && (
           <Plot
-            data= {memoizedData}
+            data={lineChartData() as Data[]}
             layout={{
-              title: 'Line Chart: Dynamic Analysis', 
+              title: 'Line Chart: Dynamic Analysis',
               yaxis: { title: numericColumn },
               xaxis: { title: categoricalColumn }
             }}
