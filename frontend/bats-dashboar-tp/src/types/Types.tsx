@@ -79,7 +79,7 @@ export interface ParseResult<T> {
 
 
 export interface DashboardState {
-  pivotState: PivotState; 
+  lineChartState: LineChartState; 
   boxPlotState: BoxPlotState; 
   barChartState: BarChartState; 
   correlationMatrixState: MatrixDataState; 

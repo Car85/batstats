@@ -49,7 +49,6 @@ function ReportsList({ setPivotState, setBoxPlotState }: Readonly<ReportsListPro
   
       const { pivotState = {}, boxPlotState = {} } = parsedConfig;
 
-      console.log("Validated Pivot State:", pivotState);     
   
       setPivotState(pivotState);
       setBoxPlotState(boxPlotState);

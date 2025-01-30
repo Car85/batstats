@@ -42,7 +42,6 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
     cleanRows.forEach((row) => {
       const category = row[headers.indexOf(categoricalColumn)];
       const numericValue = Number(row[headers.indexOf(numericColumn)]);
-      console.log("First 5 rows:", cleanRows);
 
       const additionalValue = row[headers.indexOf(additionalColumn)] ?? "N/A"; 
 
@@ -57,12 +56,6 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
     groupedData.x = groupedData.x.filter(function (e) { return e; }); // delete null values
     groupedData.y = groupedData.y.filter(function (e) { return e; });
 
-
-    console.log("Categorical column (X-axis):", categoricalColumn);
-    console.log("Numeric column (Y-axis):", numericColumn);
-    console.log("Data for X:", groupedData.x);
-    console.log("Data for Y:", groupedData.y);
-    
     return [{
       x: groupedData.x,
       y: groupedData.y,

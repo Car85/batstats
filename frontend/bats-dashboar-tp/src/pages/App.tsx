@@ -5,7 +5,6 @@ import createPlotlyRenderers from "react-pivottable/PlotlyRenderers";
 import "react-pivottable/pivottable.css";
 import "./styles/App.css"
 import * as XLSX from "xlsx";
-import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
 import BoxPlot from "../Components/BoxPlot/Boxplot";
 import DashboardLandscape from "../Components/Dashboard/DashboardLandscape"
@@ -107,7 +106,6 @@ const App = () => {
       reader.readAsArrayBuffer(file);
     } else {
       console.log("Format data no valid");
-      toast.error("You can import only CSV and XLS files.");
     }
   };
 
@@ -270,6 +268,11 @@ const App = () => {
                     </div>
                   </div>
 
+                  
+                </section>
+              )}
+
+              <section className="snapSection">
 
                   <Link
                     to="/dashboard"
@@ -282,8 +285,7 @@ const App = () => {
                   >
                     <button>Generate Dashboard</button>
                   </Link>
-                </section>
-              )}
+                  </section>
 
             </div>
           }
@@ -293,14 +295,12 @@ const App = () => {
         <Route
           path="/dashboard"
           element={
-            <section className="snapSection">
               <DashboardLandscape
-                pivotState={pivotState}
+                lineChartState={lineChartState}
                 boxPlotState={boxPlotState}
                 barChartState={barChartState}
                 correlationMatrixState={CorrelationMatrixState}
               />
-            </section>
           }
         />
       </Routes>
