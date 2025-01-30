@@ -7,9 +7,7 @@ import "./styles/App.css"
 import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
-import SaveReport from "../Components/SaveReport/SaveReport";
 import BoxPlot from "../Components/BoxPlot/Boxplot";
-import ReportList from "../Components/ReportList/ReportList";
 import DashboardLandscape from "../Components/Dashboard/DashboardLandscape"
 
 import "../styles/App.css";
@@ -252,7 +250,7 @@ const App = () => {
                           layout={{
                             ...barState.layout,
                             autosize: true,
-                            margin: { t: 25, l: 45, r: 45, b: 135 },
+                            margin: { t: 25, l: 45, r: 45, b: 105 },
                           }}
                           useResizeHandler={true}
                           style={{ width: "100%", height: "100%" }} />
@@ -305,32 +303,7 @@ const App = () => {
             </section>
           }
         />
-
       </Routes>
-      {csvLoaded && (
-        <section className="snapSection">
-          <div style={{ width: "90%" }}>
-            <div className="snapSection">
-              <div className="buttonContainer">
-                <SaveReport
-                  pivotState={pivotState}
-                  boxPlotState={boxPlotState}
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {csvLoaded && (
-        <section className="snapSection">
-          <ReportList
-            setPivotState={handleFileUpload}
-            setBoxPlotState={handleFileUpload}
-          />
-        </section>
-      )}
-
     </Router>
   )
 };

@@ -74,9 +74,8 @@ useEffect(() => {
 
   return (
     <div className="lables">
-      <h3>Correlation Matrix (Table)</h3>
       {correlationMatrix.length > 0 ? (
-        <table border={1} cellPadding={5} style={{ width: "100%", height: "auto" }}>
+        <table border={1} cellPadding={5}>
         <thead>
             <tr>
               <th></th>

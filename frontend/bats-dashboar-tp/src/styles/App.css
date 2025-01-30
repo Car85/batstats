@@ -55,20 +55,56 @@
   }
 
   .correlation-matrix-container {
-    max-width: 100%;
-    overflow-x: auto; 
+    max-width: 85%;
+    height: 90vh;
+    padding: 2rem;
   }
 
-  .correlation-matrix-container th,
-.correlation-matrix-container td {
+  th, td {
   padding: 10px;
   text-align: center;
-  min-width: 80px; /* Evita que las celdas sean demasiado pequeñas */
 }
   
-  .correlation-matrix-container table {
+ table {
     width: 100%;
-    border-collapse: collapse;
+    height: 100%;
     font-size: 1rem;
+    border: 1;
   }
   
+ 
+
+
+
+  /* Responsive design */
+  @media (max-width: 1300px) {
+    table {
+      width: 100%;
+      height: 100%;
+      font-size: small;
+    }
+    th, td{
+      padding: 0.2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    table {
+      width: 100%;
+      height: 100%;
+      font-size: smaller;
+    }
+    th, td{
+      padding: 0.1rem;
+    }
+
+    @media (max-width: 300px) {
+      table {
+        width: 100%;
+        height: 100%;
+        font-size: 2px;
+      }
+      th, td{
+        padding: 0;
+      }  
+  }
