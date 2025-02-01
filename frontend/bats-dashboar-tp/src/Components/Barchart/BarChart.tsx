@@ -5,8 +5,19 @@ import useBarChartState from './useBarChartState';
 import Plot from 'react-plotly.js';
 import { useEffect } from 'react';
 
-const BarChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (state: { data: Data[]; layout: BarLayout }) => void }) => {
+const BarChart = ({ data, onStateChange }:
+                  
+                  BarChartState & { 
+                  
+                  onStateChange?: (state:
+                  
+                  { data: Data[];
+                  
+                  layout: BarLayout })
+                  
+                  => void }) => {
 
+  
   if (!data || data.length === 0) {
     return <p>No data available</p>; 
   }
