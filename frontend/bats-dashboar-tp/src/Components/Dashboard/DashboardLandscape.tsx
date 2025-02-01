@@ -4,13 +4,11 @@ import  LineChart  from "../LineChart/LineChart";
 import CorrelationMatrix from "../CorrelationMatrix/CorrelationMatrix";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { DashboardState } from "@/types/Types";
+import { useLocation } from "react-router-dom";
 
-const DashboardLandscape = ({ 
-  lineChartState,
-  boxPlotState,
-  barChartState,
-  correlationMatrixState }: DashboardState) => {
+const DashboardLandscape = () => {
+  const location = useLocation(); 
+  const { lineChartState, boxPlotState, barChartState, correlationMatrixState } = location.state || {}; 
 
 
     const exportAsImageOrPDF = async (format: "image" | "pdf") => {

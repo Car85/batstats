@@ -208,6 +208,8 @@ const App = () => {
 
               {csvLoaded && (
                 <section className="snapSection">
+                <div className="correlation-matrix">
+
                   <CorrelationMatrix
                     data={
                       Array.isArray(CorrelationMatrixState.data) &&
@@ -216,7 +218,8 @@ const App = () => {
                         : data
                     }
                   />
-                </section>
+                  </div>
+                </section> 
               )}
 
               {csvLoaded && (
@@ -286,7 +289,7 @@ const App = () => {
                 <Link
                   to="/dashboard"
                   state={{
-                    pivotState,
+                    lineChartState,
                     boxPlotState,
                     barChartState,
                     CorrelationMatrixState,
