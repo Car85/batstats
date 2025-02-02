@@ -11,6 +11,9 @@ const DashboardLandscape = () => {
   const { lineChartState, boxPlotState, barChartState, correlationMatrixState } = location.state || {}; 
 
 
+
+    console.log("Location state: ", location.state);
+
     const exportAsImageOrPDF = async (format: "image" | "pdf") => {
       const dashboardElement = document.getElementById("dashboard-container");
   

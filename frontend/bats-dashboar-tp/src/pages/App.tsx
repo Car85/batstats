@@ -34,11 +34,10 @@ import LineChart from "@/Components/LineChart/LineChart";
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
 const App = () => {
-  const [pivotState, setPivotState] = useState<PivotState>({});
   const [boxPlotState, setBoxPlotState] = useState<BoxPlotState>({});
   const [lineChartState, setLineChartState] = useState<LineChartState>({});
   const [barChartState, setBarChartState] = useState<BarChartState>({});
-  const [CorrelationMatrixState] = useState<MatrixDataState>({});
+  const [correlationMatrixState, setCorrelationMatrixState] = useState<MatrixDataState>({});
 
   const [plotState, setPlotState] = useState<{ data: Data[]; layout: PlotYaout } | null>(null);
   const [barState, setBarState] = useState<{ data: Data[]; layout: BarLayout } | null>(null);
@@ -50,10 +49,14 @@ const App = () => {
 
   const [showDashboard, setShowDashboard] = useState<DashboardState>({});
 
-  //const handleGenerateDashboard = () => {
-  //  setShowDashboard();
- // };
-  
+  const handleGenerateDashboard = () => {
+    setShowDashboard({
+      lineChartState,
+      boxPlotState,
+      barChartState,
+      correlationMatrixState,
+    });
+  };
 
 
   const handleFileUpload = (file: File) => {
@@ -73,7 +76,9 @@ const App = () => {
 
           setData(parsedData);
           setCsvLoaded(true);
-          setPivotState({ data: parsedData });
+          setCorrelationMatrixState({
+            data: parsedData, 
+          });
         },
         header: false,
       });
@@ -103,7 +108,9 @@ const App = () => {
   
           setData(excelData);
           setCsvLoaded(true);
-          setPivotState({ data: excelData });
+          setCorrelationMatrixState({
+            data: excelData, 
+          });
         } catch (error: unknown) {
           if (error instanceof Error) {
             alert("Error processing XLSX files: " + error.message);
@@ -212,9 +219,9 @@ const App = () => {
 
                   <CorrelationMatrix
                     data={
-                      Array.isArray(CorrelationMatrixState.data) &&
-                        CorrelationMatrixState.data.length > 0
-                        ? CorrelationMatrixState.data
+                      Array.isArray(correlationMatrixState.data) &&
+                      correlationMatrixState.data.length > 0
+                        ? correlationMatrixState.data
                         : data
                     }
                   />
@@ -271,9 +278,9 @@ const App = () => {
                       <div className="correlation-matrix-container">
                         <CorrelationMatrix
                           data={
-                            Array.isArray(CorrelationMatrixState.data) &&
-                              CorrelationMatrixState.data.length > 0
-                              ? CorrelationMatrixState.data
+                            Array.isArray(correlationMatrixState.data) &&
+                            correlationMatrixState.data.length > 0
+                              ? correlationMatrixState.data
                               : data
                           }
                         /></div>
@@ -292,11 +299,10 @@ const App = () => {
                     lineChartState,
                     boxPlotState,
                     barChartState,
-                    CorrelationMatrixState,
+                    correlationMatrixState,
                   }}
                 >
-                  <button>Generate Dashboard</button>
-                </Link>
+                  <button onClick={handleGenerateDashboard}>Generate Dashboard</button>                </Link>
               </section>
 
             </div>
@@ -311,7 +317,7 @@ const App = () => {
               lineChartState={lineChartState}
               boxPlotState={boxPlotState}
               barChartState={barChartState}
-              correlationMatrixState={CorrelationMatrixState}
+              correlationMatrixState={correlationMatrixState}
             />
           }
         />

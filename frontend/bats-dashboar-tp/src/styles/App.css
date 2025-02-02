@@ -9,10 +9,10 @@ select {
   border-radius: 0.2rem;
   text-align: center; 
   background-color: #007BFF;
-  border: 0.8rem solid #dbc234; /* Borde azul */
-  color: #333; /* Color del texto */
+  border: 0.4rem solid #dbc234; 
+  color: #333; 
   font-size: 2rem;
-  transition: all 0.3s ease; /* Transición suave para el borde y fondo */
+  transition: all 0.3s ease; 
 }
 
 .appContainer {
