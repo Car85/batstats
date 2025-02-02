@@ -119,7 +119,7 @@ const BarChart = ({ data, onStateChange }:
           value={categoricalColumn || ''}
           onChange={handleCategoricalChange}
         >
-          <option value="">--Select Categorical Column--</option>
+          <option value="" selected>👇</option>
           {headers.map((header) => (
             <option key={header} value={header}>
               {header}
@@ -135,7 +135,7 @@ const BarChart = ({ data, onStateChange }:
           value={numericColumn || ''}
           onChange={handleNumericChange}
         >
-          <option value="">--Select Numeric Column--</option>
+          <option value="" selected>👇</option>
           {headers.map((header) => (
             <option key={header} value={header}>
               {header}
@@ -151,7 +151,7 @@ const BarChart = ({ data, onStateChange }:
           value={additionalColumn || ''}
           onChange={handleAdditionalColumnChange}
         >
-          <option value="">--Select Additional Column--</option>
+          <option value="" selected>👇</option>
           {headers.map((header) => (
             <option key={header} value={header}>
               {header}

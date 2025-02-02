@@ -104,7 +104,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
           value={categoricalColumn}
           onChange={handleCategoricalChange}
           >
-          <option value="">--Select Categorical Column--</option>
+          <option value="" selected>👇</option>
           {Array.isArray(headers) &&
             headers.map((header) => (
             <option key={header} value={header}>
@@ -121,7 +121,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
           value={numericColumn || ''}
           onChange={handleNumericChange}
         >
-          <option value="">--Select Numeric Column--</option>
+          <option value="" selected>👇</option>
           {headers.map((header, index) => (
             <option key={`${header}-${index}`} value={header}>
               {header}
@@ -137,7 +137,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
           value={tooltipColumn || ''}
           onChange={handleTooltipChange}
         >
-          <option value="">--Select Tooltip Column--</option>
+          <option value="" selected>👇</option>
 
           {Array.isArray(headers) &&
             headers.map((header) => (

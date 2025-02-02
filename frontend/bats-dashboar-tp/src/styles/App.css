@@ -1,3 +1,20 @@
+select {
+  width: auto;
+  min-width: 4rem;
+  max-width: 15rem;
+  padding: 1rem; 
+  padding-right: 3rem;
+  margin-left: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 0.2rem;
+  text-align: center; 
+  background-color: #007BFF;
+  border: 0.8rem solid #dbc234; /* Borde azul */
+  color: #333; /* Color del texto */
+  font-size: 2rem;
+  transition: all 0.3s ease; /* Transición suave para el borde y fondo */
+}
+
 .appContainer {
     scroll-snap-type: y mandatory;
     overflow-y: scroll;
@@ -12,6 +29,7 @@
     scroll-snap-align: start;
     height: 100vh;
     width: 100vw;
+    font-size: 1.5vw;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -61,14 +79,13 @@
 table {
       width: 100%;
       height: 100%;
-      font-size: small;
+      font-size: medium;
 }
   
   @media (max-width: 680px) {
     table {
       width: 100%;
       height: 100%;
-      font-size: smaller;
     }
     th, td{
       padding: 0.1rem;
