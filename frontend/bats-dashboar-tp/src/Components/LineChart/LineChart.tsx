@@ -144,10 +144,8 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
               title: 'Line Chart: Dynamic Analysis',
               yaxis: { title: numericColumn },
               xaxis: { title: categoricalColumn },
-              autosize: true,
             }}
-            useResizeHandler={true}
-            style={{ width: "100vw", height: "100%" }}
+         
           />
         )}
       </div>

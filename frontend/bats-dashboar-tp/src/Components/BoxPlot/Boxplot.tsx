@@ -78,7 +78,6 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
       title: 'Box Plot: Dynamic Analysis',
       yaxis: { title: numericColumn || 'Y-Axis' },
       xaxis: { title: categoricalColumn || 'X-Axis' },
-      autosize: true,
 
     }as PlotYaout;
   }, [numericColumn, categoricalColumn]);
