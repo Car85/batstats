@@ -12,14 +12,6 @@ export interface ParseResult<T> {
   }
 
 
-  export interface PivotState {
-    map?: string; 
-    data?: string[][];
-    options?: Record<string, unknown>;
-    layout?: Partial<Layout>; 
-    [key: string]: unknown; 
-  }
-  
   export interface BoxReplica {
     data?: Data[];
     plotlayout?: PlotYaout;

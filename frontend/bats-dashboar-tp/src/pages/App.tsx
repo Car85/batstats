@@ -13,7 +13,6 @@ import * as Excel from 'exceljs';
 import "../styles/App.css";
 import {
   BoxPlotState,
-  PivotState,
   BarChartState,
   MatrixDataState,
   LineChartState,
@@ -319,8 +318,10 @@ const App = () => {
               barChartState={barChartState}
               correlationMatrixState={correlationMatrixState}
             />
+
+            
           }
-        />
+        />        
       </Routes>
     </Router>
   )
