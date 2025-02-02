@@ -113,7 +113,7 @@ const BarChart = ({ data, onStateChange }:
       <h2>BarChart</h2>
       
       <div>
-        <label htmlFor="categoricalColumn">Select Categorical Column:</label>
+        <label htmlFor="categoricalColumn">X-Axis</label>
         <select
           id="categoricalColumn"
           value={categoricalColumn || ''}
@@ -129,7 +129,7 @@ const BarChart = ({ data, onStateChange }:
       </div>
       
       <div>
-        <label htmlFor="numericColumn">Select Numeric Column:</label>
+        <label htmlFor="numericColumn">Y-Axis</label>
         <select
           id="numericColumn"
           value={numericColumn || ''}
@@ -145,7 +145,7 @@ const BarChart = ({ data, onStateChange }:
       </div>
 
       <div>
-        <label htmlFor="additionalNumericColumn">Select Additional Column for Tooltip:</label>
+        <label htmlFor="additionalNumericColumn">Tooltip:</label>
         <select
           id="additionalNumericColumn"
           value={additionalColumn || ''}
@@ -168,6 +168,7 @@ const BarChart = ({ data, onStateChange }:
               title: 'Bar Chart: Dynamic Analysis',
               yaxis: { title: numericColumn },
               xaxis: { title: categoricalColumn },
+              autosize: true,
             }}
           />
         )}

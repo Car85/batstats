@@ -1,11 +1,9 @@
-import { AxisType, Data } from 'plotly.js';
-import { BarChartState, BarLayout } from '../../types/Types';
+import { Data } from 'plotly.js';
+import { BarChartState } from '../../types/Types';
 
 import useBarChartState from './useLineChartState';
 import Plot from 'react-plotly.js';
-import { useEffect, useMemo } from 'react';
-import { color } from 'html2canvas/dist/types/css/types/color';
-import { Y } from 'vitest/dist/chunks/reporters.D7Jzd9GS';
+import { useEffect } from 'react';
 
 const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (state: { data: Data[]; layout: Partial<Plotly.Layout> }) => void }) => {
 
@@ -90,7 +88,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       <h2>LineChart</h2>
 
       <div>
-        <label htmlFor="categoricalColumn">Select Categorical Column:</label>
+        <label htmlFor="categoricalColumn">X-Axis</label>
         <select
           id="categoricalColumn"
           value={categoricalColumn || ''}
@@ -106,7 +104,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       </div>
 
       <div>
-        <label htmlFor="numericColumn">Select Numeric Column:</label>
+        <label htmlFor="numericColumn">Y-Axis</label>
         <select
           id="numericColumn"
           value={numericColumn || ''}
@@ -121,8 +119,9 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
         </select>
       </div>
 
+
       <div>
-        <label htmlFor="additionalNumericColumn">Select Additional Column for Tooltip:</label>
+        <label htmlFor="additionalNumericColumn">Tooltip</label>
         <select
           id="additionalNumericColumn"
           value={additionalColumn || ''}
@@ -144,8 +143,11 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
             layout={{
               title: 'Line Chart: Dynamic Analysis',
               yaxis: { title: numericColumn },
-              xaxis: { title: categoricalColumn }
+              xaxis: { title: categoricalColumn },
+              autosize: true,
             }}
+            useResizeHandler={true}
+            style={{ width: "100vw", height: "100%" }}
           />
         )}
       </div>

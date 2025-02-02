@@ -78,6 +78,8 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
       title: 'Box Plot: Dynamic Analysis',
       yaxis: { title: numericColumn || 'Y-Axis' },
       xaxis: { title: categoricalColumn || 'X-Axis' },
+      autosize: true,
+
     }as PlotYaout;
   }, [numericColumn, categoricalColumn]);
 
@@ -98,7 +100,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
       <h2>Dynamic Box Plot</h2>
 
       <div>
-        <label htmlFor="categoricalColumn">Select Categorical Column:</label>
+        <label htmlFor="categoricalColumn">X-Axis</label>
         <select
           id="categoricalColumn"
           value={categoricalColumn}
@@ -115,7 +117,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
       </div>
 
       <div>
-        <label htmlFor="numericColumn">Select Numeric Column:</label>
+        <label htmlFor="numericColumn">Y-Axis</label>
         <select
           id="numericColumn"
           value={numericColumn || ''}
@@ -131,7 +133,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
       </div>
 
       <div>
-        <label htmlFor="tooltipColumn">Select Tooltip Column:</label>
+        <label htmlFor="tooltipColumn">Tooltip</label>
         <select
           id="tooltipColumn"
           value={tooltipColumn || ''}
@@ -151,7 +153,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
 
      {categoricalColumn && (
         <div>
-          <label htmlFor="categoryFilter">Select Specific Categories:</label>
+          <label htmlFor="categoryFilter">Categories:</label>
           <select
             id="categoryFilter"
             multiple
@@ -165,24 +167,15 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
                 </option>
               )
             )}
-          </select>
-          <button
-            type="button"
-            onClick={() => setSelectedCategories([])}
-            style={{
-              marginLeft: '10px',
-              padding: '5px 10px',
-              backgroundColor: '#f8f9fa',
-              border: '1px solid #ccc',
-            }}
-          >
-            Deselect All Categories
-          </button>
+          </select>         
         </div>
       )}
 
       {categoricalColumn && numericColumn && (
-        <Plotly data={plotData} layout={plotLayout} />
+        <Plotly 
+          data={plotData} 
+          layout={plotLayout}  
+          />
       )}
     </div>
   );

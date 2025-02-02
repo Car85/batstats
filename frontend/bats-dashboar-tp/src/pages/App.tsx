@@ -154,6 +154,7 @@ const App = () => {
 
               {csvLoaded && (
                 <section className="snapSection">
+                  <div className="linechart">
                   <LineChart
                     data={
                       Array.isArray(lineChartState.data) && lineChartState.data.length > 0
@@ -166,7 +167,7 @@ const App = () => {
                     onChange={(newState: LineChartState) => {
                       setLineChartState({ ...lineChartState, ...newState });
                     }}
-                  />
+                  /></div>
                 </section>
               )}
               {csvLoaded && (
@@ -198,6 +199,7 @@ const App = () => {
                         ? barChartState.data
                         : data
                     }
+                    
                     onStateChange={(state: SetStateAction<{ data: Data[]; layout: BarLayout; } | null>) => {
                       console.log(state);
                       setBarState(state);
