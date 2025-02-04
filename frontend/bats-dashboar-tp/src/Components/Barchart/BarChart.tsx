@@ -164,6 +164,10 @@ const BarChart = ({ data, onStateChange }:
         {categoricalColumn && numericColumn && additionalColumn && (
           <Plot
             data={barChartData()}
+            config={{
+              autosizable: true,
+              displaylogo: false,
+            }}
             layout={{
               title: 'Bar Chart: Dynamic Analysis',
               yaxis: { title: numericColumn },

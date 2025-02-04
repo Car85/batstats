@@ -38,9 +38,7 @@ export const boxPlotData = (
     y: values,
     type: 'box', 
     name: key, 
-    text: tooltips, 
-    hoverinfo: 'text', 
-  }));
+ }));
 };
 
 const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (state: { data: Data[]; layout: PlotYaout }) => void }) => {
@@ -55,10 +53,8 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
     tooltipColumn,
     numericColumn,
     selectedCategories,
-    setSelectedCategories,
     handleCategoricalChange,
     handleNumericChange,
-    handleTooltipChange,
     handleCategoryChange
   } = useBoxPlotState(headers);
  
@@ -74,6 +70,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
       title: 'Box Plot: Dynamic Analysis',
       yaxis: { title: numericColumn || 'Y-Axis' },
       xaxis: { title: categoricalColumn || 'X-Axis' },
+      autosize: true,
 
     }as PlotYaout;
   }, [numericColumn, categoricalColumn]);
@@ -126,28 +123,9 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
           ))}
         </select>
       </div>
-
-      <div>
-        <label htmlFor="tooltipColumn">Tooltip</label>
-        <select
-          id="tooltipColumn"
-          value={tooltipColumn || ''}
-          onChange={handleTooltipChange}
-        >
-          <option value="" selected>👇</option>
-
-          {Array.isArray(headers) &&
-            headers.map((header) => (
-            <option key={header} value={header}>
-              {header}
-            </option>
-          ))}
-        </select>
-      </div>
-
-
+     
      {categoricalColumn && (
-        <div>
+        <div className='category-filter-container'>
           <label htmlFor="categoryFilter">Categories:</label>
           <select
             id="categoryFilter"
@@ -169,7 +147,13 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
       {categoricalColumn && numericColumn && (
         <Plotly 
           data={plotData} 
+          config={{
+            autosizable: true,
+            displaylogo: false,
+          }}
           layout={plotLayout}  
+          useResizeHandler={true}
+          style={{minWidth: "35vw", maxWidth: "45vw"}}
           />
       )}
     </div>
