@@ -48,9 +48,9 @@ The frontend leverages **React with TypeScript** and integrates the **Plotly** l
 
 ---
 
-## **🖥️ Preliminary Demo (01/25)**  
+## **🖥️ Preliminary Demo (02/25)**  
 
-[📽️ Watch Demo Video](https://github.com/user-attachments/assets/7532894b-aa3b-46ff-b6d8-bb3d3af57af2)
+[📽️ Watch Demo Video](https://github.com/user-attachments/assets/74a46639-8b23-4145-9693-375241f850b8)
 
 ---
 
@@ -107,10 +107,10 @@ The initial **unitary** testing for both backend and frontend has been implement
 ### ✅ **Implement correlation matrix.**  
 ### ✅ **Support additional xsls (Excel) file formats.**
 ### ✅ **Build the dashboard to landscape**
+### ✅ **Generate a pdf dashboard with all the generated charts**
+
 - [ ] Security
-- [ ] Add interactive filters for real-time data analysis.  
 - [ ] Enable report sharing via unique links.
-- [ ] Generate a pdf dashboard with all the generated charts and relevant info
 
 ---
 
