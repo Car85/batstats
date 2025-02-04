@@ -84,7 +84,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
   }, [categoricalColumn, numericColumn, additionalColumn, selectedCategories]);
 
   return (
-    <div className="lables">
+    <div>
       <h2>LineChart</h2>
 
       <div>
@@ -136,25 +136,28 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
         </select>
       </div>
 
-      <div>
         {categoricalColumn && numericColumn && additionalColumn && (
           <Plot
             data={lineChartData() as Data[]}
+            config={{
+              autosizable: true,
+              displaylogo: false,
+            }}
             layout={{
               title: 'Line Chart: Dynamic Analysis',
               yaxis: { title: numericColumn },
               xaxis: { title: categoricalColumn },
+              autosize: true,
             }}
-         
+            useResizeHandler={true}
+            style={{maxWidth: "70vw", minWidth: "50vw"}}
           />
         )}
-      </div>
     </div>
   );
 };
 
 export default LineChart;
-
 
 
 

@@ -62,10 +62,6 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
     handleCategoryChange
   } = useBoxPlotState(headers);
  
- 
-
- 
- 
   
   const plotData = useMemo((): Data[] => {
     if (!headers.length || !rows.length) return [];
