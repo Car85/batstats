@@ -109,8 +109,10 @@ The initial **unitary** testing for both backend and frontend has been implement
 ### ✅ **Build the dashboard to landscape**
 ### ✅ **Create pdf file with the dashboard generated**
 
-- [ ] Security
+- [ ] Security.
 - [ ] Enable report sharing via unique links.
+- [ ] Deploy app in a web server.
+- [ ] Create the android app.
 
 ---
 
