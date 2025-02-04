@@ -107,7 +107,7 @@ The initial **unitary** testing for both backend and frontend has been implement
 ### ✅ **Implement correlation matrix.**  
 ### ✅ **Support additional xsls (Excel) file formats.**
 ### ✅ **Build the dashboard to landscape**
-### ✅ **Generate a pdf dashboard with all the generated charts**
+### ✅ **Create a pdf dashboard with all the generated charts**
 
 - [ ] Security
 - [ ] Enable report sharing via unique links.
