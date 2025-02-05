@@ -34,7 +34,8 @@ The app leverages **React with TypeScript** and integrates the **Plotly** librar
 - **Dynamic Data Visualization**: Generate linecharts, barcharts and correlation Matrix.  
 - **Customizable Box Plots**: Analyze numerical data with the option to select categorical variables.  
 - **Drag-and-Drop CSV and Excel Upload**: Easily upload any CSV and Excel files for analysis.  
-- **User-Friendly UI**: Scroll-snapping navigation for seamless interaction between sections.  
+- **User-Friendly UI**: Scroll-snapping navigation for seamless interaction between sections.
+- **Landscape Dashboard**: Download your landscape dashboard in a pdf file.
 
 ---
 
