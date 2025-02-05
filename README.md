@@ -101,6 +101,10 @@ This project is licensed under the **GPL-3.0 License.**
 
 ## **💡 Acknowledgments**  
 
-- [React PivotTable](https://github.com/plotly/react-pivottable)  
-- [Plotly.js](https://plotly.com/javascript/)  
+- [Node](https://github.com/nodejs/node)
+- [Yarn](https://github.com/yarnpkg/yarn)
+- [TypeScript](https://github.com/Microsoft/TypeScript)
+- [React](https://github.com/facebook/react)
+- [Vite](https://github.com/vitejs/vite)
+- [Plotly.js](https://github.com/plotly/plotly.js)  
 
