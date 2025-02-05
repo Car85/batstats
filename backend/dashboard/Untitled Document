@@ -1,7 +1,0 @@
-mvn spring-boot:run \
-    -Dspring-boot.run.main-class=com.batstat.dashboard.DashboardApplication \
-    -Dspring-boot.run.fork=false \
-    -Dmaven.test.skip=true \
-    -Dmaven.compile.skip=true \
-    -Dmaven.clean.skip=true \
-    -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=localhost:0"

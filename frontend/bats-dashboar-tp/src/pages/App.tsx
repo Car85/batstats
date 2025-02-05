@@ -73,8 +73,6 @@ const App = () => {
   };
 
 
-  const [showDashboard, setShowDashboard] = useState<DashboardState>({});
-
   const handleFileUpload = (file: File) => {
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
