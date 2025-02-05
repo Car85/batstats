@@ -8,7 +8,18 @@
 ![Plotly](https://img.shields.io/badge/Plotly-2.35.3-blue?style=flat-square&logo=plotly)
 
 
-![batstats](https://github.com/Car85/batstats/blob/2de8763c3dc1d413f101dd5ea7c467fd7c9fd58d/icon/icon_batstats.png)
+
+<h2 align="center" margin="15px">
+  <img src="https://github.com/Car85/batstats/blob/2de8763c3dc1d413f101dd5ea7c467fd7c9fd58d/icon/icon_batstats.png" alt="Fast - Free - Deep">
+   <p>Fast-Free-Deep</p>
+</h2>
+
+
+
+# Batstat is an offline, free, and open-source application with no login required. It allows for fast, detailed deep dives into your CSV and Excel data using multiple charts and generate a pdf file with your dashboard to save and/or share it.
+
+**⚠️⚠️⚠️ Batstat is an application still under development and has not released any official version yet.⚠️⚠️⚠️**
+
 
 **Generate data charts and dashboards interactively.**  
 
