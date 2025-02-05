@@ -1,5 +1,13 @@
 # **BatStats**  
 
+![Node.js](https://img.shields.io/badge/Node.js-23.6.0-green?style=flat-square&logo=node.js)
+![Yarn](https://img.shields.io/badge/Yarn-1.22.22-blue?style=flat-square&logo=yarn)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.6.2-blue?style=flat-square&logo=typescript)
+![React](https://img.shields.io/badge/React-19.0.0-blue?style=flat-square&logo=react)
+![Vite](https://img.shields.io/badge/Vite-6.0.6-blue?style=flat-square&logo=vite)
+![Plotly](https://img.shields.io/badge/Plotly-2.35.3-blue?style=flat-square&logo=plotly)
+
+
 ![batstats](https://github.com/Car85/batstats/blob/2de8763c3dc1d413f101dd5ea7c467fd7c9fd58d/icon/icon_batstats.png)
 
 **Generate data charts and dashboards interactively.**  
@@ -18,15 +26,6 @@ The app leverages **React with TypeScript** and integrates the **Plotly** librar
 - **User-Friendly UI**: Scroll-snapping navigation for seamless interaction between sections.  
 
 ---
-
-## **🛠️ Technologies Used**  
-
-| Technologies | 
-| -------- | 
-|![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) |
-|![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) |   
-|![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white) |
-
 
 ## **🖥️ Preliminary Demo (02/25)**  
 
