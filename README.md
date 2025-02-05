@@ -89,7 +89,7 @@ The initial **unitary** testing for both backend and frontend has been implement
 - [ ] Security.
 - [ ] Enable report sharing via unique links.
 - [ ] Deploy app in a web server.
-- [ ] Create the android app.
+- [ ] Create desktop, browser and android app.
 
 ---
 
