@@ -62,7 +62,7 @@ The app leverages **React with TypeScript** and integrates the **Plotly** librar
      ```
 
 4. **Access the Application**
-   ** The app will generate a random port, you will copy it from your terminal.
+   **The app will generate a random port, you will able to copy it from your terminal.**
    - Open [http://localhost:xxxx](http://localhost:3000) in your browser.  
 
 ---
