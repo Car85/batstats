@@ -87,7 +87,24 @@ The initial **unitary** testing for both backend and frontend has been implement
 ### ✅ **Build the dashboard to landscape**
 ### ✅ **Create pdf file with the dashboard generated**
 
-- [ ] Security.
+### ✅ **Security:**
+
+
+| 🔒 **Risk** | ✅ **Mitigated BatStats** | 📜 **OWASP/UI Security Standard** |
+|------------|---------------------|----------------------|
+| **1. XSS (Cross-Site Scripting)** | ✅ Protected (`sanitizeData()` blocks `<script>`) | ✅ [OWASP A07:2021 – Identification & Authentication Failures](https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/) |
+| **2. Clickjacking** | ✅ Protected (`Content-Security-Policy: frame-ancestors 'none'`) | ✅ [OWASP Clickjacking Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html) |
+| **3. DoS with Large Files** | ✅ Protected (`processedRows` and `maxFiles: 1`) | ✅ [OWASP DoS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html) |
+| **4. UI Freezing with Large Files** | ✅ Protected (`worker: true` in `Papa.parse`) | ✅ [Google UI Performance & Security Guidelines](https://developer.chrome.com/docs/devtools/) |
+| **5. Malformed Excel Files** | ✅ Protected (`try/catch` and validation) | ✅ [OWASP Secure UI Design Principles](https://cheatsheetseries.owasp.org/cheatsheets/User_Interface_Security_Cheat_Sheet.html) |
+| **6. Restricting Allowed File Types** | ✅ Protected (`useDropzone accept`) | ✅ [OWASP File Upload Security](https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html) |
+| **7. Formula Injection in Excel** | ✅ Protected (`sanitizeData()`) | ✅ [OWASP Spreadsheet Injection Guide](https://owasp.org/www-community/attacks/Spreadsheet_Formula_Injection) |
+| **8. Malicious URLs in CSV/XLSX** | ✅ Protected (`sanitizeData()` blocks URLs) | ✅ [OWASP Data Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html) |
+| **9. JavaScript Execution in PDFs** | ✅ Protected (Local loading of `jsPDF`, `addJS()` disabled) | ✅ [OWASP Untrusted Code Execution](https://owasp.org/www-project-top-ten/OWASP_Top_Ten_2017/Top_10-2017_A08-Insecure_Deserialization) |
+
+---
+
+
 - [ ] Enable report sharing via unique links.
 - [ ] Deploy app in a web server.
 - [ ] Create desktop, browser and android app.
