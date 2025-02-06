@@ -78,7 +78,7 @@ The app leverages **React with TypeScript** and integrates the **Plotly** librar
    ![batstats](https://github.com/Car85/batstats/blob/2de8763c3dc1d413f101dd5ea7c467fd7c9fd58d/icon/icon_batstats.png)
       
 ### ✅ **Testing** 🚧
-The initial **unitary** testing for both backend and frontend has been implemented. ⚠️ **However, this is an ongoing process** as new features and improvements are added. The testing suite will be continuously updated to ensure the application remains robust and reliable.
+The initial **unitary** testing has been implemented. ⚠️ **However, this is an ongoing process** as new features and improvements are added. The testing suite will be continuously updated to ensure the application remains robust and reliable.
 
 ---
 
