@@ -15,7 +15,6 @@ import {
   BarChartState,
   MatrixDataState,
   LineChartState,
-  DashboardState,
   PlotYaout,
   BarLayout,
 } from "../types/Types";
@@ -48,107 +47,181 @@ const App = () => {
 
 
   const exportAsImageOrPDF = async (format: "image" | "pdf") => {
-  //  const dashboardElement = document.getElementById("dashboard-container");
     const dashboardElement = document.querySelector(".dashboard-container") as HTMLDivElement;
-
+  
     if (!dashboardElement) return;
-
+  
     const canvas = await html2canvas(dashboardElement);
     const image = canvas.toDataURL("image/png");
-
+  
     if (format === "image") {
       const link = document.createElement("a");
       link.href = image;
       link.download = "dashboard.png";
       link.click();
     } else if (format === "pdf") {
+      const { jsPDF } = await import("jspdf");
+  
       const pdf = new jsPDF({
         orientation: "landscape",
         unit: "px",
         format: [canvas.width, canvas.height],
       });
+  
       pdf.addImage(image, "PNG", 0, 0, canvas.width, canvas.height);
       pdf.save("dashboard.pdf");
     }
   };
+  
 
+  const checkForMaliciousContent = (data: string[][]): boolean => {
+    return data.some(row => row.some(cell => 
+      typeof cell === "string" && cell.includes("<script>")
+    ));
+  };
 
+  const sanitizeData = (data: string[][]) => {
+    return data
+      .filter(row => row.some(cell => cell.trim().length > 0)) 
+      .map(row => 
+        row.map(cell => {
+          let sanitizedCell = cell.trim(); 
+  
+          
+          if (sanitizedCell.match(/(http:\/\/|https:\/\/)[a-z0-9-]+\.[a-z]{2,}/i)) {
+            sanitizedCell = "[BLOCKED URL]"; 
+          }
+            
+          if (sanitizedCell.startsWith("=") || sanitizedCell.startsWith("+") || sanitizedCell.startsWith("-") || sanitizedCell.startsWith("@")) {
+            sanitizedCell = `'${sanitizedCell}`; 
+          }
+  
+          return sanitizedCell;
+        })
+      );
+  };
+  
+  
   const handleFileUpload = (file: File) => {
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
-
+  
     if (fileExtension === "csv") {
+      let processedRows = 0; 
+      const parsedData: string[][] = []; 
+  
       Papa.parse<String[]>(file, {
-        complete: (results) => {
-          const parsedData = results.data.every(row => Array.isArray(row) && row.every(cell => typeof cell === 'string'))
-            ? (results.data as string[][])
-            : [];
-
+        worker: true,
+        step: (row, parser) => {
+          processedRows++;
+  
+          if (processedRows > 1_000_000) {
+            alert("File is too large to process.");
+            parser.abort();
+            return;
+          }
+  
+          if (!Array.isArray(row.data) || row.data.some(cell => typeof cell !== 'string')) {
+            parser.abort();
+            alert("Invalid CSV structure.");
+            return;
+          }
+  
+          parsedData.push(row.data as string[]);
+        },
+        complete: () => {
           if (parsedData.length === 0) {
-            alert("The CSV data is invalid or empty.");
+            alert("The CSV file is empty or invalid.");
             return;
           }
 
-          setData(parsedData);
+          if (checkForMaliciousContent(parsedData)) {
+            alert("Potentially malicious content detected.");
+            return;
+          }
+
+
+          const sanitizedData = sanitizeData(parsedData);
+
+  
+          setData(sanitizedData);
           setCsvLoaded(true);
-          setCorrelationMatrixState({
-            data: parsedData,
-          });
+          setCorrelationMatrixState({ data: sanitizedData });
         },
         header: false,
       });
+  
     } else if (fileExtension === "xlsx" || fileExtension === "xls") {
       const reader = new FileReader();
       reader.onload = async (event) => {
         try {
           const data = event.target?.result as ArrayBuffer;
-
           const workbook = new Excel.Workbook();
           await workbook.xlsx.load(data);
-
+  
           const worksheet = workbook.worksheets[0];
           const excelData: string[][] = [];
-
-          worksheet.eachRow((row: Excel.Row, rowNumber: Number) => {
-
+  
+          let processedRows = 0;
+          worksheet.eachRow((row: Excel.Row) => {
+            processedRows++;
+            if (processedRows > 500_000) {
+              alert("Excel file is too large.");
+              return;
+            }
+  
             const rowValues = row.values.slice(1)
-              .map((cell: any) => cell !== null && cell !== undefined ? cell.toString() : '');
-
+              .map(cell => (cell !== null && cell !== undefined ? cell.toString() : ""));
             excelData.push(rowValues);
           });
-
+  
           if (excelData.length === 0) {
-            throw new Error("The XLSX file seems empty or corrupt.");
+            alert("The XLSX file seems empty or corrupt.");
+            return;
           }
 
-          setData(excelData);
-          setCsvLoaded(true);
-          setCorrelationMatrixState({
-            data: excelData,
-          });
-        } catch (error: unknown) {
-          if (error instanceof Error) {
-            alert("Error processing XLSX files: " + error.message);
-          } else {
-            alert("Unknown error.");
+          if (checkForMaliciousContent(excelData)) {
+            alert("Potentially malicious content detected.");
+            return;
           }
+  
+
+          const sanitizedExcelData = sanitizeData(excelData);
+
+
+          setData(sanitizedExcelData);
+          setCsvLoaded(true);
+          setCorrelationMatrixState({ data: sanitizedExcelData });
+        } catch (error) {
+          alert("Error processing XLSX file: " + (error instanceof Error ? error.message : "Unknown error"));
         }
       };
       reader.readAsArrayBuffer(file);
     } else {
-      console.log("Format data no valid");
+      console.log("Invalid file format.");
     }
   };
-
-
+  
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "text/csv": [".csv"],
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
     },
-    onDrop: (acceptedFiles) => {
-      acceptedFiles.forEach((file) => handleFileUpload(file));
+    maxFiles: 1,
+    onDrop: (acceptedFiles, rejectedFiles) => {
+      if (rejectedFiles.length > 0) {
+        alert("Invalid file type. Please upload a CSV or XLSX file.");
+        return;
+      }  
+      acceptedFiles.forEach((file) => {
+        if (!file.name.match(/\.(csv|xlsx)$/i)) {
+          alert("Invalid file type. Please upload a CSV or XLSX file.");
+          return;
+        }
+        handleFileUpload(file);
+      });
     },
   });
+  
 
 
   return (
