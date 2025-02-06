@@ -49,7 +49,7 @@ The app leverages **React with TypeScript** and integrates the **Plotly** librar
 
 1. **Clone the Repository**  
    ```bash
-   git clone https://github.com/yourusername/batstats.git
+   git clone https://github.com/Car85/batstats.git
    cd batstats
    ```
 
@@ -57,7 +57,7 @@ The app leverages **React with TypeScript** and integrates the **Plotly** librar
    - Install Node.js and npm/yarn.  
    - Navigate to the frontend folder:  
      ```bash
-     cd frontend
+     cd frontend/bats-dashboar-tp/
      yarn install
      yarn run dev
      ```
