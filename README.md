@@ -16,7 +16,7 @@
 
 
 
-# BatStats is a free and open-source application with no login required. It allows for fast, detailed deep dives into your CSV and Excel data using multiple charts and generate a pdf file with your dashboard to save and share it. There are many solutions on the market for generating dashboards and performing data analysis, but not as many when it comes to free & open-source, no-logging solutions. We don’t want your data—the application is purely about functionality.
+## BatStats is a free and open-source application with no login required. It allows for fast, detailed deep dives into your CSV and Excel data using multiple charts and generate a pdf file with your dashboard to save and share it. There are many solutions on the market for generating dashboards and performing data analysis, but not as many when it comes to free & open-source, no-logging solutions. We don’t want your data—the application is purely about functionality.
 
 **⚠️⚠️⚠️ Batstat is an application still under development and has not released any official version yet.⚠️⚠️⚠️**
 
