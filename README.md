@@ -4,7 +4,7 @@
 ![Yarn](https://img.shields.io/badge/Yarn-1.22.22-blue?style=flat-square&logo=yarn)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6.2-blue?style=flat-square&logo=typescript)
 ![React](https://img.shields.io/badge/React-19.0.0-blue?style=flat-square&logo=react)
-![Vite](https://img.shields.io/badge/Vite-6.0.6-blue?style=flat-square&logo=vite)
+![Vite](https://img.shields.io/badge/Vite-6.1.0-blue?style=flat-square&logo=vite)
 ![Plotly](https://img.shields.io/badge/Plotly-2.35.3-blue?style=flat-square&logo=plotly)
 
 
