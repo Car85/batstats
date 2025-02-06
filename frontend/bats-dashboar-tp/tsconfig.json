@@ -20,10 +20,11 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "resolveJsonModule": true, 
-    "isolatedModules": true, 
-    "noEmit": true 
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": false,
+    "outDir": "./dist" 
   },
-  "include": ["src/**/*", "src/types/**/*"], 
-  "exclude": ["node_modules", "dist", "coverage"] 
+  "include": ["src/**/*", "src/types/**/*"],
+  "exclude": ["node_modules", "dist", "coverage"]
 }
