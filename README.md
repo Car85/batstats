@@ -134,5 +134,6 @@ This project is licensed under the **GPL-3.0 License.**
 - [TypeScript](https://github.com/Microsoft/TypeScript)
 - [React](https://github.com/facebook/react)
 - [Vite](https://github.com/vitejs/vite)
-- [Plotly.js](https://github.com/plotly/plotly.js)  
+- [Plotly.js](https://github.com/plotly/plotly.js)
+- [Electron](https://github.com/electron/electron)
 
