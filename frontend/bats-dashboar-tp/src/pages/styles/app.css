@@ -61,14 +61,14 @@ body {
     table {
       border-collapse: collapse;
       width: auto; 
-      background-color: color(rgba(38, 229, 204));
+      background-color: color(rgb(67, 129, 146));
     }
     
     th, td {
       width: auto;
       text-align: center;
       padding: 0.6em;
-      background-color: rgb(99, 96, 96);
+      background-color: rgb(43, 43, 196);
     }
     
   
