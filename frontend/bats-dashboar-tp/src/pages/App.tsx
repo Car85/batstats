@@ -27,7 +27,6 @@ import Papa from "papaparse";
 import { Data } from "plotly.js";
 import LineChart from "@/Components/LineChart/LineChart";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
