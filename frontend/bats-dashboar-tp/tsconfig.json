@@ -10,7 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "types": [
-      "vitest",
       "@testing-library/react",
       "@testing-library/user-event",
       "plotly.js",
