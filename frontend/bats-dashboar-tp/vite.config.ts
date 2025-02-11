@@ -2,19 +2,26 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 async function loadTsconfigPaths() {
-  // Use dynamic import inside an async function
   const tsconfigPaths = (await import('vite-tsconfig-paths')).default;
   return tsconfigPaths;
 }
 
 const getRandomPort = () => Math.floor(Math.random() * (4000 - 3000 + 1)) + 3000;
 
+import electron from 'vite-plugin-electron';
 
 export default defineConfig(async () => {
   const tsconfigPaths = await loadTsconfigPaths(); 
 
   return {
-    plugins: [react(), tsconfigPaths()],
+    plugins: [
+      react(), 
+      tsconfigPaths(),
+      electron({
+        entry: './electron/main.ts',  
+        
+      })
+    ],
     server: {
       port: getRandomPort(),
       proxy: {
