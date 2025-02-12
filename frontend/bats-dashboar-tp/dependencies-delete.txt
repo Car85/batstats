@@ -1,0 +1,32 @@
+Al usar vite-plugin-electron, algunos de los paquetes y configuraciones adicionales que tenías en tu package.json podrían no ser necesarios. Aquí tienes algunas dependencias que podrías eliminar si usas el plugin:
+
+vite-tsconfig-paths: Este paquete es útil para resolver rutas de módulos en proyectos TypeScript, pero vite-plugin-electron maneja este tipo de configuración internamente.
+
+ts-loader: Dado que Vite tiene un soporte muy eficiente para TypeScript, ts-loader no es necesario. El plugin se encarga de la parte de TypeScript para Electron.
+
+webpack, webpack-cli, webpack-dev-server: Estas dependencias son redundantes cuando usas Vite. Vite reemplaza la mayoría de las tareas de empaquetado y desarrollo que realizabas con Webpack.
+
+electron-builder (en algunos casos): Si decides manejar el empaquetado y la construcción con el propio vite-plugin-electron, puedes evitar algunas configuraciones adicionales de electron-builder. Aunque, si deseas empaquetar tu aplicación con electron-builder, aún puedes mantener esta dependencia.
+
+electron: Ya está incluido como dependencia en vite-plugin-electron, por lo que no necesitarías agregarlo por separado si no deseas empaquetar con electron-builder.
+
+
+
+"build": {
+    "extends": null,
+    "extraMetadata": {
+      "main": "./dist-electron/main.js"
+    },
+    "files": "./electron/main.ts",
+    "appId": "com.car85.batsats",
+    "productName": "BatStats",
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "icon": "../../icon/icon_batstats_2.png",
+      "category": "Utility",
+      "maintainer": "Car85 <car85@startmail.com>",
+      "description": "BatStats is a dynamic and user-friendly solution for analyzing and visualizing data."
+    }
+  },

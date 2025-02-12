@@ -20,12 +20,12 @@ import {
 } from "../types/Types";
 
 
-import BarChart from "@/Components/Barchart/BarChart";
-import CorrelationMatrix from "@/Components/CorrelationMatrix/CorrelationMatrix";
+import BarChart from "../Components/Barchart/BarChart";
+import CorrelationMatrix from "../Components/CorrelationMatrix/CorrelationMatrix";
 import Papa from "papaparse";
 
 import { Data } from "plotly.js";
-import LineChart from "@/Components/LineChart/LineChart";
+import LineChart from "../Components/LineChart/LineChart";
 import html2canvas from "html2canvas";
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
