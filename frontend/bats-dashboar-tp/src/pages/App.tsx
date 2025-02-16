@@ -108,7 +108,7 @@ const App = () => {
       let processedRows = 0; 
       const parsedData: string[][] = []; 
   
-      Papa.parse<String[]>(file, {
+      Papa.parse<string[]>(file, {
         worker: true,
         step: (row, parser) => {
           processedRows++;

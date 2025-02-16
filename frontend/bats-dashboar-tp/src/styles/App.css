@@ -2,6 +2,7 @@
 select {
   min-width: 2rem;
   max-width: 11rem;
+  max-height: 3.8rem;
   padding: 1rem;
   padding-right: 3rem;
   margin-left: 2rem;
@@ -11,19 +12,23 @@ select {
   background-color: #007BFF;
   border: 0.4rem solid #dbc234;
   color: #fff;
-  font-size: 1.2rem;
+  font-size: medium;
   transition: all 0.3s ease;
 }
 
 
+h2 {
+  font-size: 1rem;
+}
+
 .appContainer {  
+  scroll-snap-points-y: repeat(300px);
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
   height: 100vh;
   width: 100vw;
   box-sizing: border-box;
   margin: 0;
-  padding: 0;
 }
 
 .snapSection {
@@ -35,6 +40,7 @@ select {
   justify-content: center;
   flex-direction: column;
   text-align: center;
+  overflow-y: hidden;
 }
 
 .dropZone {

@@ -174,6 +174,8 @@ const BarChart = ({ data, onStateChange }:
               xaxis: { title: categoricalColumn },
               autosize: true,
             }}
+            useResizeHandler={true}
+            style={{minWidth: "45vw", maxWidth: "75vw", minHeight: "40vw" , maxHeight: "80vw"}}
           />
         )}
       </div>

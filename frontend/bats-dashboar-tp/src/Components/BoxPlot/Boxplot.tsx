@@ -33,7 +33,7 @@ export const boxPlotData = (
     }
   });
 
-  return Object.entries(groupedData).map(([key, { values, tooltips }], index) => ({
+  return Object.entries(groupedData).map(([key, { values }], index) => ({
     key: `box-${index}`,
     y: values,
     type: 'box', 
@@ -153,7 +153,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
           }}
           layout={plotLayout}  
           useResizeHandler={true}
-          style={{minWidth: "35vw", maxWidth: "45vw"}}
+          style={{minWidth: "45vw", maxWidth: "75vw", minHeight: "40vw" , maxHeight: "75vw"}}
           />
       )}
     </div>
