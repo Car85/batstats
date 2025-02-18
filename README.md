@@ -39,9 +39,9 @@ The app leverages **React with TypeScript** and integrates the **Plotly** librar
 
 ---
 
-## **🖥️ Preliminary Demo (02/25)**  
+## **🖥️ Preliminary Demo (18/02/25)**  
 
-[📽️ Watch Demo Video](https://github.com/user-attachments/assets/74a46639-8b23-4145-9693-375241f850b8)
+[📽️ Watch Demo Video](https://github.com/user-attachments/assets/3a81dd63-b514-40d4-81c2-027616023b2d)
 
 ---
 
