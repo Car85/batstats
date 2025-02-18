@@ -15,8 +15,9 @@ const CorrelationMatrix = ({ data }: MatrixDataState) => {
     headers.forEach((_, colIndex) => {
         const column = rows.map(row => row[colIndex]);
         const hasNumbers = column.some(cell => /\d/.test(cell));  
+        const hasLetters = column.some(cell => /[a-zA-Z]/.test(cell));
 
-        if (hasNumbers) {
+        if (hasNumbers && !hasLetters) {
             numericalColumnIndices.push(colIndex);
         }
     });
@@ -94,8 +95,8 @@ useEffect(() => {
                   <td
                     key={`cell-${i}-${j}`}
                     style={{
-                      backgroundColor: `rgba(2, 55, 250, ${Math.abs(value)})`,
-                      color: Math.abs(value) > 0.5 ? 'white' : 'black',
+                      backgroundColor: `#001f3f`,
+                      color: Math.abs(value) > 0.5 ? '#dbc234' : '#535bf2',
                     }}
                   >
                     {isNaN(value) ? 'N/A' : value.toFixed(2)}

@@ -1,4 +1,4 @@
-import { Color, Dash, Data, Layout, ScatterLine } from "plotly.js";
+import { Data } from "plotly.js";
 
 export interface ParseResult<T> {
     data: T[];
@@ -18,7 +18,7 @@ export interface ParseResult<T> {
   }
 
   export interface BoxPlotState {
-    data?: string[][] | any;          
+    data?: string[][];          
     options?: Record<string, unknown>; 
     labels?: string[];           
     categoricalColumn?: string;  

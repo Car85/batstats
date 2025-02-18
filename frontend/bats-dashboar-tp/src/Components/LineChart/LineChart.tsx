@@ -65,9 +65,6 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
     }];
   };
   
-
-
-
   useEffect(() => {
     if (onStateChange) {
 

@@ -3,7 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
   color: #ffffff;
-  background-color: #242424;
+  background-color: #0f4070;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -21,7 +21,7 @@ a:hover {
 
 body {
   margin: 0;
-  background-color: #242424;
+  background-color: #48505a;
   display: flex;
   place-items: center;
   min-width: 100vh;

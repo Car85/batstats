@@ -153,7 +153,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
           }}
           layout={plotLayout}  
           useResizeHandler={true}
-          style={{minWidth: "45vw", maxWidth: "75vw", minHeight: "40vw" , maxHeight: "75vw"}}
+          style={{minWidth: "45vw", maxWidth: "75vw"}}
           />
       )}
     </div>

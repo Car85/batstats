@@ -16,6 +16,9 @@ export default defineConfig(async () => {
         main: {
           entry: 'electron/main.ts',
         },
+        preload: {
+          input: "electron/preload.ts",
+        },
         
       })
     ],

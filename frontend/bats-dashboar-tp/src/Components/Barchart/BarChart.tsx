@@ -175,7 +175,7 @@ const BarChart = ({ data, onStateChange }:
               autosize: true,
             }}
             useResizeHandler={true}
-            style={{minWidth: "45vw", maxWidth: "75vw", minHeight: "40vw" , maxHeight: "80vw"}}
+            style={{minWidth: "45vw", maxWidth: "75vw"}}
           />
         )}
       </div>
