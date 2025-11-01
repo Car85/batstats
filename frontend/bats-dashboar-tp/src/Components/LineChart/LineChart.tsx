@@ -33,15 +33,15 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       y: [],
       tooltips: []
     };
-    const cleanRows = rows.filter(row => 
-      row.length > 1 && row.some(cell => cell !== null && cell !== undefined && cell !== "")
-    );
+    const cleanRows = rows.filter(row =>
+        row.length > 1 && row.some(cell => cell !== null && cell !== undefined && cell !== "")
+      );
 
-    cleanRows.forEach((row) => {
-      const category = row[headers.indexOf(categoricalColumn)];
-      const numericValue = Number(row[headers.indexOf(numericColumn)]);
+      cleanRows.forEach((row) => {
+        const category = row[headers.indexOf(categoricalColumn)];
+        const numericValue = Number(row[headers.indexOf(numericColumn)]);
 
-      const additionalValue = row[headers.indexOf(additionalColumn)] ?? "N/A"; 
+        const additionalValue = row[headers.indexOf(additionalColumn)] ?? "N/A"; 
 
       if (!selectedCategories.length || selectedCategories.includes(category)) {
 
@@ -64,7 +64,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
 
     }];
   };
-  
+
   useEffect(() => {
     if (onStateChange) {
 
@@ -155,7 +155,3 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
 };
 
 export default LineChart;
-
-
-
-

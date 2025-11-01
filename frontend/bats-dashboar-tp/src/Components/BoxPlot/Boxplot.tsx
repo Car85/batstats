@@ -5,16 +5,16 @@ import { Data } from 'plotly.js';
 import { useEffect, useMemo } from 'react';
 
 
-export const boxPlotData = ( 
+export const boxPlotData = (
   headers: string[],
   rows: string[][],
   categoricalColumn: string,
   numericColumn: string,
   tooltipColumn: string,
   selectedCategories: string[]): Data[] => {
-  
+
   if (!categoricalColumn || !numericColumn) return [];
- 
+
 
   const groupedData: { [key: string]: { values: number[]; tooltips: string[] } } = {};
 
@@ -22,7 +22,7 @@ export const boxPlotData = (
     const category = row[headers.indexOf(categoricalColumn)] as string;
     const numericValue = Number(row[headers.indexOf(numericColumn)]);
     const tooltipValue = String(row[headers.indexOf(tooltipColumn)]);
-    
+
 
     if (!selectedCategories.length || selectedCategories.includes(category)) {
       if (!groupedData[category]) {
@@ -36,14 +36,14 @@ export const boxPlotData = (
   return Object.entries(groupedData).map(([key, { values }], index) => ({
     key: `box-${index}`,
     y: values,
-    type: 'box', 
-    name: key, 
+    type: 'box',
+    name: key,
  }));
 };
 
 const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (state: { data: Data[]; layout: PlotYaout }) => void }) => {
-  
-  
+
+
   const headers = useMemo(() => (Array.isArray(data) && data.length > 0 && Array.isArray(data[0]) ? data[0] : []), [data]);
   const rows = useMemo(() => (data && data.length > 1 ? data.slice(1) : []), [data]);
 
@@ -57,8 +57,8 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
     handleNumericChange,
     handleCategoryChange
   } = useBoxPlotState(headers);
- 
-  
+
+
   const plotData = useMemo((): Data[] => {
     if (!headers.length || !rows.length) return [];
     return boxPlotData(headers, rows, categoricalColumn, numericColumn || '', tooltipColumn, selectedCategories);
@@ -123,7 +123,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
           ))}
         </select>
       </div>
-     
+
      {categoricalColumn && (
         <div className='category-filter-container'>
           <label htmlFor="categoryFilter">Categories:</label>
@@ -140,18 +140,18 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
                 </option>
               )
             )}
-          </select>         
+          </select>
         </div>
       )}
 
       {categoricalColumn && numericColumn && (
-        <Plotly 
-          data={plotData} 
+        <Plotly
+          data={plotData}
           config={{
             autosizable: true,
             displaylogo: false,
           }}
-          layout={plotLayout}  
+          layout={plotLayout}
           useResizeHandler={true}
           style={{minWidth: "45vw", maxWidth: "75vw"}}
           />
