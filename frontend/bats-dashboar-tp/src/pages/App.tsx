@@ -22,7 +22,7 @@ const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
 const App = () => {
   const rawData = useDashboardStore((state) => state.rawData);
-  const setRawData = useDashboardStore((state) => state.setRawData);
+  const loadDataset = useDashboardStore((state) => state.loadDataset);
   const lineChartState = useDashboardStore((state) => state.lineChart);
   const setLineChartState = useDashboardStore((state) => state.setLineChart);
   const boxPlotState = useDashboardStore((state) => state.boxPlot);
@@ -31,7 +31,6 @@ const App = () => {
   const setBarChartState = useDashboardStore((state) => state.setBarChart);
   const correlationMatrixState = useDashboardStore((state) => state.correlation);
   const setCorrelationMatrixState = useDashboardStore((state) => state.setCorrelation);
-  const resetDashboardState = useDashboardStore((state) => state.reset);
 
   const csvLoaded = rawData.length > 0;
 
@@ -142,8 +141,7 @@ const App = () => {
             return;
           }
 
-          resetDashboardState();
-          setRawData(sanitizedData as string[][]);
+          loadDataset(sanitizedData as string[][]);
           setCorrelationMatrixState({ data: sanitizedData as string[][] });
         },
         header: false,
@@ -191,8 +189,7 @@ const App = () => {
             return;
           }
 
-          resetDashboardState();
-          setRawData(sanitizedExcelData as string[][]);
+          loadDataset(sanitizedExcelData as string[][]);
           setCorrelationMatrixState({ data: sanitizedExcelData as string[][] });
         } catch (error) {
           alert("Error processing XLSX file: " + (error instanceof Error ? error.message : "Unknown error"));

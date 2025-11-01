@@ -9,7 +9,7 @@ type ChartState<T> = {
 
 type DashboardStore = {
   rawData: string[][];
-  setRawData: (data: string[][]) => void;
+  loadDataset: (data: string[][]) => void;
 
   lineChart: ChartState<Partial<Plotly.Layout>> | null;
   setLineChart: (state: ChartState<Partial<Plotly.Layout>>) => void;
@@ -22,13 +22,18 @@ type DashboardStore = {
 
   correlation: MatrixDataState;
   setCorrelation: (state: MatrixDataState) => void;
-
-  reset: () => void;
 };
 
 export const useDashboardStore = create<DashboardStore>((set) => ({
   rawData: [],
-  setRawData: (data) => set({ rawData: data }),
+  loadDataset: (data) =>
+    set({
+      rawData: data,
+      lineChart: null,
+      boxPlot: null,
+      barChart: null,
+      correlation: { data },
+    }),
 
   lineChart: null,
   setLineChart: (state) => set({ lineChart: state }),
@@ -41,13 +46,4 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
 
   correlation: {},
   setCorrelation: (state) => set({ correlation: state }),
-
-  reset: () =>
-    set({
-      rawData: [],
-      lineChart: null,
-      boxPlot: null,
-      barChart: null,
-      correlation: {},
-    }),
 }));
