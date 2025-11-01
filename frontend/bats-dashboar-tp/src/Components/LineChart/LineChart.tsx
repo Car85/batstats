@@ -165,7 +165,3 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
 };
 
 export default LineChart;
-
-
-
-

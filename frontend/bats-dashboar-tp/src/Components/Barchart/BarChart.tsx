@@ -6,20 +6,20 @@ import Plot from 'react-plotly.js';
 import { useEffect, useMemo } from 'react';
 
 const BarChart = ({ data, onStateChange }:
-                  
-                  BarChartState & { 
-                  
+
+                  BarChartState & {
+
                   onStateChange?: (state:
-                  
+
                   { data: Data[];
-                  
+
                   layout: BarLayout })
-                  
+
                   => void }) => {
 
-  
+
   if (!data || data.length === 0) {
-    return <p>No data available</p>; 
+    return <p>No data available</p>;
   }
 
   
@@ -138,7 +138,7 @@ const BarChart = ({ data, onStateChange }:
   return (
     <div className="lables">
       <h2>BarChart</h2>
-      
+
       <div>
         <label htmlFor="categoricalColumn">X-Axis</label>
         <select
@@ -154,7 +154,7 @@ const BarChart = ({ data, onStateChange }:
           ))}
         </select>
       </div>
-      
+
       <div>
         <label htmlFor="numericColumn">Y-Axis</label>
         <select
