@@ -9,17 +9,17 @@ const userBarChartState = (headers: string[]) => {
 
     const handleCategoricalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setCategoricalColumn(event.target.value);
-        setSelectedCategories([]); 
+        setSelectedCategories([]);
       };
-    
+
     const handleNumericChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setNumericColumn(event.target.value);
       };
-    
+
     const handleAdditionalColumnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setAdditionalColumn(event.target.value);
       };
-    
+
 
     return {
         categoricalColumn,
