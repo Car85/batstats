@@ -6,25 +6,25 @@ import Plot from 'react-plotly.js';
 import { useEffect } from 'react';
 
 const BarChart = ({ data, onStateChange }:
-                  
-                  BarChartState & { 
-                  
+
+                  BarChartState & {
+
                   onStateChange?: (state:
-                  
+
                   { data: Data[];
-                  
+
                   layout: BarLayout })
-                  
+
                   => void }) => {
 
-  
+
   if (!data || data.length === 0) {
-    return <p>No data available</p>; 
+    return <p>No data available</p>;
   }
 
-  
-  const headers = data[0]; 
-  const rows = data.slice(1); 
+
+  const headers = data[0];
+  const rows = data.slice(1);
 
 
   const {
@@ -36,7 +36,7 @@ const BarChart = ({ data, onStateChange }:
     handleNumericChange,
     handleAdditionalColumnChange,
   } = useBarChartState(headers);
-  
+
   const barChartData = (): BarChartState[] => {
 
     if (!categoricalColumn || !numericColumn || !additionalColumn) return [];
@@ -65,20 +65,23 @@ const BarChart = ({ data, onStateChange }:
     })
     .map(([key, { values, tooltips }]) => ({
         y: values,
-        x: Array.from({ length: values.length }, (_, i) => i + 1), 
+        x: Array.from({ length: values.length }, (_, i) => i + 1),
         type: 'bar' as const,
         name: key,
         text: tooltips,
         hoverinfo: 'text',
         textposition: 'none',
     }));
-    
+
     return sortedGroupedData;
   };
 
   useEffect(() => {
     if (onStateChange) {
-      const numericValues = data.map((d: any) => d[numericColumn]);
+      const numericIndex = headers.indexOf(numericColumn);
+    //  const numericValues = data.map((d: any) => d[numericColumn]);
+      const numericValues = rows.map((row) => Number(row[numericIndex]))
+            .filter((value) => Number.isFinite(value));
       const minNumeric = Math.min(...numericValues);
       const maxNumeric = Math.max(...numericValues);
       const layout: BarLayout = {
@@ -111,7 +114,7 @@ const BarChart = ({ data, onStateChange }:
   return (
     <div className="lables">
       <h2>BarChart</h2>
-      
+
       <div>
         <label htmlFor="categoricalColumn">X-Axis</label>
         <select
@@ -127,7 +130,7 @@ const BarChart = ({ data, onStateChange }:
           ))}
         </select>
       </div>
-      
+
       <div>
         <label htmlFor="numericColumn">Y-Axis</label>
         <select
