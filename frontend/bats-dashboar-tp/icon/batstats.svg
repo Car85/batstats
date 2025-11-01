@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Batstats icon</title>
+  <desc id="desc">Stylised bat embracing analytics bars and line chart</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#1a3753" />
+      <stop offset="100%" stop-color="#0b1f33" />
+    </radialGradient>
+    <linearGradient id="bar" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#c9961d" />
+      <stop offset="100%" stop-color="#f4c645" />
+    </linearGradient>
+  </defs>
+  <circle cx="256" cy="256" r="220" fill="url(#bg)" />
+  <g fill="url(#bar)">
+    <rect x="180" y="252" width="38" height="120" rx="12" />
+    <rect x="236" y="208" width="38" height="164" rx="12" />
+    <rect x="292" y="230" width="38" height="142" rx="12" />
+  </g>
+  <g fill="none" stroke="#56c4ff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M145 320 C185 280 225 200 285 240 S370 220 385 170" />
+  </g>
+  <g fill="#56c4ff">
+    <circle cx="145" cy="320" r="12" />
+    <circle cx="220" cy="230" r="12" />
+    <circle cx="285" cy="240" r="12" />
+    <circle cx="360" cy="205" r="12" />
+  </g>
+  <path fill="#101424" d="M256 188 L236 200 L210 192 L180 170 L150 184 L128 210 L110 240 L148 235 L182 262 L198 298 L226 282 L256 304 L286 282 L314 298 L330 262 L364 235 L402 240 L384 210 L362 184 L332 170 L302 192 L276 200 Z" />
+  <path fill="#21365a" d="M220 190 L236 220 L256 208 L276 220 L292 190 L278 170 L256 182 L234 170 Z" />
+  <path fill="#21365a" d="M226 150 L220 190 L236 184 L246 164 Z" />
+  <path fill="#21365a" d="M286 150 L266 164 L276 184 L292 190 Z" />
+  <g fill="#ffffff">
+    <circle cx="380" cy="140" r="10" />
+    <circle cx="420" cy="190" r="8" />
+    <circle cx="360" cy="110" r="6" />
+  </g>
+</svg>
