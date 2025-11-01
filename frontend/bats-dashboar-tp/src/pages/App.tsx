@@ -70,25 +70,30 @@ const App = () => {
     ));
   };
 
-  const sanitizeData = (data: string[][]) => {
-    return data
-      .filter(row => row.some(cell => cell.trim().length > 0)) 
-      .map(row => 
-        row.map(cell => {
-          let sanitizedCell = cell.trim(); 
-  
-          
-          if (sanitizedCell.match(/(http:\/\/|https:\/\/)[a-z0-9-]+\.[a-z]{2,}/i)) {
-            sanitizedCell = "[BLOCKED URL]"; 
-          }
-            
-          if (sanitizedCell.startsWith("=") || sanitizedCell.startsWith("+") || sanitizedCell.startsWith("-") || sanitizedCell.startsWith("@")) {
-            sanitizedCell = `'${sanitizedCell}`; 
-          }
-  
-          return sanitizedCell;
-        })
-      );
+  const sanitizeData = (data: (string | number | null | undefined)[][]) => {
+    const normalized = data.map((row) =>
+      row.map((cell) => {
+        const rawValue = typeof cell === 'string'
+          ? cell
+          : cell === null || cell === undefined
+            ? ''
+            : String(cell);
+
+        let sanitizedCell = rawValue.trim();
+
+        if (/(http:\/\/|https:\/\/)[a-z0-9-]+\.[a-z]{2,}/i.test(sanitizedCell)) {
+          sanitizedCell = '[BLOCKED URL]';
+        }
+
+        if (/^[=+\-@]/.test(sanitizedCell)) {
+          sanitizedCell = `'${sanitizedCell}`;
+        }
+
+        return sanitizedCell;
+      })
+    );
+
+    return normalized.filter((row) => row.some((cell) => cell.length > 0));
   };
   
   
@@ -132,9 +137,14 @@ const App = () => {
 
           const sanitizedData = sanitizeData(parsedData);
 
+          if (sanitizedData.length === 0) {
+            alert("The CSV file does not contain readable rows after sanitization.");
+            return;
+          }
+
           resetDashboardState();
-          setRawData(sanitizedData);
-          setCorrelationMatrixState({ data: sanitizedData });
+          setRawData(sanitizedData as string[][]);
+          setCorrelationMatrixState({ data: sanitizedData as string[][] });
         },
         header: false,
       });
@@ -176,9 +186,14 @@ const App = () => {
 
           const sanitizedExcelData = sanitizeData(excelData);
 
+          if (sanitizedExcelData.length === 0) {
+            alert("The Excel file does not contain readable rows after sanitization.");
+            return;
+          }
+
           resetDashboardState();
-          setRawData(sanitizedExcelData);
-          setCorrelationMatrixState({ data: sanitizedExcelData });
+          setRawData(sanitizedExcelData as string[][]);
+          setCorrelationMatrixState({ data: sanitizedExcelData as string[][] });
         } catch (error) {
           alert("Error processing XLSX file: " + (error instanceof Error ? error.message : "Unknown error"));
         }
