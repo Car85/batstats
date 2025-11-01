@@ -1,48 +1,38 @@
-import { SetStateAction, useState } from "react";
-
 import Plotly from 'react-plotly.js';
 import createPlotlyRenderers from "react-pivottable/PlotlyRenderers";
 import "react-pivottable/pivottable.css";
-import "./styles/app.css"
+import "./styles/app.css";
 import { useDropzone } from "react-dropzone";
 import BoxPlot from "../Components/BoxPlot/Boxplot";
 import * as Excel from 'exceljs';
 
 
 import "../styles/App.css";
-import {
-  BoxPlotState,
-  BarChartState,
-  MatrixDataState,
-  LineChartState,
-  PlotYaout,
-  BarLayout,
-} from "../types/Types";
 
 
 import BarChart from "../Components/Barchart/BarChart";
 import CorrelationMatrix from "../Components/CorrelationMatrix/CorrelationMatrix";
 import Papa from "papaparse";
 
-import { Data } from "plotly.js";
 import LineChart from "../Components/LineChart/LineChart";
 import html2canvas from "html2canvas";
+import { useDashboardStore } from "../state/dashboardStore";
 
 const PlotlyRenderers = createPlotlyRenderers(Plotly);
 
 const App = () => {
-  const [boxPlotState, setBoxPlotState] = useState<BoxPlotState>({});
-  const [lineChartState, setLineChartState] = useState<LineChartState>({});
-  const [barChartState, setBarChartState] = useState<BarChartState>({});
-  const [correlationMatrixState, setCorrelationMatrixState] = useState<MatrixDataState>({});
+  const rawData = useDashboardStore((state) => state.rawData);
+  const loadDataset = useDashboardStore((state) => state.loadDataset);
+  const lineChartState = useDashboardStore((state) => state.lineChart);
+  const setLineChartState = useDashboardStore((state) => state.setLineChart);
+  const boxPlotState = useDashboardStore((state) => state.boxPlot);
+  const setBoxPlotState = useDashboardStore((state) => state.setBoxPlot);
+  const barChartState = useDashboardStore((state) => state.barChart);
+  const setBarChartState = useDashboardStore((state) => state.setBarChart);
+  const correlationMatrixState = useDashboardStore((state) => state.correlation);
+  const setCorrelationMatrixState = useDashboardStore((state) => state.setCorrelation);
 
-  const [plotState, setPlotState] = useState<{ data: Data[]; layout: PlotYaout } | null>(null);
-  const [barState, setBarState] = useState<{ data: Data[]; layout: BarLayout } | null>(null);
-  const [lineState, setLineState] = useState<{ data: Data[]; layout: Partial<Plotly.Layout> } | null>(null);
-
-
-  const [data, setData] = useState<string[][]>([]);
-  const [csvLoaded, setCsvLoaded] = useState(false);
+  const csvLoaded = rawData.length > 0;
 
 
   const exportAsImageOrPDF = async (format: "image" | "pdf") => {
@@ -79,25 +69,30 @@ const App = () => {
     ));
   };
 
-  const sanitizeData = (data: string[][]) => {
-    return data
-      .filter(row => row.some(cell => cell.trim().length > 0)) 
-      .map(row => 
-        row.map(cell => {
-          let sanitizedCell = cell.trim(); 
-  
-          
-          if (sanitizedCell.match(/(http:\/\/|https:\/\/)[a-z0-9-]+\.[a-z]{2,}/i)) {
-            sanitizedCell = "[BLOCKED URL]"; 
-          }
-            
-          if (sanitizedCell.startsWith("=") || sanitizedCell.startsWith("+") || sanitizedCell.startsWith("-") || sanitizedCell.startsWith("@")) {
-            sanitizedCell = `'${sanitizedCell}`; 
-          }
-  
-          return sanitizedCell;
-        })
-      );
+  const sanitizeData = (data: (string | number | null | undefined)[][]) => {
+    const normalized = data.map((row) =>
+      row.map((cell) => {
+        const rawValue = typeof cell === 'string'
+          ? cell
+          : cell === null || cell === undefined
+            ? ''
+            : String(cell);
+
+        let sanitizedCell = rawValue.trim();
+
+        if (/(http:\/\/|https:\/\/)[a-z0-9-]+\.[a-z]{2,}/i.test(sanitizedCell)) {
+          sanitizedCell = '[BLOCKED URL]';
+        }
+
+        if (/^[=+\-@]/.test(sanitizedCell)) {
+          sanitizedCell = `'${sanitizedCell}`;
+        }
+
+        return sanitizedCell;
+      })
+    );
+
+    return normalized.filter((row) => row.some((cell) => cell.length > 0));
   };
   
   
@@ -141,10 +136,13 @@ const App = () => {
 
           const sanitizedData = sanitizeData(parsedData);
 
-  
-          setData(sanitizedData);
-          setCsvLoaded(true);
-          setCorrelationMatrixState({ data: sanitizedData });
+          if (sanitizedData.length === 0) {
+            alert("The CSV file does not contain readable rows after sanitization.");
+            return;
+          }
+
+          loadDataset(sanitizedData as string[][]);
+          setCorrelationMatrixState({ data: sanitizedData as string[][] });
         },
         header: false,
       });
@@ -186,10 +184,13 @@ const App = () => {
 
           const sanitizedExcelData = sanitizeData(excelData);
 
+          if (sanitizedExcelData.length === 0) {
+            alert("The Excel file does not contain readable rows after sanitization.");
+            return;
+          }
 
-          setData(sanitizedExcelData);
-          setCsvLoaded(true);
-          setCorrelationMatrixState({ data: sanitizedExcelData });
+          loadDataset(sanitizedExcelData as string[][]);
+          setCorrelationMatrixState({ data: sanitizedExcelData as string[][] });
         } catch (error) {
           alert("Error processing XLSX file: " + (error instanceof Error ? error.message : "Unknown error"));
         }
@@ -237,16 +238,9 @@ const App = () => {
       {csvLoaded && (
         <section className="snapSection">
           <LineChart
-            data={
-              Array.isArray(lineChartState.data) && lineChartState.data.length > 0
-                ? lineChartState.data
-                : data
-            }
+            data={rawData}
             onStateChange={(state) => {
-              setLineState(state);
-            }}
-            onChange={(newState: LineChartState) => {
-              setLineChartState({ ...lineChartState, ...newState });
+              setLineChartState(state);
             }}
           />
         </section>
@@ -254,16 +248,9 @@ const App = () => {
       {csvLoaded && (
         <section className="snapSection">
           <BoxPlot
-            data={
-              Array.isArray(boxPlotState.data) && boxPlotState.data.length > 0
-                ? boxPlotState.data
-                : data
-            }
+            data={rawData}
             onStateChange={(state) => {
-              setPlotState(state);
-            }}
-            onChange={(newState: BoxPlotState) => {
-              setBoxPlotState({ ...boxPlotState, ...newState });
+              setBoxPlotState(state);
             }}
             renderers={{
               ...PlotlyRenderers,
@@ -275,19 +262,11 @@ const App = () => {
       {csvLoaded && (
         <section className="snapSection">
           <BarChart
-            data={
-              Array.isArray(barChartState.data) && barChartState.data.length > 0
-                ? barChartState.data
-                : data
-            }
+            data={rawData}
 
-            onStateChange={(state: SetStateAction<{ data: Data[]; layout: BarLayout; } | null>) => {
-              console.log(state);
-              setBarState(state);
+            onStateChange={(state) => {
+              setBarChartState(state);
             }}
-            onChange={(newState: BarChartState) =>
-              setBarChartState({ ...barChartState, ...newState })
-            }
             renderes={{
               ...PlotlyRenderers
             }}
@@ -304,7 +283,7 @@ const App = () => {
                 Array.isArray(correlationMatrixState.data) &&
                   correlationMatrixState.data.length > 0
                   ? correlationMatrixState.data
-                  : data
+                  : rawData
               }
             />
           </div>
@@ -316,10 +295,10 @@ const App = () => {
 
           <div className="dashboard-container">
             <div className="dashboard-item">
-              {lineState && lineState.data && lineState.layout && (
-                <Plotly data={lineState.data}
+              {lineChartState && lineChartState.data && lineChartState.layout && (
+                <Plotly data={lineChartState.data}
                   layout={{
-                    ...lineState.layout,
+                    ...lineChartState.layout,
                     autosize: true,
                     margin: { t: 55, l: 45, r: 45, b: 75 },
                   }}
@@ -330,11 +309,11 @@ const App = () => {
 
             </div>
 
-            {plotState && (
+            {boxPlotState && (
               <div className="dashboard-item">
-                <Plotly data={plotState.data}
+                <Plotly data={boxPlotState.data}
                   layout={{
-                    ...plotState.layout,
+                    ...boxPlotState.layout,
                     autosize: true,
                     margin: { t: 55, l: 45, r: 45, b: 105 },
                   }}
@@ -343,11 +322,11 @@ const App = () => {
               </div>
             )}
 
-            {barState && (
+            {barChartState && (
               <div className="dashboard-item">
-                <Plotly data={barState.data}
+                <Plotly data={barChartState.data}
                   layout={{
-                    ...barState.layout,
+                    ...barChartState.layout,
                     autosize: true,
                     margin: { t: 25, l: 45, r: 45, b: 105 },
                   }}

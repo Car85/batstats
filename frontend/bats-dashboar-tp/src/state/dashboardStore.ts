@@ -1,31 +1,39 @@
 import { create } from 'zustand';
 import { Data } from 'plotly.js';
-import { BarLayout, PlotYaout } from '@/types/Types';
+import { BarLayout, MatrixDataState, PlotYaout } from '@/types/Types';
 
-type ChartState<T> = { data: Data[]; layout: T } | null;
+type ChartState<T> = {
+  data: Data[];
+  layout: T;
+};
 
 type DashboardStore = {
   rawData: string[][];
-  setRawData: (data: string[][]) => void;
+  loadDataset: (data: string[][]) => void;
 
-  lineChart: ChartState<Partial<Plotly.Layout>>;
-  setLineChart: (state: NonNullable<DashboardStore['lineChart']>) => void;
+  lineChart: ChartState<Partial<Plotly.Layout>> | null;
+  setLineChart: (state: ChartState<Partial<Plotly.Layout>>) => void;
 
-  boxPlot: ChartState<PlotYaout>;
-  setBoxPlot: (state: NonNullable<DashboardStore['boxPlot']>) => void;
+  boxPlot: ChartState<PlotYaout> | null;
+  setBoxPlot: (state: ChartState<PlotYaout>) => void;
 
-  barChart: ChartState<BarLayout>;
-  setBarChart: (state: NonNullable<DashboardStore['barChart']>) => void;
+  barChart: ChartState<BarLayout> | null;
+  setBarChart: (state: ChartState<BarLayout>) => void;
 
-  correlation: { data?: string[][] };
-  setCorrelation: (state: { data?: string[][] }) => void;
-
-  reset: () => void;
+  correlation: MatrixDataState;
+  setCorrelation: (state: MatrixDataState) => void;
 };
 
 export const useDashboardStore = create<DashboardStore>((set) => ({
   rawData: [],
-  setRawData: (data) => set({ rawData: data }),
+  loadDataset: (data) =>
+    set({
+      rawData: data,
+      lineChart: null,
+      boxPlot: null,
+      barChart: null,
+      correlation: { data },
+    }),
 
   lineChart: null,
   setLineChart: (state) => set({ lineChart: state }),
@@ -38,13 +46,4 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
 
   correlation: {},
   setCorrelation: (state) => set({ correlation: state }),
-
-  reset: () =>
-    set({
-      rawData: [],
-      lineChart: null,
-      boxPlot: null,
-      barChart: null,
-      correlation: {},
-    }),
 }));
