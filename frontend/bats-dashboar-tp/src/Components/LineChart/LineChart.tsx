@@ -3,7 +3,7 @@ import { BarChartState } from '../../types/Types';
 
 import useBarChartState from './useLineChartState';
 import Plot from 'react-plotly.js';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (state: { data: Data[]; layout: Partial<Plotly.Layout> }) => void }) => {
 
@@ -11,8 +11,8 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
     return <p>No data available</p>;
   }
 
-  const headers = data[0];
-  const rows = data.slice(1);
+  const headers = useMemo(() => (Array.isArray(data) && data.length > 0 ? data[0] : []), [data]);
+  const rows = useMemo(() => (Array.isArray(data) && data.length > 1 ? data.slice(1) : []), [data]);
 
   const {
     categoricalColumn,
@@ -24,46 +24,56 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
     handleAdditionalColumnChange,
   } = useBarChartState(headers);
 
-  const lineChartData = () => {
+  const lineChartData = useMemo(() => {
+    if (!categoricalColumn || !numericColumn || !additionalColumn) {
+      return [];
+    }
 
-    if (!categoricalColumn || !numericColumn || !additionalColumn) return [];
+    const categoricalIndex = headers.indexOf(categoricalColumn);
+    const numericIndex = headers.indexOf(numericColumn);
+    const additionalIndex = headers.indexOf(additionalColumn);
+
+    if (categoricalIndex === -1 || numericIndex === -1 || additionalIndex === -1) {
+      return [];
+    }
 
     const groupedData: { x: string[]; y: number[]; tooltips: string[] } = {
       x: [],
       y: [],
-      tooltips: []
+      tooltips: [],
     };
-    const cleanRows = rows.filter(row => 
-      row.length > 1 && row.some(cell => cell !== null && cell !== undefined && cell !== "")
+
+    const cleanRows = rows.filter((row) =>
+      row.length > 1 && row.some((cell) => cell !== null && cell !== undefined && cell !== '')
     );
 
     cleanRows.forEach((row) => {
-      const category = row[headers.indexOf(categoricalColumn)];
-      const numericValue = Number(row[headers.indexOf(numericColumn)]);
+      const category = String(row[categoricalIndex] ?? '');
+      const numericValue = Number(row[numericIndex]);
+      const additionalValue = row[additionalIndex] ?? 'N/A';
 
-      const additionalValue = row[headers.indexOf(additionalColumn)] ?? "N/A"; 
+      if (!Number.isFinite(numericValue)) {
+        return;
+      }
 
       if (!selectedCategories.length || selectedCategories.includes(category)) {
-
         groupedData.x.push(category);
         groupedData.y.push(numericValue);
         groupedData.tooltips.push(`${category}, ${numericValue}, ${additionalColumn}: ${additionalValue}`);
       }
-
     });
-    groupedData.x = groupedData.x.filter(function (e) { return e; }); // delete null values
-    groupedData.y = groupedData.y.filter(function (e) { return e; });
 
-    return [{
-      x: groupedData.x,
-      y: groupedData.y,
-      type: 'scatter',
-      mode: 'lines+markers',
-      text: groupedData.tooltips,
-      hoverinfo: 'text',
-
-    }];
-  };
+    return [
+      {
+        x: groupedData.x.filter((value) => value !== undefined && value !== null && value !== ''),
+        y: groupedData.y.filter((value) => Number.isFinite(value)),
+        type: 'scatter',
+        mode: 'lines+markers',
+        text: groupedData.tooltips,
+        hoverinfo: 'text',
+      },
+    ];
+  }, [additionalColumn, headers, numericColumn, rows, selectedCategories, categoricalColumn]);
   
   useEffect(() => {
     if (onStateChange) {
@@ -74,11 +84,11 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
       };
 
       onStateChange({
-        data: lineChartData() as Data[],
+        data: lineChartData as Data[],
         layout,
       });
     }
-  }, [categoricalColumn, numericColumn, additionalColumn, selectedCategories]);
+  }, [additionalColumn, categoricalColumn, lineChartData, numericColumn, onStateChange, selectedCategories]);
 
   return (
     <div>
@@ -91,7 +101,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
           value={categoricalColumn || ''}
           onChange={handleCategoricalChange}
         >
-          <option value="" selected>👇</option>
+          <option value="">👇</option>
           {headers.map((header) => (
             <option key={header} value={header}>
               {header}
@@ -107,7 +117,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
           value={numericColumn || ''}
           onChange={handleNumericChange}
         >
-          <option value="" selected>👇</option>
+          <option value="">👇</option>
           {headers.map((header) => (
             <option key={header} value={header}>
               {header}
@@ -124,7 +134,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
           value={additionalColumn || ''}
           onChange={handleAdditionalColumnChange}
         >
-          <option value="" selected>👇</option>
+          <option value="">👇</option>
           {headers.map((header) => (
             <option key={header} value={header}>
               {header}
@@ -135,7 +145,7 @@ const LineChart = ({ data, onStateChange }: BarChartState & { onStateChange?: (s
 
         {categoricalColumn && numericColumn && additionalColumn && (
           <Plot
-            data={lineChartData() as Data[]}
+            data={lineChartData as Data[]}
             config={{
               autosizable: true,
               displaylogo: false,

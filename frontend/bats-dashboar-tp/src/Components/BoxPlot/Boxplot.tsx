@@ -5,30 +5,41 @@ import { Data } from 'plotly.js';
 import { useEffect, useMemo } from 'react';
 
 
-export const boxPlotData = ( 
+export const boxPlotData = (
   headers: string[],
   rows: string[][],
   categoricalColumn: string,
   numericColumn: string,
   tooltipColumn: string,
-  selectedCategories: string[]): Data[] => {
+  selectedCategories: string[],
+): Data[] => {
   
   if (!categoricalColumn || !numericColumn) return [];
  
 
   const groupedData: { [key: string]: { values: number[]; tooltips: string[] } } = {};
 
+  const categoricalIndex = headers.indexOf(categoricalColumn);
+  const numericIndex = headers.indexOf(numericColumn);
+  const tooltipIndex = tooltipColumn ? headers.indexOf(tooltipColumn) : -1;
+
+  if (categoricalIndex === -1 || numericIndex === -1) {
+    return [];
+  }
+
   rows.forEach((row) => {
-    const category = row[headers.indexOf(categoricalColumn)] as string;
-    const numericValue = Number(row[headers.indexOf(numericColumn)]);
-    const tooltipValue = String(row[headers.indexOf(tooltipColumn)]);
+    const category = row[categoricalIndex] as string;
+    const numericValue = Number(row[numericIndex]);
+    const tooltipValue = tooltipIndex > -1 ? String(row[tooltipIndex]) : '';
     
 
     if (!selectedCategories.length || selectedCategories.includes(category)) {
       if (!groupedData[category]) {
         groupedData[category] = { values: [], tooltips: [] };
       }
-      groupedData[category].values.push(numericValue);
+      if (Number.isFinite(numericValue)) {
+        groupedData[category].values.push(numericValue);
+      }
       groupedData[category].tooltips.push(`${category}, ${numericValue}, ${tooltipColumn}: ${tooltipValue}`);
     }
   });
@@ -55,13 +66,14 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
     selectedCategories,
     handleCategoricalChange,
     handleNumericChange,
-    handleCategoryChange
+    handleTooltipChange,
+    handleCategoryChange,
   } = useBoxPlotState(headers);
  
   
   const plotData = useMemo((): Data[] => {
     if (!headers.length || !rows.length) return [];
-    return boxPlotData(headers, rows, categoricalColumn, numericColumn || '', tooltipColumn, selectedCategories);
+    return boxPlotData(headers, rows, categoricalColumn, numericColumn || '', tooltipColumn || '', selectedCategories);
   }, [headers, rows, categoricalColumn, numericColumn, tooltipColumn, selectedCategories]);
 
 
@@ -98,7 +110,7 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
           value={categoricalColumn}
           onChange={handleCategoricalChange}
           >
-          <option value="" selected>👇</option>
+          <option value="">👇</option>
           {Array.isArray(headers) &&
             headers.map((header) => (
             <option key={header} value={header}>
@@ -115,9 +127,25 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
           value={numericColumn || ''}
           onChange={handleNumericChange}
         >
-          <option value="" selected>👇</option>
+          <option value="">👇</option>
           {headers.map((header, index) => (
             <option key={`${header}-${index}`} value={header}>
+              {header}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="tooltipColumn">Tooltip</label>
+        <select
+          id="tooltipColumn"
+          value={tooltipColumn || ''}
+          onChange={handleTooltipChange}
+        >
+          <option value="">👇</option>
+          {headers.map((header, index) => (
+            <option key={`${header}-tooltip-${index}`} value={header}>
               {header}
             </option>
           ))}
