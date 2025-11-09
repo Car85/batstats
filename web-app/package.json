@@ -12,5 +12,10 @@
     "build": "yarn workspace bats-dashboar-tp build",
     "tauri:build": "yarn workspace bats-dashboar-tp tauri:build"
   },
-  "packageManager": "yarn@4.11.0"
+  "packageManager": "yarn@4.11.0",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17"
+  }
 }
