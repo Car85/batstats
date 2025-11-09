@@ -224,14 +224,15 @@ const App = () => {
 
 
   return (
-    <div className="appContainer">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-blue-900 shadow-[0_4px_6px_rgba(0,0,0,0.6),inset_0_1px_4px_rgba(28,51,76,1),inset_-1px_-1px_2px_rgba(5,7,12,1)]">
       {!csvLoaded && (
         <section className="snapSection">
+        <section className="flex justify-center items-center w-screen h-screen border-2 border-dashed border-gray-300 bg-blue-900 text-white cursor-pointer text-center">
           <section className="dropZone" {...getRootProps()}>
             <input {...getInputProps()} />
             <p>DROP HERE YOUR CSV OR XLSX DATASET HERE</p>
           </section>
-        </section>
+        </section></section>
       )}
 
       {csvLoaded && (
@@ -313,51 +314,54 @@ const App = () => {
 
       {csvLoaded && (
         <section className="snapSection">
-
-          <div className="dashboard-container">
-            <div className="dashboard-item">
+          <div className="grid grid-cols-2 grid-rows-2 gap-1 w-full h-screen">
+            <div className="w-full h-full box-border bg-blue-900 border border-gray-300 rounded-lg overflow-hidden">
               {lineState && lineState.data && lineState.layout && (
-                <Plotly data={lineState.data}
+                <Plotly 
+                  data={lineState.data}
                   layout={{
                     ...lineState.layout,
                     autosize: true,
                     margin: { t: 55, l: 45, r: 45, b: 75 },
                   }}
                   useResizeHandler={true}
-                  style={{ width: "100%", height: "100%" }}
+                  className="w-full h-full"
                 />
               )}
-
             </div>
 
             {plotState && (
-              <div className="dashboard-item">
-                <Plotly data={plotState.data}
+              <div className="w-full h-full box-border bg-blue-900 border border-gray-300 rounded-lg overflow-hidden">
+                <Plotly 
+                  data={plotState.data}
                   layout={{
                     ...plotState.layout,
                     autosize: true,
                     margin: { t: 55, l: 45, r: 45, b: 105 },
                   }}
                   useResizeHandler={true}
-                  style={{ width: "100%", height: "100%" }} />
+                  className="w-full h-full"
+                />
               </div>
             )}
 
             {barState && (
-              <div className="dashboard-item">
-                <Plotly data={barState.data}
+              <div className="w-full h-full box-border bg-blue-900 border border-gray-300 rounded-lg overflow-hidden">
+                <Plotly 
+                  data={barState.data}
                   layout={{
                     ...barState.layout,
                     autosize: true,
                     margin: { t: 25, l: 45, r: 45, b: 105 },
                   }}
                   useResizeHandler={true}
-                  style={{ width: "100%", height: "100%" }} />
+                  className="w-full h-full"
+                />
               </div>
             )}
 
-            <div className="dashboard-item">
-              <div className="correlation-matrix-container">
+            <div className="w-full h-full box-border bg-blue-900 border border-gray-300 rounded-lg overflow-hidden">
+              <div className="w-full h-full">
                 <CorrelationMatrix
                   data={
                     Array.isArray(correlationMatrixState.data) &&
@@ -365,11 +369,10 @@ const App = () => {
                       ? correlationMatrixState.data
                       : data
                   }
-                /></div>
+                />
+              </div>
             </div>
           </div>
-
-
         </section>
       )}
       {csvLoaded && (
@@ -377,12 +380,8 @@ const App = () => {
           <button onClick={() => exportAsImageOrPDF("pdf")}>Export as PDF</button>
         </section>
       )}
-      
     </div>
-
-      
-  )
+  );
 };
-
 
 export default App;
