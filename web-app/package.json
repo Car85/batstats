@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "batstats-monorepo",
+  "version": "0.1.0",
+  "workspaces": [
+    "frontend/*",
+    "backend/*"
+  ],
+  "scripts": {
+    "dev": "yarn workspace bats-dashboar-tp dev",
+    "tauri:dev": "yarn workspace bats-dashboar-tp tauri:dev",
+    "build": "yarn workspace bats-dashboar-tp build",
+    "tauri:build": "yarn workspace bats-dashboar-tp tauri:build"
+  },
+  "packageManager": "yarn@4.10.3"
+}
