@@ -12,5 +12,5 @@
     "build": "yarn workspace bats-dashboar-tp build",
     "tauri:build": "yarn workspace bats-dashboar-tp tauri:build"
   },
-  "packageManager": "yarn@4.10.3"
+  "packageManager": "yarn@4.11.0"
 }

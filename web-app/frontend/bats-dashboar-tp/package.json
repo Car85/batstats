@@ -7,7 +7,7 @@
   "description": "BatStats is a dynamic and user-friendly solution for analyzing and visualizing data.",
   "scripts": {
     "dev": "vite",
-    "tauri:dev": "tauri dev",
+    "tauri": "tauri dev",
     "build": "vite build",
     "tauri:build": "tauri build",
     "preview": "vite preview",
@@ -62,6 +62,5 @@
   "resolutions": {
     "vite": "^6.0.6",
     "regl": "2.1.0"
-  },
-  "packageManager": "yarn@4.6.0"
+  }
 }
