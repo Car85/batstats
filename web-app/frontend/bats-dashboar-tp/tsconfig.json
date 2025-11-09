@@ -27,10 +27,9 @@
     "outDir": "./dist" 
   },
   "include": [
-  "src/**/*",
-  "src/types/**/*",
-  "src/**/*.ts",
-  "electron/**/*"  
+    "src/**/*",
+    "src/types/**/*",
+    "src/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

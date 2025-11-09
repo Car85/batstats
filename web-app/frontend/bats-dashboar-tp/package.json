@@ -63,6 +63,5 @@
     "vite": "^6.0.6",
     "regl": "2.1.0"
   },
-  "packageManager": "yarn@4.6.0",
-  "main": "dist-electron/main.js"
+  "packageManager": "yarn@4.6.0"
 }
