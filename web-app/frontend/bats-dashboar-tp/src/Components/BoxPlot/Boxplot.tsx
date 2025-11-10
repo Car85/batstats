@@ -123,7 +123,6 @@ const BoxPlot = ({ data, onStateChange }: BoxPlotState & { onStateChange?: (stat
           ))}
         </select>
       </div>
-
      {categoricalColumn && (
       <div className="flex items-center text-center gap-2.5">
         <label className="min-w-30 text-right" htmlFor="categoryFilter">Categories:</label>
