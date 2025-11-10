@@ -42,18 +42,6 @@ h2 {
   overflow-y: hidden;
 }
 
-.dropZone {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  border: 2px dashed #ccc;
-  background-color: #001f3f;
-  color: #fff;
-  cursor: pointer;
-  text-align: center;
-}
 
 .buttonContainer {
   margin-top: 2.5rem;
@@ -76,11 +64,7 @@ h2 {
   display: block;
 }
 
-th, td {
-  background-color: #001f3f;
-  padding: 10px;
-  text-align: center;
-}
+
 
 table {
   background-color: #007BFF;

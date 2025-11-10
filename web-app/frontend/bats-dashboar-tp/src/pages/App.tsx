@@ -298,8 +298,7 @@ const App = () => {
 
       {csvLoaded && (
         <section className="snapSection">
-          <div className="correlation-matrix">
-
+          <div className="p-32 block">
             <CorrelationMatrix
               data={
                 Array.isArray(correlationMatrixState.data) &&

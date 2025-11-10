@@ -74,8 +74,8 @@ useEffect(() => {
 }, [data]);
 
   return (
-    <div className="lables">
-      {correlationMatrix.length > 0 ? (
+    <div className="p-32 block">
+        {correlationMatrix.length > 0 ? (
         <table border={1} cellPadding={5}>
         <thead>
             <tr>
