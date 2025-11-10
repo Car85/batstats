@@ -6,6 +6,7 @@
 ![React](https://img.shields.io/badge/React-19.0.0-blue?style=flat-square&logo=react)
 ![Vite](https://img.shields.io/badge/Vite-6.1.0-blue?style=flat-square&logo=vite)
 ![Plotly](https://img.shields.io/badge/Plotly-2.35.3-blue?style=flat-square&logo=plotly)
+![Tauris](https://img.shields.io/badge/Tauris-Rust_Project-orange?style=flat-square&logo=rust)
 
 
 
